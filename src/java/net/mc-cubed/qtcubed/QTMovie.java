@@ -34,6 +34,9 @@ import javax.swing.SwingUtilities;
 import java.net.URL;
 import java.io.File;
 import java.util.Properties;
+import java.lang.InstantiationException;
+import java.io.IOException;
+import net.mc_cubed.QTCubed;
 
 /**
  * Placeholder (for now) for QTMovie bridge class
@@ -42,9 +45,12 @@ import java.util.Properties;
  */
 public class QTMovie {
 	
+	// Initialize the QTCubed Library
+	static final QTCubed cubed = new QTCubed();
+	
 	private long movieRef;
 	
-	protected long getMovieRef() {
+	public long getMovieRef() {
 		return movieRef;
 	}
 		
@@ -103,28 +109,41 @@ public class QTMovie {
 		}		
 	}
 	
-	public QTMovie() throws Exception {
-		movieRef = _movie();
+	/**
+	 * Designated Initializer for QTMovie
+	 * @param movieRef
+	 *   Takes the movieRef created by a native function and stores it
+	 */
+	protected QTMovie(long movieRef) throws InstantiationException {
+		if (movieRef == 0)
+		{
+			throw new java.lang.InstantiationException("Didn't successfully obtain a QTMovie reference");
+		}
+		this.movieRef = movieRef;
 	}
 
-	public QTMovie(URL url) throws Exception {
-		movieRef = _movieWithURL(url);
+	public QTMovie() throws InstantiationException {
+		this(_movie());
+	}
+
+	public QTMovie(URL url) throws InstantiationException {
+		this(_movieWithURL(url.toString()));
 	}
 	
-	public QTMovie(File file) throws Exception {
-		movieRef = _movieWithFile(file.getCanonicalPath());
+	public QTMovie(File file) throws InstantiationException,IOException {
+		this(_movieWithFile(file.getCanonicalPath()));
 	}
 	
-	public QTMovie(byte[] bytes) throws Exception {
-		movieRef = _movieWithData(bytes);
+	public QTMovie(byte[] bytes) throws InstantiationException {
+		this(_movieWithData(bytes));
 	}
 	
-	public QTMovie(Properties attributes) throws Exception {
-		movieRef = _movieWithAttributes(attributes);
+	public QTMovie(Properties attributes) throws InstantiationException {
+		this(_movieWithAttributes(attributes));
 	}
 	
-	public QTMovie(String name) throws Exception {
-		movieRef = _movieNamed(name);
+	public QTMovie(String name) throws InstantiationException {
+		this(_movieNamed(name));
 	}
 	
 	/**
@@ -141,9 +160,9 @@ public class QTMovie {
 	 *   An NSString object that specifies a full pathname to a file.
 	 * @result			true if a QTMovie object can be initialized from the specified file, false otherwise.
 	 */
-	native public static boolean _canInitWithFile(String filename) throws Exception;
+	native public static boolean _canInitWithFile(String filename) throws InstantiationException;
 	
-	public static boolean canInit(File file) throws Exception {
+	public static boolean canInit(File file) throws InstantiationException,IOException {
 		return _canInitWithFile(file.getCanonicalPath());
 	}
 	
@@ -154,10 +173,10 @@ public class QTMovie {
 	 An NSURL object.
 	 @result			YES if a QTMovie object can be initialized from the specified URL, NO otherwise.
 	 */
-	native public static boolean _canInitWithURL(URL url);
+	native public static boolean _canInitWithURL(String url);
 	
 	public static boolean canInit(URL url) {
-		return _canInitWithURL(url);
+		return _canInitWithURL(url.toString());
 	}
 	
 	/**
@@ -179,23 +198,32 @@ public class QTMovie {
 	 This array excludes any file types for still images and any file types that require an aggressive movie importer
 	 (for instance, the movie importer for text files).
 	 @result			An NSArray object that contains NSString objects indicating supported file types.
-	 */
-	//+ (NSArray *)movieFileTypes:(QTMovieFileTypeOptions)types;
+	 */	
+	native protected static String[] _movieFileTypes(int types);
+
+	public static String[] movieFileTypes(QTMovieFileTypeOptions[] types){
+		int type = 0;
+		for (QTMovieFileTypeOptions opt : types) {
+			type |= opt.valueOf();
+		}
+		return _movieFileTypes(type);
+	}
+	
 	
 	/**
 	 @method			movieUnfilteredFileTypes
 	 @abstract		Returns an array of file types that can be used to initialize a QTMovie object.
 	 @result			An NSArray object that contains NSString objects indicating supported file types.
 	 */
-	//+ (NSArray *)movieUnfilteredFileTypes;
+	native public static String[] movieUnfilteredFileTypes();
 	
 	/**
 	 @method			movieUnfilteredPasteboardTypes
 	 @abstract		Returns an array of pasteboard types that can be used to initialize a QTMovie object.
 	 @result			An NSArray object that contains NSString objects indicating supported pasteboard types.
 	 */
-//	+ (NSArray *)movieUnfilteredPasteboardTypes;
-	
+	native protected static String[] _movieUnfilteredPasteboardTypes();
+		
 	/**
 	 @method			movieTypesWithOptions:
 	 @abstract		Returns an array of UTIs that QTKit can open.
@@ -204,7 +232,15 @@ public class QTMovie {
 	 See the description of +movieFileTypes for more information.
 	 @result			An NSArray object that contains NSString objects indicating supported file types.
 	 */
-//		+ (NSArray *)movieTypesWithOptions:(QTMovieFileTypeOptions)types;
+	public static String[] movieTypesWithOptions(QTMovieFileTypeOptions[] types) {
+		int type = 0;
+		for (QTMovieFileTypeOptions opt : types) {
+			type |= opt.valueOf();
+		}
+		return _movieTypesWithOptions(type);		
+	}
+	
+	native protected static String[] _movieTypesWithOptions(int types);
 		
 	/**
 	 @method			movie
@@ -222,7 +258,7 @@ public class QTMovie {
 	 A pointer to an NSError object; if a movie cannot be created, an NSError object is returned in this location.
 	 @result			An autoreleased QTMovie object.
 	 */
-	native static protected long _movieWithFile(String filename) throws Exception;
+	native static protected long _movieWithFile(String filename) throws InstantiationException;
 		
 	/**
 	 @method			movieWithURL:error:
@@ -233,7 +269,7 @@ public class QTMovie {
 	 A pointer to an NSError object; if a movie cannot be created, an NSError object is returned in this location.
 	 @result			An autoreleased QTMovie object.
 	 */
-	native static protected long _movieWithURL(URL url) throws Exception;
+	native static protected long _movieWithURL(String url) throws InstantiationException;
 	
 	/**
 	 @method			movieWithDataReference:error:
@@ -267,7 +303,7 @@ public class QTMovie {
 	 A pointer to an NSError object; if a movie cannot be created, an NSError object is returned in this location.
 	 @result			An autoreleased QTMovie object.
 	 */
-	native static protected long _movieWithData(byte[] bytes) throws Exception;
+	native static protected long _movieWithData(byte[] bytes) throws InstantiationException;
 	
 	/**
 	 @method			movieWithQuickTimeMovie:disposeWhenDone:error:
@@ -303,7 +339,7 @@ public class QTMovie {
 	 A pointer to an NSError object; if a movie cannot be created, an NSError object is returned in this location.
 	 @result			An autoreleased QTMovie object.
 	 */
-	native static protected long _movieWithAttributes(Properties attributes) throws Exception;
+	native static protected long _movieWithAttributes(Properties attributes) throws InstantiationException;
 	
 	/**
 	 @method			movieNamed:error:
@@ -312,7 +348,7 @@ public class QTMovie {
 	 A pointer to an NSError object; if a movie cannot be created, an NSError object is returned in this location.
 	 @result			A QTMovie object.
 	 */
-	native static protected long _movieNamed(String name) throws Exception;
+	native static protected long _movieNamed(String name) throws InstantiationException;
 	
 	/**
 	 @method			initWithFile:error:
@@ -323,9 +359,9 @@ public class QTMovie {
 	 A pointer to an NSError object; if a movie cannot be created, an NSError object is returned in this location.
 	 @result			A QTMovie object.
 	 */
-	native protected void _initWithFile(String filename) throws Exception;
+	native protected void _initWithFile(String filename) throws InstantiationException;
 	
-	public void init(File file) throws Exception {
+	public void init(File file) throws InstantiationException,IOException {
 		_initWithFile(file.getCanonicalPath());
 	}
 	
@@ -338,10 +374,10 @@ public class QTMovie {
 	 A pointer to an NSError object; if a movie cannot be created, an NSError object is returned in this location.
 	 @result			A QTMovie object.
 	 */
-	native protected void _initWithURL(URL url) throws Exception;
+	native protected void _initWithURL(String url) throws InstantiationException;
 	
-	public void init(URL url) throws Exception {
-		_initWithURL(url);
+	public void init(URL url) throws InstantiationException {
+		_initWithURL(url.toString());
 	}
 	
 	/**
@@ -376,9 +412,9 @@ public class QTMovie {
 	 A pointer to an NSError object; if a movie cannot be created, an NSError object is returned in this location.
 	 @result			A QTMovie object.
 	 */
-	native protected void _initWithData(byte[] bytes) throws Exception;
+	native protected void _initWithData(byte[] bytes) throws InstantiationException;
 	
-	public void init(byte[] bytes) throws Exception {
+	public void init(byte[] bytes) throws InstantiationException {
 		_initWithData(bytes);
 	}
 	
@@ -393,7 +429,11 @@ public class QTMovie {
 	 A pointer to an NSError object; if a movie cannot be created, an NSError object is returned in this location.
 	 @result			A QTMovie object.
 	 */
-//	- (id)initWithMovie:(QTMovie *)movie timeRange:(QTTimeRange)range error:(NSError **)errorPtr;
+	native protected void _initWithMovie(QTMovie movie,QTTimeRange range);
+	
+	public void init(QTMovie movie, QTTimeRange range) {
+		_initWithMovie(movie,range);
+	}
 	
 	/**
 	 @method			initWithQuickTimeMovie:disposeWhenDone:error:
@@ -442,6 +482,7 @@ public class QTMovie {
 	 @result			A QTMovie object.
 	 */
 //	- (id)movieWithTimeRange:(QTTimeRange)range error:(NSError **)errorPtr;
+	
 	
 	/**
 	 @method			initToWritableFile:error:

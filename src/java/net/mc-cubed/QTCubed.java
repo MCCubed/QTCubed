@@ -42,6 +42,8 @@ import java.awt.Button;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * Starting point for the application. General initialization should be done inside
@@ -52,19 +54,24 @@ import java.io.FileInputStream;
  */
 public class QTCubed extends Frame implements ActionListener {
 	static {
+		Logger.getAnonymousLogger().log(Level.INFO,"Loading QTCubed Library");
 		// Ensure native JNI library is loaded
 		System.loadLibrary("QTCubed");
+
+		Logger.getAnonymousLogger().log(Level.INFO,"Successfully Loaded QTCubed Library!");
 	}
 
 	QTMovieView qtmv;
 
 	
 	public static void main(final String[] args) {
-			SwingUtilities.invokeLater(new Runnable() {
-				public void run() {
-					new QTCubed().setVisible(true);
-				}
-			});
+		SwingUtilities.invokeLater(new Runnable() {
+			public void run() {
+				new QTCubed().setVisible(true);
+			}
+		});
+		
+		System.out.println("Reached end of main");
 	}
 	
 	// No argument main constructor

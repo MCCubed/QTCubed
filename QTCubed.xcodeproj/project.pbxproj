@@ -23,6 +23,7 @@
 /* End PBXAggregateTarget section */
 
 /* Begin PBXBuildFile section */
+		56E9FCDC113270D100570103 /* libQTCubed.jnilib in CopyFiles */ = {isa = PBXBuildFile; fileRef = BFA701EE112EA91A00D5157A /* libQTCubed.jnilib */; };
 		89C3F2920F5250A300B0048E /* Credits.rtf in Resources */ = {isa = PBXBuildFile; fileRef = 89C3F2900F5250A300B0048E /* Credits.rtf */; };
 		89D0F0240F392F20007831A7 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 89D0F0210F392F20007831A7 /* InfoPlist.strings */; };
 		89D0F0410F39306C007831A7 /* JavaApplicationStub in Copy Executable */ = {isa = PBXBuildFile; fileRef = 89D0F03E0F39304A007831A7 /* JavaApplicationStub */; };
@@ -66,6 +67,16 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
+		56E9FCDB113270A300570103 /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 12;
+			dstPath = /Library/Java/Extensions;
+			dstSubfolderSpec = 0;
+			files = (
+				56E9FCDC113270D100570103 /* libQTCubed.jnilib in CopyFiles */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		89D0F0440F393070007831A7 /* Copy Executable */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
@@ -264,6 +275,7 @@
 				89D0F04C0F393AD9007831A7 /* Headers */,
 				89D0F04D0F393AD9007831A7 /* Sources */,
 				89D0F04E0F393AD9007831A7 /* Frameworks */,
+				56E9FCDB113270A300570103 /* CopyFiles */,
 			);
 			buildRules = (
 			);

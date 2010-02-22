@@ -29,10 +29,14 @@
 
 package net.mc_cubed.qtcubed;
 
+import net.mc_cubed.QTCubed;
 import java.awt.Dimension;
 import com.apple.eawt.CocoaComponent;
 
 public class QTMovieView extends CocoaComponent {
+
+	// Initialize the QTCubed Library
+	static final QTCubed cubed = new QTCubed();
 
 	protected static final int SET_MOVIE = 1;
 	protected Dimension size = new Dimension(320,240);
@@ -66,8 +70,6 @@ public class QTMovieView extends CocoaComponent {
 	public void setMovie(QTMovie movie) {
 		this.movie = movie;
 		this.sendMessage(SET_MOVIE, movie.getMovieRef());
-		Long l = 1L;
-		long l2 = l.longValue();
 	}
 	
 	public QTMovieView() {

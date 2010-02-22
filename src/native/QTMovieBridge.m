@@ -31,6 +31,7 @@
 #import <JavaNativeFoundation/JavaNativeFoundation.h>
 #import "net_mc_cubed_qtcubed_QTMovie.h"
 
+const char * INST_EXCEPTION = "java.lang.InstantiationException";
 /*
  * Class:     net_mc_cubed_qtcubed_QTMovie
  * Method:    _canInitWithFile
@@ -61,6 +62,15 @@ JNIEXPORT jboolean JNICALL Java_net_mc_1cubed_qtcubed_QTMovie__1canInitWithFile
 	
 	return canInit;	
 }
+
+/*
+ * Class:     net_mc_cubed_qtcubed_QTMovie
+ * Method:    _canInitWithURL
+ * Signature: (Ljava/lang/String;)Z
+ */
+JNIEXPORT jboolean JNICALL Java_net_mc_1cubed_qtcubed_QTMovie__1canInitWithURL
+(JNIEnv *, jclass, jstring);
+
 /*
  * Class:     net_mc_cubed_qtcubed_QTMovie
  * Method:    _movieWithFile
@@ -87,7 +97,7 @@ JNIEXPORT jlong JNICALL Java_net_mc_1cubed_qtcubed_QTMovie__1movieWithFile
 		[qtMovie retain];
 		movieRef = (jlong)qtMovie;
 	} else {
-		jclass exClass = (*env)->FindClass(env,"java.lang.Exception");
+		jclass exClass = (*env)->FindClass(env,INST_EXCEPTION);
 		(*env)->ThrowNew(env,exClass,[[error localizedDescription] UTF8String]);
 	}
 	
@@ -111,7 +121,28 @@ JNIEXPORT jboolean JNICALL Java_net_mc_1cubed_qtcubed_QTMovie__1canInitWithURL
  * Signature: ()J
  */
 JNIEXPORT jlong JNICALL Java_net_mc_1cubed_qtcubed_QTMovie__1movie
-(JNIEnv *, jclass);
+(JNIEnv *env, jclass classRef) {
+	jlong movieRef = 0;
+	
+	/* Set up autorelease and exception handling */
+	JNF_COCOA_ENTER(env);
+		
+	// Do the actual call to QTMovie and set the return value depending on the result
+	QTMovie * qtMovie = [QTMovie movie];
+	if (qtMovie != nil) {
+		// We want to keep this, and pass the pointer back to java to store
+		[qtMovie retain];
+		movieRef = (jlong)qtMovie;
+	} else {
+		jclass exClass = (*env)->FindClass(env,INST_EXCEPTION);
+		(*env)->ThrowNew(env,exClass,"An unknown error occured instantiating QTMovie");
+	}
+	
+	/* Autorelease and exception cleanup */
+	JNF_COCOA_EXIT(env);
+	
+	return movieRef;	
+}
 
 /*
  * Class:     net_mc_cubed_qtcubed_QTMovie
@@ -132,13 +163,7 @@ JNIEXPORT jlong JNICALL Java_net_mc_1cubed_qtcubed_QTMovie__1movieWithData
 	
 	/* Set up autorelease and exception handling */
 	JNF_COCOA_ENTER(env);
-	
-/*	// Get the QTMovie object
-	jclass cls = (*env)->GetObjectClass(env,movieObject);
-	jmethodID getMovieRefMethod = (*env)->GetMethodID(env,cls,"getMovieRef","()J");
-	jlong movieRef = (*env)->CallLongMethod(env,movieObject,getMovieRefMethod);
-	QTMovie* qtMovie = (QTMovie*)movieRef;*/
-	
+		
 	// get the bytes from the byte array
 	int numBytes = (*env)->GetArrayLength(env,jbytes);
 	jboolean isCopy;
@@ -160,7 +185,7 @@ JNIEXPORT jlong JNICALL Java_net_mc_1cubed_qtcubed_QTMovie__1movieWithData
 		[qtMovie retain];
 		movieRef = (jlong)qtMovie;
 	} else {
-		jclass exClass = (*env)->FindClass(env,"java.lang.Exception");
+		jclass exClass = (*env)->FindClass(env,INST_EXCEPTION);
 		(*env)->ThrowNew(env,exClass,[[error localizedDescription] UTF8String]);
 	}
 	
@@ -184,7 +209,36 @@ JNIEXPORT jlong JNICALL Java_net_mc_1cubed_qtcubed_QTMovie__1movieWithAttributes
  * Signature: (Ljava/lang/String;)J
  */
 JNIEXPORT jlong JNICALL Java_net_mc_1cubed_qtcubed_QTMovie__1movieNamed
-(JNIEnv *, jclass, jstring);
+(JNIEnv *env, jclass classRef, jstring jMovieName) {
+	jlong movieRef;
+	
+	/* Set up autorelease and exception handling */
+	JNF_COCOA_ENTER(env);
+	
+	// Convert the jstring into an NSString *
+	const jchar *chars = (*env)->GetStringChars(env, jMovieName, NULL);
+	NSString *movieName = [NSString stringWithCharacters:(UniChar *)chars
+												 length:(*env)->GetStringLength(env, jMovieName)];
+	(*env)->ReleaseStringChars(env, jMovieName, chars);
+
+	// Initialize the movie from the NSData object contents
+	NSError * error = nil;
+	QTMovie *qtMovie = [QTMovie movieNamed:movieName error:&error];
+	if (qtMovie != nil && error == nil) {
+		// We want to keep this, and pass the pointer back to java to store
+		[qtMovie retain];
+		movieRef = (jlong)qtMovie;
+	} else {
+		jclass exClass = (*env)->FindClass(env,INST_EXCEPTION);
+		(*env)->ThrowNew(env,exClass,[[error localizedDescription] UTF8String]);
+	}
+	
+	/* Autorelease and exception cleanup */
+	JNF_COCOA_EXIT(env);
+	
+	return movieRef;
+	
+}
 
 /*
  * Class:     net_mc_cubed_qtcubed_QTMovie
@@ -237,7 +291,7 @@ JNIEXPORT void JNICALL Java_net_mc_1cubed_qtcubed_QTMovie__1initWithData
 
 	// If an error occured, create an exception with a description of the problem, and throw it.
 	if (qtMovie == nil || error == nil) {
-		jclass exClass = (*env)->FindClass(env,"java.lang.Exception");
+		jclass exClass = (*env)->FindClass(env,INST_EXCEPTION);
 		(*env)->ThrowNew(env,exClass,[[error localizedDescription] UTF8String]);
 	}
 	
@@ -251,4 +305,24 @@ JNIEXPORT void JNICALL Java_net_mc_1cubed_qtcubed_QTMovie__1initWithData
  * Signature: ()V
  */
 JNIEXPORT void JNICALL Java_net_mc_1cubed_qtcubed_QTMovie__1invalidate
-(JNIEnv *, jobject);
+(JNIEnv *env, jobject movieObject) {
+	/* Set up autorelease and exception handling */
+	JNF_COCOA_ENTER(env);
+	
+	// Get the QTMovie object
+	jclass cls = (*env)->GetObjectClass(env,movieObject);
+	jmethodID getMovieRefMethod = (*env)->GetMethodID(env,cls,"getMovieRef","()J");
+	jlong movieRef = (*env)->CallLongMethod(env,movieObject,getMovieRefMethod);
+	QTMovie* qtMovie = (QTMovie*)movieRef;
+	
+	[qtMovie release];
+	
+	// Set the QTMovie object to nil
+	jmethodID setMovieRefMethod = (*env)->GetMethodID(env,cls,"setMovieRef","(J)V");
+	(*env)->CallVoidMethod(env,movieObject,setMovieRefMethod,nil);
+	
+	/* Autorelease and exception cleanup */
+	JNF_COCOA_EXIT(env);
+
+	
+}
