@@ -1,5 +1,5 @@
 //
-//  QTMovieView.java
+//  MacQTMovieView.java
 //  QTCubed
 //
 //  Created by Chappell Charles on 10/02/20.
@@ -32,8 +32,9 @@ package net.mc_cubed.qtcubed;
 import net.mc_cubed.QTCubed;
 import java.awt.Dimension;
 import com.apple.eawt.CocoaComponent;
+import java.awt.Component;
 
-public class QTMovieView extends CocoaComponent {
+class MacQTMovieView extends CocoaComponent implements QTMovieView {
 
 	// Initialize the QTCubed Library
 	static final QTCubed cubed = new QTCubed();
@@ -42,7 +43,12 @@ public class QTMovieView extends CocoaComponent {
 	protected Dimension size = new Dimension(320,240);
 	protected Dimension preferredSize = new Dimension(320,240);
 	
-	protected QTMovie movie;
+	protected QTKitMovieImpl movie;
+	
+	@Override
+	public Component getComponent() {
+		return this;
+	}
 	
 	@Deprecated
 	public int createNSView() {
@@ -68,11 +74,11 @@ public class QTMovieView extends CocoaComponent {
 	}
 	
 	public void setMovie(QTMovie movie) {
-		this.movie = movie;
-		this.sendMessage(SET_MOVIE, movie.getMovieRef());
+		this.movie = (QTKitMovieImpl)movie;
+		this.sendMessage(SET_MOVIE, this.movie.getMovieRef());
 	}
 	
-	public QTMovieView() {
+	public MacQTMovieView() {
 		super();
 	}
 }

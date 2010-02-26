@@ -32,6 +32,7 @@ package net.mc_cubed;
 import javax.swing.SwingUtilities;
 import net.mc_cubed.qtcubed.QTMovie;
 import net.mc_cubed.qtcubed.QTMovieView;
+import net.mc_cubed.qtcubed.QTCubedFactory;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.Dialog;
@@ -44,6 +45,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import quicktime.QTSession;
 
 /**
  * Starting point for the application. General initialization should be done inside
@@ -53,14 +55,34 @@ import java.util.logging.Logger;
  * @author shadow
  */
 public class QTCubed extends Frame implements ActionListener {
+	static final boolean hasQTKit;
+	
 	static {
-		Logger.getAnonymousLogger().log(Level.INFO,"Loading QTCubed Library");
-		// Ensure native JNI library is loaded
-		System.loadLibrary("QTCubed");
+		boolean qtKitLoaded = false;
+		try {
+			Logger.getAnonymousLogger().log(Level.INFO,"Loading QTCubed Library");
+			// Ensure native JNI library is loaded
+			System.loadLibrary("QTCubed");
 
-		Logger.getAnonymousLogger().log(Level.INFO,"Successfully Loaded QTCubed Library!");
+			Logger.getAnonymousLogger().log(Level.INFO,"Successfully Loaded QTCubed Library!");
+			qtKitLoaded = true;
+		} catch (Throwable t) {
+			// Couldn't load the library, try QTJava instead
+			try {
+				QTSession.open();
+			} catch (Exception ex) {
+				ex.printStackTrace();
+			}
+			
+		}
+		
+		hasQTKit = qtKitLoaded;
 	}
 
+	public static boolean usesQTKit() {
+		return hasQTKit;
+	}
+	
 	QTMovieView qtmv;
 
 	
@@ -73,16 +95,20 @@ public class QTCubed extends Frame implements ActionListener {
 		
 		System.out.println("Reached end of main");
 	}
-	
+		
 	// No argument main constructor
 	public QTCubed() {
 		setLayout (new BorderLayout());
         Button b = new Button ("Select Movie...");
         b.addActionListener (this);
-        qtmv = new QTMovieView();
-        add (b, BorderLayout.SOUTH);
-        add (qtmv, BorderLayout.CENTER);
-		pack();
+		try {
+			qtmv = QTCubedFactory.initQTMovieView();
+			add (b, BorderLayout.SOUTH);
+			add (qtmv.getComponent(), BorderLayout.CENTER);
+			pack();
+		} catch (InstantiationException ex) {
+			ex.printStackTrace();
+		}
 	}
 	
     public void actionPerformed (ActionEvent e) {
@@ -103,7 +129,7 @@ public class QTCubed extends Frame implements ActionListener {
 			//             QTMovie movie = new QTMovie (u);
 
 			// Copy the contents of the entire file into a memory buffer
-			ByteArrayOutputStream baos = new ByteArrayOutputStream();
+/*			ByteArrayOutputStream baos = new ByteArrayOutputStream();
 			FileInputStream inStream = new FileInputStream(f);
 			int inChars;
 			byte[] buffer = new byte[10240]; // Read up to 10k bytes at a time
@@ -113,8 +139,8 @@ public class QTCubed extends Frame implements ActionListener {
 
 			// Create a QTMovie from the memory buffer
 			QTMovie movie = new QTMovie (baos.toByteArray());
-			
-            movie = new QTMovie (f);
+*/			
+            QTMovie movie = QTCubedFactory.initQTMovie(f);
             System.out.println ("Created movie");
 			
             // set movie on the view

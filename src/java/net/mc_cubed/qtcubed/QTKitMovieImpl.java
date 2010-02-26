@@ -1,5 +1,5 @@
 //
-//  QTMovie.java
+//  QTKitMovieImpl.java
 //  QTCubed
 //
 //  Created by Chappell Charles on 10/02/19.
@@ -43,78 +43,20 @@ import net.mc_cubed.QTCubed;
  * 
  * @author shadow
  */
-public class QTMovie {
-	
-	// Initialize the QTCubed Library
-	static final QTCubed cubed = new QTCubed();
-	
+class QTKitMovieImpl implements QTMovie {
+
 	private long movieRef;
 	
 	public long getMovieRef() {
 		return movieRef;
 	}
-		
-	// constants for movieFileTypes method
-	public enum QTMovieFileTypeOptions {
-		QTIncludeStillImageTypes(1),
-		QTIncludeTranslatableTypes(2),
-		QTIncludeAggressiveTypes(4),
-		QTIncludeDynamicTypes(8),
-		QTIncludeCommonTypes(0),
-		QTIncludeAllTypes(0xffff);
-		
-		private long value;
-
-		QTMovieFileTypeOptions(long value) {
-			this.value = value;
-		}
-		
-		public long valueOf() {
-			return value;
-		}		
-	}
-	
-	// constants for movieShouldContinueOp delegate method
-	public enum QTMovieOperationPhase {
-		QTMovieOperationBeginPhase(0),
-		QTMovieOperationUpdatePercentPhase(1),
-		QTMovieOperationEndPhase(2);
-		private long value;
-		
-		QTMovieOperationPhase(long value) {
-			this.value = value;
-		}
-		
-		public long valueOf() {
-			return value;
-		}		
-	}
-	
-	// constants for QTMovieLoadStateAttribute
-	public enum QTMovieLoadStateAttribute {
-		QTMovieLoadStateError(-1L),			// an error occurred while loading the movie
-		QTMovieLoadStateLoading(1000),			// the movie is loading
-		QTMovieLoadStateLoaded(2000),			// the movie atom has loaded; it's safe to query movie properties
-		QTMovieLoadStatePlayable(10000),		// the movie has loaded enough media data to begin playing
-		QTMovieLoadStatePlaythroughOK(20000),		// the movie has loaded enough media data to play through to the end
-		QTMovieLoadStateComplete(100000L);		// the movie has loaded completely
-		private long value;
-		
-		QTMovieLoadStateAttribute(long value) {
-			this.value = value;
-		}
-		
-		public long valueOf() {
-			return value;
-		}		
-	}
-	
+			
 	/**
 	 * Designated Initializer for QTMovie
 	 * @param movieRef
 	 *   Takes the movieRef created by a native function and stores it
 	 */
-	protected QTMovie(long movieRef) throws InstantiationException {
+	protected QTKitMovieImpl(long movieRef) throws InstantiationException {
 		if (movieRef == 0)
 		{
 			throw new java.lang.InstantiationException("Didn't successfully obtain a QTMovie reference");
@@ -122,27 +64,27 @@ public class QTMovie {
 		this.movieRef = movieRef;
 	}
 
-	public QTMovie() throws InstantiationException {
+	public QTKitMovieImpl() throws InstantiationException {
 		this(_movie());
 	}
 
-	public QTMovie(URL url) throws InstantiationException {
+	public QTKitMovieImpl(URL url) throws InstantiationException {
 		this(_movieWithURL(url.toString()));
 	}
 	
-	public QTMovie(File file) throws InstantiationException,IOException {
+	public QTKitMovieImpl(File file) throws InstantiationException,IOException {
 		this(_movieWithFile(file.getCanonicalPath()));
 	}
 	
-	public QTMovie(byte[] bytes) throws InstantiationException {
+	public QTKitMovieImpl(byte[] bytes) throws InstantiationException {
 		this(_movieWithData(bytes));
 	}
 	
-	public QTMovie(Properties attributes) throws InstantiationException {
+	public QTKitMovieImpl(Properties attributes) throws InstantiationException {
 		this(_movieWithAttributes(attributes));
 	}
 	
-	public QTMovie(String name) throws InstantiationException {
+	public QTKitMovieImpl(String name) throws InstantiationException {
 		this(_movieNamed(name));
 	}
 	
@@ -162,7 +104,7 @@ public class QTMovie {
 	 */
 	native public static boolean _canInitWithFile(String filename) throws InstantiationException;
 	
-	public static boolean canInit(File file) throws InstantiationException,IOException {
+	public boolean canInit(File file) throws InstantiationException,IOException {
 		return _canInitWithFile(file.getCanonicalPath());
 	}
 	
@@ -175,7 +117,7 @@ public class QTMovie {
 	 */
 	native public static boolean _canInitWithURL(String url);
 	
-	public static boolean canInit(URL url) {
+	public boolean canInit(URL url) {
 		return _canInitWithURL(url.toString());
 	}
 	
@@ -201,28 +143,28 @@ public class QTMovie {
 	 */	
 	native protected static String[] _movieFileTypes(int types);
 
-	public static String[] movieFileTypes(QTMovieFileTypeOptions[] types){
+	public String[] movieFileTypes(QTMovieFileTypeOptions[] types){
 		int type = 0;
 		for (QTMovieFileTypeOptions opt : types) {
 			type |= opt.valueOf();
 		}
 		return _movieFileTypes(type);
 	}
-	
+
 	
 	/**
 	 @method			movieUnfilteredFileTypes
 	 @abstract		Returns an array of file types that can be used to initialize a QTMovie object.
 	 @result			An NSArray object that contains NSString objects indicating supported file types.
 	 */
-	native public static String[] movieUnfilteredFileTypes();
+	native public String[] movieUnfilteredFileTypes();
 	
 	/**
 	 @method			movieUnfilteredPasteboardTypes
 	 @abstract		Returns an array of pasteboard types that can be used to initialize a QTMovie object.
 	 @result			An NSArray object that contains NSString objects indicating supported pasteboard types.
 	 */
-	native protected static String[] _movieUnfilteredPasteboardTypes();
+	native protected String[] _movieUnfilteredPasteboardTypes();
 		
 	/**
 	 @method			movieTypesWithOptions:
@@ -232,7 +174,7 @@ public class QTMovie {
 	 See the description of +movieFileTypes for more information.
 	 @result			An NSArray object that contains NSString objects indicating supported file types.
 	 */
-	public static String[] movieTypesWithOptions(QTMovieFileTypeOptions[] types) {
+	public String[] movieTypesWithOptions(QTMovieFileTypeOptions[] types) {
 		int type = 0;
 		for (QTMovieFileTypeOptions opt : types) {
 			type |= opt.valueOf();

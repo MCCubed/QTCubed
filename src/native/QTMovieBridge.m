@@ -29,7 +29,7 @@
 
 #import <QTKit/QTKit.h>
 #import <JavaNativeFoundation/JavaNativeFoundation.h>
-#import "net_mc_cubed_qtcubed_QTMovie.h"
+#import "net_mc_cubed_qtcubed_QTKitMovieImpl.h"
 
 const char * INST_EXCEPTION = "java.lang.InstantiationException";
 /*
@@ -37,7 +37,7 @@ const char * INST_EXCEPTION = "java.lang.InstantiationException";
  * Method:    _canInitWithFile
  * Signature: (Ljava/lang/String;)Z
  */
-JNIEXPORT jboolean JNICALL Java_net_mc_1cubed_qtcubed_QTMovie__1canInitWithFile
+JNIEXPORT jboolean JNICALL Java_net_mc_1cubed_qtcubed_QTKitMovieImpl__1canInitWithFile
 (JNIEnv *env, jclass classRef, jstring jstringFilename) {
 	jboolean canInit;
 	
@@ -68,7 +68,7 @@ JNIEXPORT jboolean JNICALL Java_net_mc_1cubed_qtcubed_QTMovie__1canInitWithFile
  * Method:    _canInitWithURL
  * Signature: (Ljava/lang/String;)Z
  */
-JNIEXPORT jboolean JNICALL Java_net_mc_1cubed_qtcubed_QTMovie__1canInitWithURL
+JNIEXPORT jboolean JNICALL Java_net_mc_1cubed_qtcubed_QTKitMovieImpl__1canInitWithURL
 (JNIEnv *, jclass, jstring);
 
 /*
@@ -76,7 +76,7 @@ JNIEXPORT jboolean JNICALL Java_net_mc_1cubed_qtcubed_QTMovie__1canInitWithURL
  * Method:    _movieWithFile
  * Signature: (Ljava/lang/String;)J
  */
-JNIEXPORT jlong JNICALL Java_net_mc_1cubed_qtcubed_QTMovie__1movieWithFile
+JNIEXPORT jlong JNICALL Java_net_mc_1cubed_qtcubed_QTKitMovieImpl__1movieWithFile
 (JNIEnv *env, jclass classRef, jstring jstringFilename) {
 	jlong movieRef = 0;
 	
@@ -112,7 +112,7 @@ JNIEXPORT jlong JNICALL Java_net_mc_1cubed_qtcubed_QTMovie__1movieWithFile
  * Method:    _canInitWithURL
  * Signature: (Ljava/net/URL;)Z
  */
-JNIEXPORT jboolean JNICALL Java_net_mc_1cubed_qtcubed_QTMovie__1canInitWithURL
+JNIEXPORT jboolean JNICALL Java_net_mc_1cubed_qtcubed_QTKitMovieImpl__1canInitWithURL
 (JNIEnv *, jclass, jobject);
 
 /*
@@ -120,7 +120,7 @@ JNIEXPORT jboolean JNICALL Java_net_mc_1cubed_qtcubed_QTMovie__1canInitWithURL
  * Method:    _movie
  * Signature: ()J
  */
-JNIEXPORT jlong JNICALL Java_net_mc_1cubed_qtcubed_QTMovie__1movie
+JNIEXPORT jlong JNICALL Java_net_mc_1cubed_qtcubed_QTKitMovieImpl__1movie
 (JNIEnv *env, jclass classRef) {
 	jlong movieRef = 0;
 	
@@ -149,7 +149,7 @@ JNIEXPORT jlong JNICALL Java_net_mc_1cubed_qtcubed_QTMovie__1movie
  * Method:    _movieWithURL
  * Signature: (Ljava/net/URL;)J
  */
-JNIEXPORT jlong JNICALL Java_net_mc_1cubed_qtcubed_QTMovie__1movieWithURL
+JNIEXPORT jlong JNICALL Java_net_mc_1cubed_qtcubed_QTKitMovieImpl__1movieWithURL
 (JNIEnv *, jclass, jobject);
 
 /*
@@ -157,7 +157,7 @@ JNIEXPORT jlong JNICALL Java_net_mc_1cubed_qtcubed_QTMovie__1movieWithURL
  * Method:    _movieWithData
  * Signature: ([B)J
  */
-JNIEXPORT jlong JNICALL Java_net_mc_1cubed_qtcubed_QTMovie__1movieWithData
+JNIEXPORT jlong JNICALL Java_net_mc_1cubed_qtcubed_QTKitMovieImpl__1movieWithData
 (JNIEnv * env, jclass classRef, jbyteArray jbytes) {
 	jlong movieRef;
 	
@@ -200,7 +200,7 @@ JNIEXPORT jlong JNICALL Java_net_mc_1cubed_qtcubed_QTMovie__1movieWithData
  * Method:    _movieWithAttributes
  * Signature: (Ljava/util/Properties;)J
  */
-JNIEXPORT jlong JNICALL Java_net_mc_1cubed_qtcubed_QTMovie__1movieWithAttributes
+JNIEXPORT jlong JNICALL Java_net_mc_1cubed_qtcubed_QTKitMovieImpl__1movieWithAttributes
 (JNIEnv *, jclass, jobject);
 
 /*
@@ -208,7 +208,7 @@ JNIEXPORT jlong JNICALL Java_net_mc_1cubed_qtcubed_QTMovie__1movieWithAttributes
  * Method:    _movieNamed
  * Signature: (Ljava/lang/String;)J
  */
-JNIEXPORT jlong JNICALL Java_net_mc_1cubed_qtcubed_QTMovie__1movieNamed
+JNIEXPORT jlong JNICALL Java_net_mc_1cubed_qtcubed_QTKitMovieImpl__1movieNamed
 (JNIEnv *env, jclass classRef, jstring jMovieName) {
 	jlong movieRef;
 	
@@ -261,7 +261,7 @@ JNIEXPORT void JNICALL Java_net_mc_1cubed_qtcubed_QTMovie__1initWithURL
  * Method:    _initWithData
  * Signature: ([B)V
  */
-JNIEXPORT void JNICALL Java_net_mc_1cubed_qtcubed_QTMovie__1initWithData
+JNIEXPORT void JNICALL Java_net_mc_1cubed_qtcubed_QTKitMovieImpl__1initWithData
 (JNIEnv *env, jobject movieObject, jbyteArray jbytes) {
 	/* Set up autorelease and exception handling */
 	JNF_COCOA_ENTER(env);
@@ -304,7 +304,7 @@ JNIEXPORT void JNICALL Java_net_mc_1cubed_qtcubed_QTMovie__1initWithData
  * Method:    _invalidate
  * Signature: ()V
  */
-JNIEXPORT void JNICALL Java_net_mc_1cubed_qtcubed_QTMovie__1invalidate
+JNIEXPORT void JNICALL Java_net_mc_1cubed_qtcubed_QTKitMovieImpl__1invalidate
 (JNIEnv *env, jobject movieObject) {
 	/* Set up autorelease and exception handling */
 	JNF_COCOA_ENTER(env);

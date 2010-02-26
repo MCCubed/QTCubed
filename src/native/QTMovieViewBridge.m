@@ -34,7 +34,7 @@
  * Method:    createNSViewLong
  * Signature: ()J
  */
-JNIEXPORT jlong JNICALL Java_net_mc_1cubed_qtcubed_QTMovieView_createNSViewLong
+JNIEXPORT jlong JNICALL Java_net_mc_1cubed_qtcubed_MacQTMovieView_createNSViewLong
 (JNIEnv *env, jobject objectRef) {
 	jlong viewPointer;
 
@@ -59,7 +59,7 @@ JNIEXPORT jlong JNICALL Java_net_mc_1cubed_qtcubed_QTMovieView_createNSViewLong
 
 - (void) awtMessage:(jint)messageID message:(jobject)message env:(JNIEnv *)env {
 	switch (messageID) {
-		case net_mc_cubed_qtcubed_QTMovieView_SET_MOVIE:
+		case net_mc_cubed_qtcubed_MacQTMovieView_SET_MOVIE:
 		{
 			jclass cls = (*env)->GetObjectClass(env,message);
 			jmethodID getLongMethod = (*env)->GetMethodID(env,cls,"longValue","()J");

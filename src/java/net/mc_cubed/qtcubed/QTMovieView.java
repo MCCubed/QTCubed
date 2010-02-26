@@ -1,9 +1,9 @@
 //
-//  QTMovieViewBridge.h
+//  QTMovieView.java
 //  QTCubed
 //
 //  Created by Chappell Charles on 10/02/20.
-//  Copyright 2010 MC Cubed, Inc. All rights reserved.
+//  Copyright (c) 2010 MC Cubed, Inc. All rights reserved.
 //
 //  This program is free software; you can redistribute it and/or modify
 //  it under the terms of the GNU General Public License as published by
@@ -27,18 +27,15 @@
 //  Saitama, Saitama, 330-0071
 //  Japan
 
-#import <QTKit/QTKit.h>
-#import <JavaNativeFoundation/JavaNativeFoundation.h>
-#import "net_mc_cubed_qtcubed_MacQTMovieView.h"
+package net.mc_cubed.qtcubed;
 
+import net.mc_cubed.QTCubed;
+import java.awt.Component;
 
-@interface QTMovieViewBridge : QTMovieView
-{
+public interface QTMovieView {
+	
+	Component getComponent();
+
+	public void setMovie(QTMovie movie);
 
 }
-
--(id)init;
--(void)awtMessage:(jint)messageID message:(jobject)message env:(JNIEnv *)env;
-
-
-@end
