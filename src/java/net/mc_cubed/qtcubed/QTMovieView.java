@@ -37,5 +37,9 @@ public interface QTMovieView {
 	Component getComponent();
 
 	public void setMovie(QTMovie movie);
+	
+	public void play();
+	
+	public void pause();
 
 }

@@ -67,11 +67,15 @@ public class QTCubed extends Frame implements ActionListener {
 			Logger.getAnonymousLogger().log(Level.INFO,"Successfully Loaded QTCubed Library!");
 			qtKitLoaded = true;
 		} catch (Throwable t) {
+			Logger.getAnonymousLogger().log(Level.INFO,"Cannot load QTCubed Library!");
 			// Couldn't load the library, try QTJava instead
 			try {
+				Logger.getAnonymousLogger().log(Level.INFO,"Trying to load QTJava Library.");
 				QTSession.open();
+				Logger.getAnonymousLogger().log(Level.INFO,"Successfully loaded QTJava Library!");
 			} catch (Exception ex) {
 				ex.printStackTrace();
+				Logger.getAnonymousLogger().log(Level.SEVERE,"Cannot load either QTCubed or QTJava libraries!  Quicktime Services will not be available!");
 			}
 			
 		}

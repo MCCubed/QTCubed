@@ -35,6 +35,7 @@ import quicktime.app.view.MoviePlayer;
 import quicktime.app.view.QTFactory;
 import quicktime.app.view.QTJComponent;
 import quicktime.std.StdQTConstants;
+import quicktime.std.StdQTException;
 import quicktime.std.movies.Movie;
 import quicktime.std.movies.MovieController;
 import java.net.URL;
@@ -47,12 +48,14 @@ import java.awt.Component;
 class QTJavaMovieView implements QTMovieView {
 
 	QTJComponent component;
+	MoviePlayer player;
 	
 	public QTJavaMovieView() throws InstantiationException {
 		try {
 			Movie newMovie = Movie.fromScrap(0);
-			MoviePlayer newMoviePlayer = new MoviePlayer(newMovie);
-			component = QTFactory.makeQTJComponent(newMoviePlayer);		
+			player = new MoviePlayer(newMovie);
+			component = QTFactory.makeQTJComponent(player);		
+			
 		} catch (QTException ex) {
 			throw new RuntimeException(ex);
 		}
@@ -70,6 +73,22 @@ class QTJavaMovieView implements QTMovieView {
 			component.setMoviePlayer(mp);
 		} catch (QTException ex) {
 			throw new RuntimeException(ex);
+		}
+	}
+	
+	public void play() {
+		try {
+			player.setRate(1);
+		} catch (StdQTException qte) {
+			qte.printStackTrace();
+		}
+	}
+	
+	public void pause() {
+		try {
+			player.setRate(0);
+		} catch (StdQTException qte) {
+			qte.printStackTrace();
 		}
 	}
 }

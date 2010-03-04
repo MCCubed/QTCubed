@@ -67,6 +67,16 @@ JNIEXPORT jlong JNICALL Java_net_mc_1cubed_qtcubed_MacQTMovieView_createNSViewLo
 			[self setMovie:(QTMovie *)movieRef];
 			break;			
 		}
+		case net_mc_cubed_qtcubed_MacQTMovieView_PLAY_MOVIE:
+		{
+			[self play:self];
+			break;			
+		}
+		case net_mc_cubed_qtcubed_MacQTMovieView_PAUSE_MOVIE:
+		{
+			[self pause:self];
+			break;
+		}
 			// more cases...
 	}
 }

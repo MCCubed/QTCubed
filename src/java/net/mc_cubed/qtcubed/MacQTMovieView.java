@@ -40,6 +40,8 @@ class MacQTMovieView extends CocoaComponent implements QTMovieView {
 	static final QTCubed cubed = new QTCubed();
 
 	protected static final int SET_MOVIE = 1;
+	protected static final int PLAY_MOVIE = 2;
+	protected static final int PAUSE_MOVIE = 3;
 	protected Dimension size = new Dimension(320,240);
 	protected Dimension preferredSize = new Dimension(320,240);
 	
@@ -81,4 +83,14 @@ class MacQTMovieView extends CocoaComponent implements QTMovieView {
 	public MacQTMovieView() {
 		super();
 	}
+	
+	public void play() {
+		this.movie = (QTKitMovieImpl)movie;
+		this.sendMessage(PLAY_MOVIE, this.movie.getMovieRef());
+	}
+
+	public void pause() {
+		this.movie = (QTKitMovieImpl)movie;
+		this.sendMessage(PAUSE_MOVIE, this.movie.getMovieRef());
+	}		
 }
