@@ -40,12 +40,14 @@ import java.awt.FileDialog;
 import java.awt.Frame;
 import java.awt.BorderLayout;
 import java.awt.Button;
+import java.security.AccessController;
+import java.security.PrivilegedAction;
+import java.lang.reflect.Method;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import quicktime.QTSession;
 
 /**
  * Starting point for the application. General initialization should be done inside
@@ -60,21 +62,45 @@ public class QTCubed extends Frame implements ActionListener {
 	static {
 		boolean qtKitLoaded = false;
 		try {
+			// Disable Cocoa Compatibility Mode
+			System.setProperty("com.apple.eawt.CocoaComponent.CompatibilityMode", "false");
+			
 			Logger.getAnonymousLogger().log(Level.INFO,"Loading QTCubed Library");
 			// Ensure native JNI library is loaded
-			System.loadLibrary("QTCubed");
+			AccessController.doPrivileged(new PrivilegedAction() {
+				public Object run() {
+					// privileged code goes here
+					System.loadLibrary("QTCubed");
+					return null; // nothing to return
+				}
+			});
 
 			Logger.getAnonymousLogger().log(Level.INFO,"Successfully Loaded QTCubed Library!");
 			qtKitLoaded = true;
-		} catch (Throwable t) {
+		} catch (Throwable t1) {
+			t1.printStackTrace();
 			Logger.getAnonymousLogger().log(Level.INFO,"Cannot load QTCubed Library!");
 			// Couldn't load the library, try QTJava instead
 			try {
 				Logger.getAnonymousLogger().log(Level.INFO,"Trying to load QTJava Library.");
-				QTSession.open();
+				// Invoke QTSession.open() using reflection to avoid any class dependancies.
+				AccessController.doPrivileged(new PrivilegedAction() {
+					public Object run() {
+						// privileged code goes here
+						//				quicktime.QTSession.open();
+						try {
+							Class clazz = Class.forName("quicktime.QTSession");
+							Method m = clazz.getMethod("open");
+							m.invoke(null);
+						} catch (Exception ex) {
+							ex.printStackTrace();
+						}
+						return null; // nothing to return
+					}
+				});
 				Logger.getAnonymousLogger().log(Level.INFO,"Successfully loaded QTJava Library!");
-			} catch (Exception ex) {
-				ex.printStackTrace();
+			} catch (Throwable t2) {
+				t2.printStackTrace();
 				Logger.getAnonymousLogger().log(Level.SEVERE,"Cannot load either QTCubed or QTJava libraries!  Quicktime Services will not be available!");
 			}
 			
@@ -151,6 +177,7 @@ public class QTCubed extends Frame implements ActionListener {
             qtmv.setMovie (movie);
             System.out.println ("Set movie on view");
 			
+			qtmv.play();
             // check to see if it's editable
 //            System.out.println ("Movie is " + 
 //                                (qtmv.isEditable() ? "" : "not ") +

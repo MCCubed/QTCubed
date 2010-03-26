@@ -42,7 +42,6 @@ class MacQTMovieView extends CocoaComponent implements QTMovieView {
 	protected static final int SET_MOVIE = 1;
 	protected static final int PLAY_MOVIE = 2;
 	protected static final int PAUSE_MOVIE = 3;
-	protected Dimension size = new Dimension(320,240);
 	protected Dimension preferredSize = new Dimension(320,240);
 	
 	protected QTKitMovieImpl movie;
@@ -62,12 +61,12 @@ class MacQTMovieView extends CocoaComponent implements QTMovieView {
 	
 	public Dimension getMaximumSize() {
 		// TODO: Get the maximum size from the native code
-		return size;
+		return new Dimension(Short.MAX_VALUE, Short.MAX_VALUE);
 	}
 	
 	public Dimension getMinimumSize() {
 		// TODO: Get the minimum size from the native code
-		return size;
+		return new Dimension(2,2);
 	}
 	
 	public Dimension getPreferredSize() {

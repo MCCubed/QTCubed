@@ -318,8 +318,8 @@ JNIEXPORT void JNICALL Java_net_mc_1cubed_qtcubed_QTKitMovieImpl__1invalidate
 	[qtMovie release];
 	
 	// Set the QTMovie object to nil
-	jmethodID setMovieRefMethod = (*env)->GetMethodID(env,cls,"setMovieRef","(J)V");
-	(*env)->CallVoidMethod(env,movieObject,setMovieRefMethod,nil);
+	//jmethodID setMovieRefMethod = (*env)->GetMethodID(env,cls,"setMovieRef","(J)V");
+	//(*env)->CallVoidMethod(env,movieObject,setMovieRefMethod,nil);
 	
 	/* Autorelease and exception cleanup */
 	JNF_COCOA_EXIT(env);

@@ -59,6 +59,7 @@
 		<javac destdir="${obj}/${product}" deprecation="on" source="1.5" target="1.5" fork="true" debug="true" debuglevel="lines,source">
 			<src path="${src}/java"/>
 			<classpath path="${src}/../lib/eawt-stubs.jar"/>
+			<classpath path="${src}/../lib/jmf.jar"/>
 		</javac>
 	</target>
 	

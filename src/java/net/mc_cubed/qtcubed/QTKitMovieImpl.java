@@ -483,6 +483,7 @@ class QTKitMovieImpl implements QTMovie {
 	{
 		// Destroy the native QTMovie reference
 		_invalidate();
+		super.finalize();
 	}
 	
 	@Override
