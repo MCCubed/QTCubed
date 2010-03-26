@@ -29,7 +29,7 @@
 
 #import <QTKit/QTKit.h>
 #import <JavaNativeFoundation/JavaNativeFoundation.h>
-#import "net_mc_cubed_qtcubed_MacQTMovieView.h"
+#import "net_mc_cubed_qtcubed_QTKitMovieView.h"
 
 
 @interface QTMovieViewBridge : QTMovieView

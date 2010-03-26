@@ -40,7 +40,7 @@ public class QTCubedFactory {
 
 	public static QTMovieView initQTMovieView() throws InstantiationException {
 		if (QTCubed.usesQTKit()) {
-			return new MacQTMovieView();
+			return new QTKitMovieView();
 		} else {
 			return new QTJavaMovieView();
 		}

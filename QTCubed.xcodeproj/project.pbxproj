@@ -106,7 +106,6 @@
 		1058C7A1FEA54F0111CA2CBB /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = /System/Library/Frameworks/Cocoa.framework; sourceTree = "<absolute>"; };
 		29B97324FDCFA39411CA2CEA /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = /System/Library/Frameworks/AppKit.framework; sourceTree = "<absolute>"; };
 		29B97325FDCFA39411CA2CEA /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = /System/Library/Frameworks/Foundation.framework; sourceTree = "<absolute>"; };
-		89B60E390F414E1200C86CA9 /* lib */ = {isa = PBXFileReference; lastKnownFileType = folder; name = lib; path = "Library/Xcode/Project Templates/Java/JNI Application/lib"; sourceTree = DEVELOPER_DIR; };
 		89C3F2910F5250A300B0048E /* English */ = {isa = PBXFileReference; lastKnownFileType = text.rtf; name = English; path = English.lproj/Credits.rtf; sourceTree = "<group>"; };
 		89D0F0220F392F20007831A7 /* English */ = {isa = PBXFileReference; fileEncoding = 10; lastKnownFileType = text.plist.strings; name = English; path = English.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		89D0F0230F392F20007831A7 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -117,6 +116,7 @@
 		89D0F1860F3A2442007831A7 /* JavaVM.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaVM.framework; path = /System/Library/Frameworks/JavaVM.framework; sourceTree = "<absolute>"; };
 		89D0F1BE0F3B68AD007831A7 /* GenericApp.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; name = GenericApp.icns; path = /System/Library/Frameworks/JavaVM.framework/Versions/A/Resources/GenericApp.icns; sourceTree = "<absolute>"; };
 		8D1107320486CEB800E47090 /* QTCubed.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = QTCubed.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		BF043E98115CB90D00B0B8A8 /* lib */ = {isa = PBXFileReference; lastKnownFileType = folder; path = lib; sourceTree = "<group>"; };
 		BFA701CC112EA8E400D5157A /* QTKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QTKit.framework; path = /System/Library/Frameworks/QTKit.framework; sourceTree = "<absolute>"; };
 		BFA701EE112EA91A00D5157A /* libQTCubed.jnilib */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.dylib"; includeInIndex = 0; path = libQTCubed.jnilib; sourceTree = BUILT_PRODUCTS_DIR; };
 		BFA7033E112EABF100D5157A /* QTMovieBridge.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = QTMovieBridge.m; sourceTree = "<group>"; };
@@ -183,7 +183,7 @@
 				89D0F0260F392F48007831A7 /* Source */,
 				89D0F0200F392F20007831A7 /* Resources */,
 				89D0F1390F3948A9007831A7 /* make */,
-				89B60E390F414E1200C86CA9 /* lib */,
+				BF043E98115CB90D00B0B8A8 /* lib */,
 				29B97323FDCFA39411CA2CEA /* Frameworks */,
 				19C28FACFE9D520D11CA2CBB /* Products */,
 			);
@@ -350,7 +350,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "# find the jar file to dig into\nJAR_TO_JAVAH=\"${BUILT_PRODUCTS_DIR}/QTCubed.jar\"\n\n# use a helper script to list all classes inside the jar, and all classes referenced by those classes\nCLASS_LIST=`\"${SRCROOT}/make/find-classrefs.sh\" \"${JAR_TO_JAVAH}\" | xargs`\n\n# run javah for all classes inside the jar, and all classes referenced by those classes\njavah -verbose -jni -classpath \"${JAR_TO_JAVAH}\" -d \"${DERIVED_SOURCES_DIR}\" ${CLASS_LIST}";
+			shellScript = "# find the jar file to dig into\nJAR_TO_JAVAH=\"${BUILT_PRODUCTS_DIR}/QTCubed.jar\"\n\n# use a helper script to list all classes inside the jar, and all classes referenced by those classes\nCLASS_LIST=`\"${SRCROOT}/make/find-classrefs.sh\" \"${JAR_TO_JAVAH}\" | xargs`\n\n# run javah for all classes inside the jar, and all classes referenced by those classes\njavah -verbose -jni -classpath \"${JAR_TO_JAVAH}:${SRCROOT}/lib/jmf.jar\" -d \"${DERIVED_SOURCES_DIR}\" ${CLASS_LIST}";
 		};
 /* End PBXShellScriptBuildPhase section */
 

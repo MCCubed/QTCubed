@@ -34,7 +34,7 @@ import java.awt.Dimension;
 import com.apple.eawt.CocoaComponent;
 import java.awt.Component;
 
-class MacQTMovieView extends CocoaComponent implements QTMovieView {
+class QTKitMovieView extends CocoaComponent implements QTMovieView {
 
 	// Initialize the QTCubed Library
 	static final QTCubed cubed = new QTCubed();
@@ -79,7 +79,7 @@ class MacQTMovieView extends CocoaComponent implements QTMovieView {
 		this.sendMessage(SET_MOVIE, this.movie.getMovieRef());
 	}
 	
-	public MacQTMovieView() {
+	public QTKitMovieView() {
 		super();
 	}
 	

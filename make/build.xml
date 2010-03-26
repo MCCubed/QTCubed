@@ -1,9 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project name="AddressBook" default="jar" basedir="..">
+<project name="QTCubed" default="jar" basedir="..">
 
 	<!-- Global Properties -->
 	<property environment="env"/>
 	
+	<path id="libs">
+		<fileset dir="lib" includes="**/*.jar"/>
+	</path>
     
 	<!-- building in Xcode -->
 	<condition property="product" value="${env.PRODUCT_NAME}">
@@ -42,7 +45,7 @@
 		</not>
 	</condition>
 	
-	<condition property="product" value="AddressBook">
+	<condition property="product" value="QTCubed">
 		<not>
 			<isset property="product"/>
 		</not>
@@ -58,8 +61,9 @@
 	<target name="compile" depends="init" description="Compile">
 		<javac destdir="${obj}/${product}" deprecation="on" source="1.5" target="1.5" fork="true" debug="true" debuglevel="lines,source">
 			<src path="${src}/java"/>
-			<classpath path="${src}/../lib/eawt-stubs.jar"/>
-			<classpath path="${src}/../lib/jmf.jar"/>
+			<classpath>
+				<path refid="libs"/>
+			</classpath>
 		</javac>
 	</target>
 	
