@@ -33,9 +33,6 @@
 
 
 @interface QTMovieViewBridge : QTMovieView
-{
-
-}
 
 -(id)init;
 -(void)awtMessage:(jint)messageID message:(jobject)message env:(JNIEnv *)env;
