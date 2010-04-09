@@ -29,14 +29,10 @@
 
 package net.mc_cubed.qtcubed;
 
-import java.lang.String;
-import javax.swing.SwingUtilities;
 import java.net.URL;
 import java.io.File;
 import java.util.Properties;
-import java.lang.InstantiationException;
 import java.io.IOException;
-import net.mc_cubed.QTCubed;
 
 /**
  * Placeholder (for now) for QTMovie bridge class

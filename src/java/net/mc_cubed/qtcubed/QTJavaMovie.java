@@ -30,10 +30,6 @@
 package net.mc_cubed.qtcubed;
 
 import quicktime.QTException;
-import quicktime.QTSession;
-import quicktime.app.view.MoviePlayer;
-import quicktime.app.view.QTFactory;
-import quicktime.app.view.QTJComponent;
 import quicktime.std.StdQTConstants;
 import quicktime.std.movies.Movie;
 import quicktime.std.movies.MovieController;
@@ -41,7 +37,6 @@ import java.net.URL;
 import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.util.Properties;
-import java.lang.InstantiationException;
 import java.io.IOException;
 
 class QTJavaMovie implements QTMovie {
