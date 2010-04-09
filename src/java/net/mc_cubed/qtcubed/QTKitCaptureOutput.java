@@ -26,13 +26,25 @@
 //  1-3-4 Kamikizaki, Urawa-ku
 //  Saitama, Saitama, 330-0071
 //  Japan
-
 package net.mc_cubed.qtcubed;
 
 /**
  *
  * @author shadow
  */
-public class QTKitCaptureOutput {
+abstract public class QTKitCaptureOutput {
+
+    protected long captureOutputRef;
+
+    protected QTKitCaptureOutput() {
+    }
+
+    protected QTKitCaptureOutput(long captureOutputRef) {
+        this.captureOutputRef = captureOutputRef;
+    }
+
+    long getCaptureOutputRef() {
+        return this.captureOutputRef;
+    }
 
 }

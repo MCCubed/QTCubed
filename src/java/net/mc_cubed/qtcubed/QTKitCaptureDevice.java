@@ -30,9 +30,20 @@
 package net.mc_cubed.qtcubed;
 
 import java.util.Collection;
+import java.util.LinkedList;
 
 
 public class QTKitCaptureDevice {
+
+    public static QTKitCaptureDevice defaultInputDevice(QTKitMediaType qtKitMediaType) {
+
+        long deviceRef = _defaultInputDevice(qtKitMediaType.ordinal());
+
+        return new QTKitCaptureDevice(deviceRef);
+
+    }
+
+    native private static long _defaultInputDevice(int ordinal);
 
     protected final long deviceRef;
     
@@ -48,24 +59,40 @@ public class QTKitCaptureDevice {
     protected native void _release(long deviceRef);
 
     public Collection<QTKitCaptureDevice> inputDevices() {
-        throw new java.lang.UnsupportedOperationException("Not yet implemented");
+        Collection<QTKitCaptureDevice> retval = new LinkedList<QTKitCaptureDevice>();
+
+        for (long captureDeviceRef: _inputDevices()) {
+            retval.add(new QTKitCaptureDevice(captureDeviceRef));
+        }
+
+        return retval;
     }
+
+    native static protected long[] _inputDevices();
 
     public void open() {
-        throw new java.lang.UnsupportedOperationException("Not yet implemented");
+        _open(deviceRef);
     }
+	
+	protected native void _open(long deviceRef);	
 
     public boolean isOpen() {
-        throw new java.lang.UnsupportedOperationException("Not yet implemented");
+        return _isOpen(deviceRef);
     }
+
+	protected native boolean _isOpen(long deviceRef);	
 
     public void close() {
-        throw new java.lang.UnsupportedOperationException("Not yet implemented");
+        _close(deviceRef);
     }
 
+	protected native void _close(long deviceRef);	
+
     public String localizedDisplayName() {
-        throw new java.lang.UnsupportedOperationException("Not yet implemented");
+        return _localizedDisplayName(deviceRef);
     }
+
+	protected native String _localizedDisplayName(long deviceRef);	
 
     @Override
     public String toString() {

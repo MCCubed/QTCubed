@@ -26,7 +26,6 @@
 //  1-3-4 Kamikizaki, Urawa-ku
 //  Saitama, Saitama, 330-0071
 //  Japan
-
 package net.mc_cubed;
 
 import javax.swing.SwingUtilities;
@@ -35,19 +34,24 @@ import net.mc_cubed.qtcubed.QTMovieView;
 import net.mc_cubed.qtcubed.QTCubedFactory;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.Dialog;
 import java.awt.FileDialog;
 import java.awt.Frame;
 import java.awt.BorderLayout;
 import java.awt.Button;
+import java.awt.GridLayout;
 import java.security.AccessController;
 import java.security.PrivilegedAction;
 import java.lang.reflect.Method;
-import java.io.ByteArrayOutputStream;
 import java.io.File;
-import java.io.FileInputStream;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JPanel;
+import net.mc_cubed.qtcubed.QTKitCaptureDecompressedVideoOutput;
+import net.mc_cubed.qtcubed.QTKitCaptureDevice;
+import net.mc_cubed.qtcubed.QTKitCaptureDeviceInput;
+import net.mc_cubed.qtcubed.QTKitCaptureSession;
+import net.mc_cubed.qtcubed.QTKitCaptureView;
+import net.mc_cubed.qtcubed.QTKitMediaType;
 
 /**
  * Starting point for the application. General initialization should be done inside
@@ -57,132 +61,163 @@ import java.util.logging.Logger;
  * @author shadow
  */
 public class QTCubed extends Frame implements ActionListener {
-	static final boolean hasQTKit;
-	
-	static {
-		boolean qtKitLoaded = false;
-		try {
-			// Disable Cocoa Compatibility Mode
-			System.setProperty("com.apple.eawt.CocoaComponent.CompatibilityMode", "false");
-			
-			Logger.getAnonymousLogger().log(Level.INFO,"Loading QTCubed Library");
-			// Ensure native JNI library is loaded
-			AccessController.doPrivileged(new PrivilegedAction() {
-				public Object run() {
-					// privileged code goes here
-					System.loadLibrary("QTCubed");
-					return null; // nothing to return
-				}
-			});
 
-			Logger.getAnonymousLogger().log(Level.INFO,"Successfully Loaded QTCubed Library!");
-			qtKitLoaded = true;
-		} catch (Throwable t1) {
-			t1.printStackTrace();
-			Logger.getAnonymousLogger().log(Level.INFO,"Cannot load QTCubed Library!");
-			// Couldn't load the library, try QTJava instead
-			try {
-				Logger.getAnonymousLogger().log(Level.INFO,"Trying to load QTJava Library.");
-				// Invoke QTSession.open() using reflection to avoid any class dependancies.
-				AccessController.doPrivileged(new PrivilegedAction() {
-					public Object run() {
-						// privileged code goes here
-						//				quicktime.QTSession.open();
-						try {
-							Class clazz = Class.forName("quicktime.QTSession");
-							Method m = clazz.getMethod("open");
-							m.invoke(null);
-						} catch (Exception ex) {
-							ex.printStackTrace();
-						}
-						return null; // nothing to return
-					}
-				});
-				Logger.getAnonymousLogger().log(Level.INFO,"Successfully loaded QTJava Library!");
-			} catch (Throwable t2) {
-				t2.printStackTrace();
-				Logger.getAnonymousLogger().log(Level.SEVERE,"Cannot load either QTCubed or QTJava libraries!  Quicktime Services will not be available!");
-			}
-			
-		}
-		
-		hasQTKit = qtKitLoaded;
-	}
+    static final boolean hasQTKit;
 
-	public static boolean usesQTKit() {
-		return hasQTKit;
-	}
-	
-	QTMovieView qtmv;
-
-	
-	public static void main(final String[] args) {
-		SwingUtilities.invokeLater(new Runnable() {
-			public void run() {
-				new QTCubed().setVisible(true);
-			}
-		});
-		
-		System.out.println("Reached end of main");
-	}
-		
-	// No argument main constructor
-	public QTCubed() {
-		setLayout (new BorderLayout());
-        Button b = new Button ("Select Movie...");
-        b.addActionListener (this);
-		try {
-			qtmv = QTCubedFactory.initQTMovieView();
-			add (b, BorderLayout.SOUTH);
-			add (qtmv.getComponent(), BorderLayout.CENTER);
-			pack();
-		} catch (InstantiationException ex) {
-			ex.printStackTrace();
-		}
-	}
-	
-    public void actionPerformed (ActionEvent e) {
+    static {
+        boolean qtKitLoaded = false;
         try {
-            System.out.println ("action performed");
-			
-            FileDialog fd =
-			new FileDialog (this, "Select Movie...", FileDialog.LOAD);
-            fd.setVisible(true);
-            String fileName = fd.getFile();
-            if (fileName == null)
-                return;
-            File f = new File (fd.getDirectory(), fd.getFile());
-			
-			//             old - when I was creating url's from file paths (works, tho)
-			//             URL u = f.toURL();
-			//             System.out.println ("Creating movie for URL: " + u);
-			//             QTMovie movie = new QTMovie (u);
+            // Disable Cocoa Compatibility Mode
+            System.setProperty("com.apple.eawt.CocoaComponent.CompatibilityMode", "false");
 
-			// Copy the contents of the entire file into a memory buffer
-/*			ByteArrayOutputStream baos = new ByteArrayOutputStream();
-			FileInputStream inStream = new FileInputStream(f);
-			int inChars;
-			byte[] buffer = new byte[10240]; // Read up to 10k bytes at a time
-			while ((inChars = inStream.read(buffer,0,buffer.length)) != -1) {
-				baos.write(buffer,0,inChars);
-			}			
+            Logger.getAnonymousLogger().log(Level.INFO, "Loading QTCubed Library");
+            // Ensure native JNI library is loaded
+            AccessController.doPrivileged(new PrivilegedAction() {
 
-			// Create a QTMovie from the memory buffer
-			QTMovie movie = new QTMovie (baos.toByteArray());
-*/			
-            QTMovie movie = QTCubedFactory.initQTMovie(f);
-            System.out.println ("Created movie");
-			
-            // set movie on the view
-            qtmv.setMovie (movie);
-            System.out.println ("Set movie on view");
-			
-			qtmv.play();
-            // check to see if it's editable
-//            System.out.println ("Movie is " + 
-//                                (qtmv.isEditable() ? "" : "not ") +
-//                                "editable");
-			
+                public Object run() {
+                    // privileged code goes here
+                    System.loadLibrary("QTCubed");
+                    return null; // nothing to return
+                }
+            });
+
+            Logger.getAnonymousLogger().log(Level.INFO, "Successfully Loaded QTCubed Library!");
+            qtKitLoaded = true;
+        } catch (Throwable t1) {
+            t1.printStackTrace();
+            Logger.getAnonymousLogger().log(Level.INFO, "Cannot load QTCubed Library!");
+            // Couldn't load the library, try QTJava instead
+            try {
+                Logger.getAnonymousLogger().log(Level.INFO, "Trying to load QTJava Library.");
+                // Invoke QTSession.open() using reflection to avoid any class dependancies.
+                AccessController.doPrivileged(new PrivilegedAction() {
+
+                    public Object run() {
+                        // privileged code goes here
+                        //				quicktime.QTSession.open();
+                        try {
+                            Class clazz = Class.forName("quicktime.QTSession");
+                            Method m = clazz.getMethod("open");
+                            m.invoke(null);
+                        } catch (Exception ex) {
+                            ex.printStackTrace();
+                        }
+                        return null; // nothing to return
+                    }
+                });
+                Logger.getAnonymousLogger().log(Level.INFO, "Successfully loaded QTJava Library!");
+            } catch (Throwable t2) {
+                t2.printStackTrace();
+                Logger.getAnonymousLogger().log(Level.SEVERE, "Cannot load either QTCubed or QTJava libraries!  Quicktime Services will not be available!");
+            }
+
+        }
+
+        hasQTKit = qtKitLoaded;
+    }
+
+    public static boolean usesQTKit() {
+        return hasQTKit;
+    }
+    QTMovieView qtmv;
+    QTKitCaptureView qtcv;
+
+    public static void main(final String[] args) {
+        SwingUtilities.invokeLater(new Runnable() {
+
+            public void run() {
+                new QTCubed().setVisible(true);
+            }
+        });
+
+        System.out.println("Reached end of main");
+    }
+
+    // No argument main constructor
+    public QTCubed() {
+        setLayout(new BorderLayout());
+        JPanel buttonPanel = new JPanel();
+        buttonPanel.setLayout(new GridLayout(1, 2));
+        Button b = new Button("Select Movie...");
+        b.setActionCommand("MOVIE");
+        b.addActionListener(this);
+        buttonPanel.add(b);
+
+        b = new Button("View Capture Device");
+        b.setActionCommand("CAPTURE");
+        b.addActionListener(this);
+        buttonPanel.add(b);
+        try {
+            qtmv = QTCubedFactory.initQTMovieView();
+            add(buttonPanel, BorderLayout.SOUTH);
+            add(qtmv.getComponent(), BorderLayout.CENTER);
+            qtcv = new QTKitCaptureView();
+            add(qtcv.getComponent(), BorderLayout.WEST);
+            pack();
+        } catch (InstantiationException ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    public void actionPerformed(ActionEvent e) {
+        try {
+            System.out.println("action performed");
+
+            if (e.getActionCommand().equalsIgnoreCase("MOVIE")) {
+                FileDialog fd =
+                        new FileDialog(this, "Select Movie...", FileDialog.LOAD);
+                fd.setVisible(true);
+                String fileName = fd.getFile();
+                if (fileName == null) {
+                    return;
+                }
+                File f = new File(fd.getDirectory(), fd.getFile());
+
+                QTMovie movie = QTCubedFactory.initQTMovie(f);
+                System.out.println("Created movie");
+                this.remove(qtmv.getComponent());
+                this.remove(qtcv.getComponent());
+
+                this.add(qtmv.getComponent(), BorderLayout.CENTER);
+                // set movie on the view
+                qtmv.setMovie(movie);
+                System.out.println("Set movie on view");
+
+                qtmv.play();
+            }
+
+            // Copying this from the apple developer docs and switching to Java syntax
+            if (e.getActionCommand().equalsIgnoreCase("CAPTURE")) {
+                final QTKitCaptureSession session = new QTKitCaptureSession();
+
+                QTKitCaptureDevice videoDevice = QTKitCaptureDevice.defaultInputDevice(QTKitMediaType.VIDEO);
+                try {
+                    videoDevice.open();
+                    QTKitCaptureDeviceInput videoDeviceInput = new QTKitCaptureDeviceInput(videoDevice);
+                    session.addInput(videoDeviceInput);
+                    session.addOutput(new QTKitCaptureDecompressedVideoOutput());
+
+                    SwingUtilities.invokeLater(new Runnable() {
+
+                        public void run() {
+                            qtcv.setCaptureSession(session);
+                        }
+                    });
+
+
+                    session.startRunning();
+
+                    this.remove(qtmv.getComponent());
+                    this.remove(qtcv.getComponent());
+
+                    this.add(qtcv.getComponent(), BorderLayout.CENTER);
+                    validate();
+                    pack();
+
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                }
+            }
         } catch (Exception ex) {
             // TODO- maybe a dialog
             ex.printStackTrace();

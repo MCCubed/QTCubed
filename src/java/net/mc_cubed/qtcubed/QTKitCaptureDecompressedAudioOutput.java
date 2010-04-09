@@ -32,6 +32,12 @@ package net.mc_cubed.qtcubed;
  *
  * @author shadow
  */
-public class QTKitCaptureDecompressedAudioOutput {
+public class QTKitCaptureDecompressedAudioOutput extends QTKitCaptureOutput {
+
+	public QTKitCaptureDecompressedAudioOutput() {
+		super(_allocInit());
+	}
+	
+    native static protected long _allocInit();
 
 }

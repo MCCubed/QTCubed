@@ -33,7 +33,6 @@ import net.mc_cubed.QTCubed;
 import java.net.URL;
 import java.io.File;
 import java.util.Properties;
-import java.lang.InstantiationException;
 import java.io.IOException;
 
 public class QTCubedFactory {

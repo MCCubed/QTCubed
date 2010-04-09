@@ -28,10 +28,23 @@
 //  Japan
 package net.mc_cubed.qtcubed;
 
+import java.util.logging.Logger;
+
 /**
  *
  * @author shadow
  */
-public class QTKitCaptureDecompressedVideoOutput {
+public class QTKitCaptureDecompressedVideoOutput extends QTKitCaptureOutput {
+
+    public QTKitCaptureDecompressedVideoOutput() {
+        captureOutputRef = _allocInit();
+    }
+
+    native protected long _allocInit();
+
+    protected void pushFrame(byte[] frameData) {
+        Logger.getAnonymousLogger().info("Got " + frameData.length + " bytes of data");
+    }
+
 
 }

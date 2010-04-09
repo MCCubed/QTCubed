@@ -30,15 +30,22 @@
 package net.mc_cubed.qtcubed;
 
 import com.apple.eawt.CocoaComponent;
+import java.awt.Component;
 import java.awt.Dimension;
+import java.awt.Panel;
+import net.mc_cubed.QTCubed;
 
 /**
  *
  * @author shadow
  */
 public class QTKitCaptureView extends CocoaComponent {
-    public final int SET_CAPTURE_SESSION = 1;
+    protected static final int SET_CAPTURE_SESSION = 1;
 
+	protected Dimension preferredSize = new Dimension(320,240);
+
+	static QTCubed qtCubed;
+	
     protected QTKitCaptureSession captureSession;
     
     @Override
@@ -50,23 +57,27 @@ public class QTKitCaptureView extends CocoaComponent {
         return (int)createNSViewLong();
     }
 
-    @Override
-    public Dimension getMaximumSize() {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
-
-    @Override
-    public Dimension getMinimumSize() {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
-
-    @Override
-    public Dimension getPreferredSize() {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
-
     public void setCaptureSession(QTKitCaptureSession session) {
         this.captureSession = session;
         sendMessage(SET_CAPTURE_SESSION, session.getCaptureSessionRef());
     }
+
+    public Component getComponent() {
+        return this;
+    }
+	
+	public Dimension getMaximumSize() {
+		// TODO: Get the maximum size from the native code
+		return new Dimension(Short.MAX_VALUE, Short.MAX_VALUE);
+	}
+	
+	public Dimension getMinimumSize() {
+		// TODO: Get the minimum size from the native code
+		return new Dimension(2,2);
+	}
+	
+	public Dimension getPreferredSize() {
+		// TODO: Get the preferred size from the native code			
+		return preferredSize;
+	}
 }

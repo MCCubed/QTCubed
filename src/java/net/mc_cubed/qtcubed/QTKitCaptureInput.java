@@ -33,6 +33,15 @@ package net.mc_cubed.qtcubed;
  *
  * @author shadow
  */
-public class QTKitCaptureInput {
+abstract public class QTKitCaptureInput {
+    protected final long captureInputRef;
+
+    protected QTKitCaptureInput(long captureInputRef) {
+        this.captureInputRef = captureInputRef;
+    }
+
+    long getCaptureInputRef() {
+        return this.captureInputRef;
+    }
 
 }

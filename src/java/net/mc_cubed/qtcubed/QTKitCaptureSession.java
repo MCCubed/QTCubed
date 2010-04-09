@@ -26,8 +26,10 @@
 //  1-3-4 Kamikizaki, Urawa-ku
 //  Saitama, Saitama, 330-0071
 //  Japan
-
 package net.mc_cubed.qtcubed;
+
+import java.util.LinkedList;
+import java.util.List;
 
 /**
  *
@@ -36,7 +38,15 @@ package net.mc_cubed.qtcubed;
 public class QTKitCaptureSession {
 
     protected final long captureSessionRef;
-    
+    protected List<QTKitCaptureInput> inputList = new LinkedList<QTKitCaptureInput>();
+    protected List<QTKitCaptureOutput> outputList = new LinkedList<QTKitCaptureOutput>();
+
+    public QTKitCaptureSession() {
+        this(_allocInit());
+    }
+
+    native static protected long _allocInit();
+
     protected QTKitCaptureSession(long captureSessionRef) {
         this.captureSessionRef = captureSessionRef;
     }
@@ -44,4 +54,32 @@ public class QTKitCaptureSession {
     long getCaptureSessionRef() {
         return captureSessionRef;
     }
+
+    native static protected void _release(long captureSessionRef);
+
+    @Override
+    protected void finalize() {
+        _release(captureSessionRef);
+    }
+
+    public boolean addInput(QTKitCaptureInput input) {
+        inputList.add(input);
+        return _addInput(captureSessionRef, input.getCaptureInputRef());
+    }
+
+    public boolean addOutput(QTKitCaptureOutput output) {
+        outputList.add(output);
+        return _addOutput(captureSessionRef, output.getCaptureOutputRef());
+
+    }
+
+    native protected boolean _addInput(long captureSessionRef, long captureInputRef);
+
+    native protected boolean _addOutput(long captureSessionRef, long captureInputRef);
+
+    public void startRunning() {
+        _startRunning(captureSessionRef);
+    }
+
+    native protected void _startRunning(long captureSessionRef);
 }

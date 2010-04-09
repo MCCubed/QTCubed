@@ -32,6 +32,13 @@ package net.mc_cubed.qtcubed;
  *
  * @author shadow
  */
-public class QTKitCaptureDeviceInput {
+public class QTKitCaptureDeviceInput extends QTKitCaptureInput {
+    long captureDeviceInputRef;
+
+    public QTKitCaptureDeviceInput(QTKitCaptureDevice videoDevice) {
+        super(_allocInitWithCaptureDevice(videoDevice.deviceRef));
+    }
+
+    native protected static long _allocInitWithCaptureDevice(long captureDeviceRef);
 
 }
