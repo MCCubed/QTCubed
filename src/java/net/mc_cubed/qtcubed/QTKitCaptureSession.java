@@ -73,6 +73,16 @@ public class QTKitCaptureSession {
 
     }
 
+    public void removeInput(QTKitCaptureInput input) {
+        inputList.remove(input);
+        _removeInput(captureSessionRef,input.getCaptureInputRef());
+    }
+
+    public void removeOutput(QTKitCaptureOutput output) {
+        outputList.remove(output);
+        _removeOutput(captureSessionRef,output.getCaptureOutputRef());
+    }
+
     native protected boolean _addInput(long captureSessionRef, long captureInputRef);
 
     native protected boolean _addOutput(long captureSessionRef, long captureInputRef);
@@ -82,4 +92,20 @@ public class QTKitCaptureSession {
     }
 
     native protected void _startRunning(long captureSessionRef);
+
+    public boolean isRunning() {
+        return _isRunning(captureSessionRef);
+    }
+
+    native protected boolean _isRunning(long captureSessionRef);
+
+    public void stopRunning() {
+        _stopRunning(captureSessionRef);
+    }
+
+    native protected void _stopRunning(long captureSessionRef);
+
+    private native void _removeInput(long captureSessionRef, long captureInputRef);
+
+    private native void _removeOutput(long captureSessionRef, long captureOutputRef);
 }

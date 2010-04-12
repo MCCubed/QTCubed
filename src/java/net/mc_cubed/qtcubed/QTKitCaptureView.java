@@ -32,7 +32,6 @@ package net.mc_cubed.qtcubed;
 import com.apple.eawt.CocoaComponent;
 import java.awt.Component;
 import java.awt.Dimension;
-import java.awt.Panel;
 import net.mc_cubed.QTCubed;
 
 /**

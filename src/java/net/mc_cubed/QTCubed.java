@@ -43,6 +43,8 @@ import java.security.AccessController;
 import java.security.PrivilegedAction;
 import java.lang.reflect.Method;
 import java.io.File;
+import java.util.Map.Entry;
+import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JPanel;
@@ -51,6 +53,7 @@ import net.mc_cubed.qtcubed.QTKitCaptureDevice;
 import net.mc_cubed.qtcubed.QTKitCaptureDeviceInput;
 import net.mc_cubed.qtcubed.QTKitCaptureSession;
 import net.mc_cubed.qtcubed.QTKitCaptureView;
+import net.mc_cubed.qtcubed.QTKitFormatDescription;
 import net.mc_cubed.qtcubed.QTKitMediaType;
 
 /**
@@ -114,6 +117,16 @@ public class QTCubed extends Frame implements ActionListener {
         }
 
         hasQTKit = qtKitLoaded;
+
+        // Reflexively call QTCubedJMFInitializer.init() to avoid classpath deps in case JMF is not present
+        try {
+            Class clazz = Class.forName("net_mc_cubed.QTCubedJMFInitializer");
+            Method initMethod = clazz.getMethod("init");
+            initMethod.invoke(null);
+        } catch (Exception ex) {
+            // Do nothing if we fail
+            Logger.getAnonymousLogger().info("Could not initialize JMF features of the QTCubed Library");
+        }
     }
 
     public static boolean usesQTKit() {
@@ -156,6 +169,18 @@ public class QTCubed extends Frame implements ActionListener {
             pack();
         } catch (InstantiationException ex) {
             ex.printStackTrace();
+        }
+
+        Logger.getAnonymousLogger().info("************** Attached capture device info follows **************");
+        for (QTKitCaptureDevice device : QTKitCaptureDevice.inputDevices()) {
+            Logger.getAnonymousLogger().info(" ----- " + device.uniqueId() + " (" + device.localizedDisplayName() + ") ----- ");
+            for (QTKitFormatDescription format : device.getFormatDescriptions()) {
+                Logger.getAnonymousLogger().info("Format Type: " + format.getMediaType() + ": " + format.getFormatType());
+                Set<Entry<Object,Object>> props = format.getFormatDescriptionAttributes().entrySet();
+                for (Entry<Object,Object> prop: props) {
+                    Logger.getAnonymousLogger().info("    " + prop.getKey() + ": " + prop.getValue());
+                }
+            }
         }
     }
 

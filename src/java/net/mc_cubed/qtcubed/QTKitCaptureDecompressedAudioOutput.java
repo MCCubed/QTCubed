@@ -28,16 +28,23 @@
 //  Japan
 package net.mc_cubed.qtcubed;
 
+import net.mc_cubed.qtcubed.media.protocol.quicktime.QTCubedDelegator;
+
 /**
  *
  * @author shadow
  */
-public class QTKitCaptureDecompressedAudioOutput extends QTKitCaptureOutput {
+public class QTKitCaptureDecompressedAudioOutput extends QTKitCaptureOutput implements QTCubedDelegator {
 
-	public QTKitCaptureDecompressedAudioOutput() {
-		super(_allocInit());
-	}
-	
+    protected QTKitCaptureDataDelegate dataDelegate;
+
+    public QTKitCaptureDecompressedAudioOutput() {
+        super(_allocInit());
+    }
+
     native static protected long _allocInit();
 
+    public void setDataDelegate(QTKitCaptureDataDelegate dataDelegate) {
+        this.dataDelegate = dataDelegate;
+    }
 }

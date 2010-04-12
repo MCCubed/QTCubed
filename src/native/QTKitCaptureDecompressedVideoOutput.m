@@ -86,7 +86,7 @@ JNIEXPORT jlong JNICALL Java_net_mc_1cubed_qtcubed_QTKitCaptureDecompressedVideo
 	// Dealloc the global Java object reference, and nil both references to the VM
 	JNIEnv *env;
 	(*g_vm)->AttachCurrentThread (g_vm, (void **) &env, NULL);
-	(*env)->DeleteGlobalRef(objectRef);
+	(*env)->DeleteGlobalRef(env,objectRef);
 	objectRef = nil;
 	(*g_vm)->DetachCurrentThread (g_vm);
 	g_vm = nil;

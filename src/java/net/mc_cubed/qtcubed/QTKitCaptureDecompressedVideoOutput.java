@@ -29,12 +29,15 @@
 package net.mc_cubed.qtcubed;
 
 import java.util.logging.Logger;
+import net.mc_cubed.qtcubed.media.protocol.quicktime.QTCubedDelegator;
 
 /**
  *
  * @author shadow
  */
-public class QTKitCaptureDecompressedVideoOutput extends QTKitCaptureOutput {
+public class QTKitCaptureDecompressedVideoOutput extends QTKitCaptureOutput implements QTCubedDelegator {
+
+    QTKitCaptureDataDelegate dataDelegate;
 
     public QTKitCaptureDecompressedVideoOutput() {
         captureOutputRef = _allocInit();
@@ -43,7 +46,16 @@ public class QTKitCaptureDecompressedVideoOutput extends QTKitCaptureOutput {
     native protected long _allocInit();
 
     protected void pushFrame(byte[] frameData) {
-        Logger.getAnonymousLogger().info("Got " + frameData.length + " bytes of data");
+        if (dataDelegate != null) {
+            dataDelegate.nextSample(frameData);
+        } else {
+            Logger.getAnonymousLogger().info("Got " + frameData.length + " bytes of data");
+        }
+
+    }
+
+    public void setDataDelegate(QTKitCaptureDataDelegate dataDelegate) {
+        this.dataDelegate = dataDelegate;
     }
 
 

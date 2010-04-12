@@ -33,6 +33,7 @@
 		89D0F1BF0F3B68AD007831A7 /* GenericApp.icns in Resources */ = {isa = PBXBuildFile; fileRef = 89D0F1BE0F3B68AD007831A7 /* GenericApp.icns */; };
 		BF152CED112ED7BE008B4ECC /* QTMovieBridge.m in Sources */ = {isa = PBXBuildFile; fileRef = BFA7033E112EABF100D5157A /* QTMovieBridge.m */; };
 		BF78591B112EDDC70064262B /* AppKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 29B97324FDCFA39411CA2CEA /* AppKit.framework */; };
+		BF98C1ED117301020059AA19 /* net_mc_cubed_qtcubed_QTKitMediaType.h in Headers */ = {isa = PBXBuildFile; fileRef = BF98C1EC117301020059AA19 /* net_mc_cubed_qtcubed_QTKitMediaType.h */; };
 		BFA701CD112EA8E400D5157A /* QTKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BFA701CC112EA8E400D5157A /* QTKit.framework */; };
 		BFC77906112FDFE900F2D7A3 /* net_mc_cubed_qtcubed_QTMovie.h in Headers */ = {isa = PBXBuildFile; fileRef = BFC77905112FDFE900F2D7A3 /* net_mc_cubed_qtcubed_QTMovie.h */; };
 		BFC7799C1130009800F2D7A3 /* net_mc_cubed_qtcubed_QTMovieView.h in Headers */ = {isa = PBXBuildFile; fileRef = BFC7799B1130009700F2D7A3 /* net_mc_cubed_qtcubed_QTMovieView.h */; };
@@ -40,6 +41,31 @@
 		BFC77A611130250900F2D7A3 /* QTMovieViewBridge.h in Headers */ = {isa = PBXBuildFile; fileRef = BFC77A601130250900F2D7A3 /* QTMovieViewBridge.h */; };
 		BFC77B1D11310CB000F2D7A3 /* libQTCubed.jnilib in Copy Java Resources */ = {isa = PBXBuildFile; fileRef = BFA701EE112EA91A00D5157A /* libQTCubed.jnilib */; };
 		BFC77B1F11310CC800F2D7A3 /* QTCubed.jar in Copy Java Resources */ = {isa = PBXBuildFile; fileRef = BFC77B1E11310CC100F2D7A3 /* QTCubed.jar */; };
+		BFFC1179116ECD8E00BEEA82 /* QTKitCaptureSession.h in Headers */ = {isa = PBXBuildFile; fileRef = BFFC1177116ECD8E00BEEA82 /* QTKitCaptureSession.h */; };
+		BFFC117A116ECD8E00BEEA82 /* QTKitCaptureSession.m in Sources */ = {isa = PBXBuildFile; fileRef = BFFC1178116ECD8E00BEEA82 /* QTKitCaptureSession.m */; };
+		BFFC117D116ECDE100BEEA82 /* net_mc_cubed_qtcubed_QTKitCaptureSession.h in Headers */ = {isa = PBXBuildFile; fileRef = BFFC117C116ECDE100BEEA82 /* net_mc_cubed_qtcubed_QTKitCaptureSession.h */; };
+		BFFC11BD116EDE4600BEEA82 /* QTKitCaptureDevice.h in Headers */ = {isa = PBXBuildFile; fileRef = BFFC11BB116EDE4600BEEA82 /* QTKitCaptureDevice.h */; };
+		BFFC11BE116EDE4600BEEA82 /* QTKitCaptureDevice.m in Sources */ = {isa = PBXBuildFile; fileRef = BFFC11BC116EDE4600BEEA82 /* QTKitCaptureDevice.m */; };
+		BFFC11CA116EDF0500BEEA82 /* net_mc_cubed_qtcubed_QTKitCaptureConnection.h in Headers */ = {isa = PBXBuildFile; fileRef = BFFC11BF116EDF0500BEEA82 /* net_mc_cubed_qtcubed_QTKitCaptureConnection.h */; };
+		BFFC11CB116EDF0500BEEA82 /* net_mc_cubed_qtcubed_QTKitCaptureDecompressedAudioOutput.h in Headers */ = {isa = PBXBuildFile; fileRef = BFFC11C0116EDF0500BEEA82 /* net_mc_cubed_qtcubed_QTKitCaptureDecompressedAudioOutput.h */; };
+		BFFC11CC116EDF0500BEEA82 /* net_mc_cubed_qtcubed_QTKitCaptureDecompressedVideoOutput.h in Headers */ = {isa = PBXBuildFile; fileRef = BFFC11C1116EDF0500BEEA82 /* net_mc_cubed_qtcubed_QTKitCaptureDecompressedVideoOutput.h */; };
+		BFFC11CD116EDF0500BEEA82 /* net_mc_cubed_qtcubed_QTKitCaptureDevice.h in Headers */ = {isa = PBXBuildFile; fileRef = BFFC11C2116EDF0500BEEA82 /* net_mc_cubed_qtcubed_QTKitCaptureDevice.h */; };
+		BFFC11CE116EDF0500BEEA82 /* net_mc_cubed_qtcubed_QTKitCaptureDeviceInput.h in Headers */ = {isa = PBXBuildFile; fileRef = BFFC11C3116EDF0500BEEA82 /* net_mc_cubed_qtcubed_QTKitCaptureDeviceInput.h */; };
+		BFFC11CF116EDF0500BEEA82 /* net_mc_cubed_qtcubed_QTKitCaptureInput.h in Headers */ = {isa = PBXBuildFile; fileRef = BFFC11C4116EDF0500BEEA82 /* net_mc_cubed_qtcubed_QTKitCaptureInput.h */; };
+		BFFC11D0116EDF0500BEEA82 /* net_mc_cubed_qtcubed_QTKitCaptureOutput.h in Headers */ = {isa = PBXBuildFile; fileRef = BFFC11C5116EDF0500BEEA82 /* net_mc_cubed_qtcubed_QTKitCaptureOutput.h */; };
+		BFFC11D1116EDF0500BEEA82 /* net_mc_cubed_qtcubed_QTKitCaptureView.h in Headers */ = {isa = PBXBuildFile; fileRef = BFFC11C6116EDF0500BEEA82 /* net_mc_cubed_qtcubed_QTKitCaptureView.h */; };
+		BFFC11D2116EDF0500BEEA82 /* net_mc_cubed_qtcubed_QTKitCompressionOptions.h in Headers */ = {isa = PBXBuildFile; fileRef = BFFC11C7116EDF0500BEEA82 /* net_mc_cubed_qtcubed_QTKitCompressionOptions.h */; };
+		BFFC11D3116EDF0500BEEA82 /* net_mc_cubed_qtcubed_QTKitFormatDescription.h in Headers */ = {isa = PBXBuildFile; fileRef = BFFC11C8116EDF0500BEEA82 /* net_mc_cubed_qtcubed_QTKitFormatDescription.h */; };
+		BFFC11D4116EDF0500BEEA82 /* net_mc_cubed_qtcubed_QTKitSampleBuffer.h in Headers */ = {isa = PBXBuildFile; fileRef = BFFC11C9116EDF0500BEEA82 /* net_mc_cubed_qtcubed_QTKitSampleBuffer.h */; };
+		BFFC1357116EF34900BEEA82 /* QTKitCaptureDeviceInput.h in Headers */ = {isa = PBXBuildFile; fileRef = BFFC1355116EF34800BEEA82 /* QTKitCaptureDeviceInput.h */; };
+		BFFC1358116EF34900BEEA82 /* QTKitCaptureDeviceInput.m in Sources */ = {isa = PBXBuildFile; fileRef = BFFC1356116EF34900BEEA82 /* QTKitCaptureDeviceInput.m */; };
+		BFFC13D1116EFAE800BEEA82 /* QTCaptureViewBridge.h in Headers */ = {isa = PBXBuildFile; fileRef = BFFC13CF116EFAE800BEEA82 /* QTCaptureViewBridge.h */; };
+		BFFC13D2116EFAE800BEEA82 /* QTCaptureViewBridge.m in Sources */ = {isa = PBXBuildFile; fileRef = BFFC13D0116EFAE800BEEA82 /* QTCaptureViewBridge.m */; };
+		BFFC13DA116EFD4000BEEA82 /* net_mc_cubed_qtcubed_QTKitMovieView.h in Headers */ = {isa = PBXBuildFile; fileRef = BFFC13D9116EFD4000BEEA82 /* net_mc_cubed_qtcubed_QTKitMovieView.h */; };
+		BFFC1414116F030200BEEA82 /* QTKitCaptureDecompressedVideoOutput.h in Headers */ = {isa = PBXBuildFile; fileRef = BFFC1412116F030200BEEA82 /* QTKitCaptureDecompressedVideoOutput.h */; };
+		BFFC1415116F030200BEEA82 /* QTKitCaptureDecompressedVideoOutput.m in Sources */ = {isa = PBXBuildFile; fileRef = BFFC1413116F030200BEEA82 /* QTKitCaptureDecompressedVideoOutput.m */; };
+		BFFC141F116F04B200BEEA82 /* QTKitCaptureDecompressedAudioOutput.h in Headers */ = {isa = PBXBuildFile; fileRef = BFFC141D116F04B200BEEA82 /* QTKitCaptureDecompressedAudioOutput.h */; };
+		BFFC1420116F04B200BEEA82 /* QTKitCaptureDecompressedAudioOutput.m in Sources */ = {isa = PBXBuildFile; fileRef = BFFC141E116F04B200BEEA82 /* QTKitCaptureDecompressedAudioOutput.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -117,6 +143,8 @@
 		89D0F1BE0F3B68AD007831A7 /* GenericApp.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; name = GenericApp.icns; path = /System/Library/Frameworks/JavaVM.framework/Versions/A/Resources/GenericApp.icns; sourceTree = "<absolute>"; };
 		8D1107320486CEB800E47090 /* QTCubed.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = QTCubed.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		BF043E98115CB90D00B0B8A8 /* lib */ = {isa = PBXFileReference; lastKnownFileType = folder; path = lib; sourceTree = "<group>"; };
+		BF98C14C1172EFA50059AA19 /* QuickTime.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuickTime.framework; path = /System/Library/Frameworks/QuickTime.framework; sourceTree = "<absolute>"; };
+		BF98C1EC117301020059AA19 /* net_mc_cubed_qtcubed_QTKitMediaType.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = net_mc_cubed_qtcubed_QTKitMediaType.h; path = "build/QTCubed.build/Debug/Compile Native.build/DerivedSources/net_mc_cubed_qtcubed_QTKitMediaType.h"; sourceTree = "<group>"; };
 		BFA701CC112EA8E400D5157A /* QTKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QTKit.framework; path = /System/Library/Frameworks/QTKit.framework; sourceTree = "<absolute>"; };
 		BFA701EE112EA91A00D5157A /* libQTCubed.jnilib */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.dylib"; includeInIndex = 0; path = libQTCubed.jnilib; sourceTree = BUILT_PRODUCTS_DIR; };
 		BFA7033E112EABF100D5157A /* QTMovieBridge.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = QTMovieBridge.m; sourceTree = "<group>"; };
@@ -127,6 +155,31 @@
 		BFC77A5B11301AD100F2D7A3 /* version.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = version.plist; sourceTree = "<group>"; };
 		BFC77A601130250900F2D7A3 /* QTMovieViewBridge.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = QTMovieViewBridge.h; sourceTree = "<group>"; };
 		BFC77B1E11310CC100F2D7A3 /* QTCubed.jar */ = {isa = PBXFileReference; lastKnownFileType = archive.jar; name = QTCubed.jar; path = build/Debug/QTCubed.jar; sourceTree = "<group>"; };
+		BFFC1177116ECD8E00BEEA82 /* QTKitCaptureSession.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = QTKitCaptureSession.h; sourceTree = "<group>"; };
+		BFFC1178116ECD8E00BEEA82 /* QTKitCaptureSession.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = QTKitCaptureSession.m; sourceTree = "<group>"; };
+		BFFC117C116ECDE100BEEA82 /* net_mc_cubed_qtcubed_QTKitCaptureSession.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = net_mc_cubed_qtcubed_QTKitCaptureSession.h; path = "build/QTCubed.build/Debug/Compile Native.build/DerivedSources/net_mc_cubed_qtcubed_QTKitCaptureSession.h"; sourceTree = "<group>"; };
+		BFFC11BB116EDE4600BEEA82 /* QTKitCaptureDevice.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = QTKitCaptureDevice.h; sourceTree = "<group>"; };
+		BFFC11BC116EDE4600BEEA82 /* QTKitCaptureDevice.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = QTKitCaptureDevice.m; sourceTree = "<group>"; };
+		BFFC11BF116EDF0500BEEA82 /* net_mc_cubed_qtcubed_QTKitCaptureConnection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = net_mc_cubed_qtcubed_QTKitCaptureConnection.h; path = "build/QTCubed.build/Debug/Compile Native.build/DerivedSources/net_mc_cubed_qtcubed_QTKitCaptureConnection.h"; sourceTree = "<group>"; };
+		BFFC11C0116EDF0500BEEA82 /* net_mc_cubed_qtcubed_QTKitCaptureDecompressedAudioOutput.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = net_mc_cubed_qtcubed_QTKitCaptureDecompressedAudioOutput.h; path = "build/QTCubed.build/Debug/Compile Native.build/DerivedSources/net_mc_cubed_qtcubed_QTKitCaptureDecompressedAudioOutput.h"; sourceTree = "<group>"; };
+		BFFC11C1116EDF0500BEEA82 /* net_mc_cubed_qtcubed_QTKitCaptureDecompressedVideoOutput.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = net_mc_cubed_qtcubed_QTKitCaptureDecompressedVideoOutput.h; path = "build/QTCubed.build/Debug/Compile Native.build/DerivedSources/net_mc_cubed_qtcubed_QTKitCaptureDecompressedVideoOutput.h"; sourceTree = "<group>"; };
+		BFFC11C2116EDF0500BEEA82 /* net_mc_cubed_qtcubed_QTKitCaptureDevice.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = net_mc_cubed_qtcubed_QTKitCaptureDevice.h; path = "build/QTCubed.build/Debug/Compile Native.build/DerivedSources/net_mc_cubed_qtcubed_QTKitCaptureDevice.h"; sourceTree = "<group>"; };
+		BFFC11C3116EDF0500BEEA82 /* net_mc_cubed_qtcubed_QTKitCaptureDeviceInput.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = net_mc_cubed_qtcubed_QTKitCaptureDeviceInput.h; path = "build/QTCubed.build/Debug/Compile Native.build/DerivedSources/net_mc_cubed_qtcubed_QTKitCaptureDeviceInput.h"; sourceTree = "<group>"; };
+		BFFC11C4116EDF0500BEEA82 /* net_mc_cubed_qtcubed_QTKitCaptureInput.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = net_mc_cubed_qtcubed_QTKitCaptureInput.h; path = "build/QTCubed.build/Debug/Compile Native.build/DerivedSources/net_mc_cubed_qtcubed_QTKitCaptureInput.h"; sourceTree = "<group>"; };
+		BFFC11C5116EDF0500BEEA82 /* net_mc_cubed_qtcubed_QTKitCaptureOutput.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = net_mc_cubed_qtcubed_QTKitCaptureOutput.h; path = "build/QTCubed.build/Debug/Compile Native.build/DerivedSources/net_mc_cubed_qtcubed_QTKitCaptureOutput.h"; sourceTree = "<group>"; };
+		BFFC11C6116EDF0500BEEA82 /* net_mc_cubed_qtcubed_QTKitCaptureView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = net_mc_cubed_qtcubed_QTKitCaptureView.h; path = "build/QTCubed.build/Debug/Compile Native.build/DerivedSources/net_mc_cubed_qtcubed_QTKitCaptureView.h"; sourceTree = "<group>"; };
+		BFFC11C7116EDF0500BEEA82 /* net_mc_cubed_qtcubed_QTKitCompressionOptions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = net_mc_cubed_qtcubed_QTKitCompressionOptions.h; path = "build/QTCubed.build/Debug/Compile Native.build/DerivedSources/net_mc_cubed_qtcubed_QTKitCompressionOptions.h"; sourceTree = "<group>"; };
+		BFFC11C8116EDF0500BEEA82 /* net_mc_cubed_qtcubed_QTKitFormatDescription.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = net_mc_cubed_qtcubed_QTKitFormatDescription.h; path = "build/QTCubed.build/Debug/Compile Native.build/DerivedSources/net_mc_cubed_qtcubed_QTKitFormatDescription.h"; sourceTree = "<group>"; };
+		BFFC11C9116EDF0500BEEA82 /* net_mc_cubed_qtcubed_QTKitSampleBuffer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = net_mc_cubed_qtcubed_QTKitSampleBuffer.h; path = "build/QTCubed.build/Debug/Compile Native.build/DerivedSources/net_mc_cubed_qtcubed_QTKitSampleBuffer.h"; sourceTree = "<group>"; };
+		BFFC1355116EF34800BEEA82 /* QTKitCaptureDeviceInput.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = QTKitCaptureDeviceInput.h; sourceTree = "<group>"; };
+		BFFC1356116EF34900BEEA82 /* QTKitCaptureDeviceInput.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = QTKitCaptureDeviceInput.m; sourceTree = "<group>"; };
+		BFFC13CF116EFAE800BEEA82 /* QTCaptureViewBridge.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = QTCaptureViewBridge.h; sourceTree = "<group>"; };
+		BFFC13D0116EFAE800BEEA82 /* QTCaptureViewBridge.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = QTCaptureViewBridge.m; sourceTree = "<group>"; };
+		BFFC13D9116EFD4000BEEA82 /* net_mc_cubed_qtcubed_QTKitMovieView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = net_mc_cubed_qtcubed_QTKitMovieView.h; path = "build/QTCubed.build/Debug/Compile Native.build/DerivedSources/net_mc_cubed_qtcubed_QTKitMovieView.h"; sourceTree = "<group>"; };
+		BFFC1412116F030200BEEA82 /* QTKitCaptureDecompressedVideoOutput.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = QTKitCaptureDecompressedVideoOutput.h; sourceTree = "<group>"; };
+		BFFC1413116F030200BEEA82 /* QTKitCaptureDecompressedVideoOutput.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = QTKitCaptureDecompressedVideoOutput.m; sourceTree = "<group>"; };
+		BFFC141D116F04B200BEEA82 /* QTKitCaptureDecompressedAudioOutput.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = QTKitCaptureDecompressedAudioOutput.h; sourceTree = "<group>"; };
+		BFFC141E116F04B200BEEA82 /* QTKitCaptureDecompressedAudioOutput.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = QTKitCaptureDecompressedAudioOutput.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -161,6 +214,7 @@
 			children = (
 				29B97324FDCFA39411CA2CEA /* AppKit.framework */,
 				29B97325FDCFA39411CA2CEA /* Foundation.framework */,
+				BF98C14C1172EFA50059AA19 /* QuickTime.framework */,
 			);
 			name = "Other Frameworks";
 			sourceTree = "<group>";
@@ -168,6 +222,20 @@
 		19C28FACFE9D520D11CA2CBB /* Products */ = {
 			isa = PBXGroup;
 			children = (
+				BF98C1EC117301020059AA19 /* net_mc_cubed_qtcubed_QTKitMediaType.h */,
+				BFFC13D9116EFD4000BEEA82 /* net_mc_cubed_qtcubed_QTKitMovieView.h */,
+				BFFC11BF116EDF0500BEEA82 /* net_mc_cubed_qtcubed_QTKitCaptureConnection.h */,
+				BFFC11C0116EDF0500BEEA82 /* net_mc_cubed_qtcubed_QTKitCaptureDecompressedAudioOutput.h */,
+				BFFC11C1116EDF0500BEEA82 /* net_mc_cubed_qtcubed_QTKitCaptureDecompressedVideoOutput.h */,
+				BFFC11C2116EDF0500BEEA82 /* net_mc_cubed_qtcubed_QTKitCaptureDevice.h */,
+				BFFC11C3116EDF0500BEEA82 /* net_mc_cubed_qtcubed_QTKitCaptureDeviceInput.h */,
+				BFFC11C4116EDF0500BEEA82 /* net_mc_cubed_qtcubed_QTKitCaptureInput.h */,
+				BFFC11C5116EDF0500BEEA82 /* net_mc_cubed_qtcubed_QTKitCaptureOutput.h */,
+				BFFC11C6116EDF0500BEEA82 /* net_mc_cubed_qtcubed_QTKitCaptureView.h */,
+				BFFC11C7116EDF0500BEEA82 /* net_mc_cubed_qtcubed_QTKitCompressionOptions.h */,
+				BFFC11C8116EDF0500BEEA82 /* net_mc_cubed_qtcubed_QTKitFormatDescription.h */,
+				BFFC11C9116EDF0500BEEA82 /* net_mc_cubed_qtcubed_QTKitSampleBuffer.h */,
+				BFFC117C116ECDE100BEEA82 /* net_mc_cubed_qtcubed_QTKitCaptureSession.h */,
 				BFC77B1E11310CC100F2D7A3 /* QTCubed.jar */,
 				BFC77905112FDFE900F2D7A3 /* net_mc_cubed_qtcubed_QTMovie.h */,
 				8D1107320486CEB800E47090 /* QTCubed.app */,
@@ -230,6 +298,18 @@
 				BFA7033E112EABF100D5157A /* QTMovieBridge.m */,
 				BFC7799E113000D200F2D7A3 /* QTMovieViewBridge.m */,
 				BFC77A601130250900F2D7A3 /* QTMovieViewBridge.h */,
+				BFFC1177116ECD8E00BEEA82 /* QTKitCaptureSession.h */,
+				BFFC1178116ECD8E00BEEA82 /* QTKitCaptureSession.m */,
+				BFFC11BB116EDE4600BEEA82 /* QTKitCaptureDevice.h */,
+				BFFC11BC116EDE4600BEEA82 /* QTKitCaptureDevice.m */,
+				BFFC1355116EF34800BEEA82 /* QTKitCaptureDeviceInput.h */,
+				BFFC1356116EF34900BEEA82 /* QTKitCaptureDeviceInput.m */,
+				BFFC13CF116EFAE800BEEA82 /* QTCaptureViewBridge.h */,
+				BFFC13D0116EFAE800BEEA82 /* QTCaptureViewBridge.m */,
+				BFFC1412116F030200BEEA82 /* QTKitCaptureDecompressedVideoOutput.h */,
+				BFFC1413116F030200BEEA82 /* QTKitCaptureDecompressedVideoOutput.m */,
+				BFFC141D116F04B200BEEA82 /* QTKitCaptureDecompressedAudioOutput.h */,
+				BFFC141E116F04B200BEEA82 /* QTKitCaptureDecompressedAudioOutput.m */,
 			);
 			path = native;
 			sourceTree = "<group>";
@@ -244,6 +324,26 @@
 				BFC77906112FDFE900F2D7A3 /* net_mc_cubed_qtcubed_QTMovie.h in Headers */,
 				BFC7799C1130009800F2D7A3 /* net_mc_cubed_qtcubed_QTMovieView.h in Headers */,
 				BFC77A611130250900F2D7A3 /* QTMovieViewBridge.h in Headers */,
+				BFFC1179116ECD8E00BEEA82 /* QTKitCaptureSession.h in Headers */,
+				BFFC117D116ECDE100BEEA82 /* net_mc_cubed_qtcubed_QTKitCaptureSession.h in Headers */,
+				BFFC11BD116EDE4600BEEA82 /* QTKitCaptureDevice.h in Headers */,
+				BFFC11CA116EDF0500BEEA82 /* net_mc_cubed_qtcubed_QTKitCaptureConnection.h in Headers */,
+				BFFC11CB116EDF0500BEEA82 /* net_mc_cubed_qtcubed_QTKitCaptureDecompressedAudioOutput.h in Headers */,
+				BFFC11CC116EDF0500BEEA82 /* net_mc_cubed_qtcubed_QTKitCaptureDecompressedVideoOutput.h in Headers */,
+				BFFC11CD116EDF0500BEEA82 /* net_mc_cubed_qtcubed_QTKitCaptureDevice.h in Headers */,
+				BFFC11CE116EDF0500BEEA82 /* net_mc_cubed_qtcubed_QTKitCaptureDeviceInput.h in Headers */,
+				BFFC11CF116EDF0500BEEA82 /* net_mc_cubed_qtcubed_QTKitCaptureInput.h in Headers */,
+				BFFC11D0116EDF0500BEEA82 /* net_mc_cubed_qtcubed_QTKitCaptureOutput.h in Headers */,
+				BFFC11D1116EDF0500BEEA82 /* net_mc_cubed_qtcubed_QTKitCaptureView.h in Headers */,
+				BFFC11D2116EDF0500BEEA82 /* net_mc_cubed_qtcubed_QTKitCompressionOptions.h in Headers */,
+				BFFC11D3116EDF0500BEEA82 /* net_mc_cubed_qtcubed_QTKitFormatDescription.h in Headers */,
+				BFFC11D4116EDF0500BEEA82 /* net_mc_cubed_qtcubed_QTKitSampleBuffer.h in Headers */,
+				BFFC1357116EF34900BEEA82 /* QTKitCaptureDeviceInput.h in Headers */,
+				BFFC13D1116EFAE800BEEA82 /* QTCaptureViewBridge.h in Headers */,
+				BFFC13DA116EFD4000BEEA82 /* net_mc_cubed_qtcubed_QTKitMovieView.h in Headers */,
+				BFFC1414116F030200BEEA82 /* QTKitCaptureDecompressedVideoOutput.h in Headers */,
+				BFFC141F116F04B200BEEA82 /* QTKitCaptureDecompressedAudioOutput.h in Headers */,
+				BF98C1ED117301020059AA19 /* net_mc_cubed_qtcubed_QTKitMediaType.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -361,6 +461,12 @@
 			files = (
 				BF152CED112ED7BE008B4ECC /* QTMovieBridge.m in Sources */,
 				BFC779A0113000D200F2D7A3 /* QTMovieViewBridge.m in Sources */,
+				BFFC117A116ECD8E00BEEA82 /* QTKitCaptureSession.m in Sources */,
+				BFFC11BE116EDE4600BEEA82 /* QTKitCaptureDevice.m in Sources */,
+				BFFC1358116EF34900BEEA82 /* QTKitCaptureDeviceInput.m in Sources */,
+				BFFC13D2116EFAE800BEEA82 /* QTCaptureViewBridge.m in Sources */,
+				BFFC1415116F030200BEEA82 /* QTKitCaptureDecompressedVideoOutput.m in Sources */,
+				BFFC1420116F04B200BEEA82 /* QTKitCaptureDecompressedAudioOutput.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
