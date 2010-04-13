@@ -46,7 +46,7 @@ public class QTKitCaptureDevice {
     protected QTKitCaptureDevice(long newDeviceRef) {
         this.deviceRef = newDeviceRef;
     }
-
+    
     @Override
     protected void finalize() {
         _release(deviceRef);

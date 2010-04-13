@@ -46,10 +46,12 @@ JNIEXPORT jlong JNICALL Java_net_mc_1cubed_qtcubed_QTKitCaptureDevice__1defaultI
 	JNF_COCOA_ENTER(env);
 
 	NSString *  mediaType = deviceTypeToMediaType(deviceType);
-
 	
-	
+	// Get the default capture device for the specified media type
 	captureDevice = [QTCaptureDevice defaultInputDeviceWithMediaType:mediaType];
+	
+	// Above method is not a create or new, so we need to retain this object
+	[captureDevice retain];
 	
 	/* Autorelease and exception cleanup */
 	JNF_COCOA_EXIT(env);
@@ -104,7 +106,9 @@ JNIEXPORT jlongArray JNICALL Java_net_mc_1cubed_qtcubed_QTKitCaptureDevice__1inp
 	
 	// Iterate through the capture devices, assigning their values to the elements in the array
 	for (int devNum = 0; devNum < count; devNum++) {
-		longVals[devNum] = (jlong) [deviceArray objectAtIndex:devNum];
+		QTCaptureDevice * device = [deviceArray objectAtIndex:devNum];
+		[device retain];
+		longVals[devNum] = (jlong) device;
 	}
 
 	// Re-assign the values back to the array

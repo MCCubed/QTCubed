@@ -29,7 +29,6 @@
 
 package net.mc_cubed.qtcubed;
 
-import net.mc_cubed.QTCubed;
 import java.awt.Component;
 
 public interface QTMovieView {

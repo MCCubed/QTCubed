@@ -165,7 +165,7 @@ public class QTCubed extends Frame implements ActionListener {
             add(buttonPanel, BorderLayout.SOUTH);
             add(qtmv.getComponent(), BorderLayout.CENTER);
             qtcv = new QTKitCaptureView();
-            add(qtcv.getComponent(), BorderLayout.WEST);
+//            add(qtcv.getComponent(), BorderLayout.WEST);
             pack();
         } catch (InstantiationException ex) {
             ex.printStackTrace();
