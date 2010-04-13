@@ -18,6 +18,7 @@ import net.mc_cubed.qtcubed.QTKitCaptureDevice;
 import net.mc_cubed.qtcubed.QTKitCaptureDeviceInput;
 import net.mc_cubed.qtcubed.QTKitCaptureSession;
 import net.mc_cubed.qtcubed.QTKitFormatDescription;
+
 /**
  *
  * @author shadow
@@ -155,10 +156,7 @@ public class DataSource extends BasicPushBufferDataSource {
         } else {
             captureParameters = null;
         }
-
     }
-
-
 
 
 }

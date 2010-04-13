@@ -29,7 +29,7 @@ JNIEXPORT jlong JNICALL Java_net_mc_1cubed_qtcubed_QTKitCaptureDecompressedVideo
 	[videoOutput setDelegate:delegate];
 	
 	[videoOutput setAutomaticallyDropsLateVideoFrames:YES];
-
+	
 	ref = (jlong) videoOutput;
 	
 	/* Autorelease and exception cleanup */
@@ -38,6 +38,95 @@ JNIEXPORT jlong JNICALL Java_net_mc_1cubed_qtcubed_QTKitCaptureDecompressedVideo
 	return ref;
 	
 }
+
+/*
+ * Class:     net_mc_cubed_qtcubed_QTKitCaptureDecompressedVideoOutput
+ * Method:    _setFrameRate
+ * Signature: (JF)V
+ */
+JNIEXPORT void JNICALL Java_net_mc_1cubed_qtcubed_QTKitCaptureDecompressedVideoOutput__1setFrameRate
+(JNIEnv *env, jobject objectRef, jlong videoOutputRef, jfloat newFrameRate) {
+	/* Set up autorelease and exception handling */
+	JNF_COCOA_ENTER(env);
+		
+	QTCaptureDecompressedVideoOutput * videoOutput = (QTCaptureDecompressedVideoOutput *)videoOutputRef;
+		
+	NSTimeInterval frameInterval = 1.0f / newFrameRate;
+		 
+	[videoOutput setMinimumVideoFrameInterval:frameInterval];
+	
+	/* Autorelease and exception cleanup */
+	JNF_COCOA_EXIT(env);
+}
+
+/*
+ * Class:     net_mc_cubed_qtcubed_QTKitCaptureDecompressedVideoOutput
+ * Method:    _getFrameRate
+ * Signature: (J)F
+ */
+JNIEXPORT jfloat JNICALL Java_net_mc_1cubed_qtcubed_QTKitCaptureDecompressedVideoOutput__1getFrameRate
+(JNIEnv *env, jobject objectRef, jlong videoOutputRef) {
+	jfloat frameRate;
+	
+	/* Set up autorelease and exception handling */
+	JNF_COCOA_ENTER(env);
+	
+	QTCaptureDecompressedVideoOutput * videoOutput = (QTCaptureDecompressedVideoOutput *)videoOutputRef;
+		
+	NSTimeInterval frameInterval = [videoOutput minimumVideoFrameInterval];
+	
+	frameRate = 1 / frameInterval;
+	
+	/* Autorelease and exception cleanup */
+	JNF_COCOA_EXIT(env);
+	
+	return frameRate;	
+}
+
+/*
+ * Class:     net_mc_cubed_qtcubed_QTKitCaptureDecompressedVideoOutput
+ * Method:    _setSize
+ * Signature: (JII)V
+ */
+JNIEXPORT void JNICALL Java_net_mc_1cubed_qtcubed_QTKitCaptureDecompressedVideoOutput__1setSize
+(JNIEnv *env, jobject objectRef, jlong videoOutputRef, jint newWidth, jint newHeight) {
+	/* Set up autorelease and exception handling */
+	JNF_COCOA_ENTER(env);
+	
+	QTCaptureDecompressedVideoOutput * videoOutput = (QTCaptureDecompressedVideoOutput *)videoOutputRef;
+
+	NSDictionary * pixelBufferAttributes = [videoOutput pixelBufferAttributes];
+	
+	NSNumber * width  = [NSNumber numberWithInt:newWidth];
+	NSString * widthKey = (NSString*)kCVPixelBufferWidthKey;
+	NSNumber * height = [NSNumber numberWithInt:newHeight];
+	NSString * heightKey = (NSString*)kCVPixelBufferHeightKey;	
+	
+	[pixelBufferAttributes setValue:width  forKey:widthKey];
+	[pixelBufferAttributes setValue:height forKey:heightKey];
+	
+	[videoOutput setPixelBufferAttributes:pixelBufferAttributes];
+	
+	/* Autorelease and exception cleanup */
+	JNF_COCOA_EXIT(env);
+	
+}
+
+/*
+ * Class:     net_mc_cubed_qtcubed_QTKitCaptureDecompressedVideoOutput
+ * Method:    _getWidth
+ * Signature: (J)I
+ */
+JNIEXPORT jint JNICALL Java_net_mc_1cubed_qtcubed_QTKitCaptureDecompressedVideoOutput__1getWidth
+(JNIEnv *, jobject, jlong);
+
+/*
+ * Class:     net_mc_cubed_qtcubed_QTKitCaptureDecompressedVideoOutput
+ * Method:    _getHeight
+ * Signature: (J)I
+ */
+JNIEXPORT jint JNICALL Java_net_mc_1cubed_qtcubed_QTKitCaptureDecompressedVideoOutput__1getHeight
+(JNIEnv *, jobject, jlong);
 
 
 @implementation QTKitCaptureDecompressedVideoOutput

@@ -26,6 +26,10 @@
 //  1-3-4 Kamikizaki, Urawa-ku
 //  Saitama, Saitama, 330-0071
 //  Japan
+//
+//  Email: info@mc-cubed.net
+//  Website: http://www.mc-cubed.net/
+
 package net.mc_cubed;
 
 import javax.swing.SwingUtilities;
@@ -34,6 +38,7 @@ import net.mc_cubed.qtcubed.QTMovieView;
 import net.mc_cubed.qtcubed.QTCubedFactory;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.Dimension;
 import java.awt.FileDialog;
 import java.awt.Frame;
 import java.awt.BorderLayout;
@@ -220,7 +225,10 @@ public class QTCubed extends Frame implements ActionListener {
                     videoDevice.open();
                     QTKitCaptureDeviceInput videoDeviceInput = new QTKitCaptureDeviceInput(videoDevice);
                     session.addInput(videoDeviceInput);
-                    session.addOutput(new QTKitCaptureDecompressedVideoOutput());
+					QTKitCaptureDecompressedVideoOutput videoOutput = new QTKitCaptureDecompressedVideoOutput();
+					videoOutput.setFrameRate(1.0f);
+					videoOutput.setSize(new Dimension(32,24));
+                    session.addOutput(videoOutput);
 
                     SwingUtilities.invokeLater(new Runnable() {
 

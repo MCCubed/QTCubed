@@ -8,6 +8,7 @@
 
 #import <QTKit/QTKit.h>
 #import <JavaNativeFoundation/JavaNativeFoundation.h>
+#import <CoreFoundation/CFNumber.h>
 #import "net_mc_cubed_qtcubed_QTKitCaptureDecompressedVideoOutput.h"
 
 

@@ -29,6 +29,7 @@
 package net.mc_cubed.qtcubed;
 
 import java.util.logging.Logger;
+import java.awt.Dimension;
 import net.mc_cubed.qtcubed.media.protocol.quicktime.QTCubedDelegator;
 
 /**
@@ -57,6 +58,42 @@ public class QTKitCaptureDecompressedVideoOutput extends QTKitCaptureOutput impl
     public void setDataDelegate(QTKitCaptureDataDelegate dataDelegate) {
         this.dataDelegate = dataDelegate;
     }
+	
+	public void setFrameRate(float newFrameRate) {
+		_setFrameRate(captureOutputRef,newFrameRate);
+	}
 
+	protected native void _setFrameRate(long captureOutputRef,float newFrameRate);
+	
+	public float getFrameRate() {
+		return _getFrameRate(captureOutputRef);
+	}
+	
+	protected native float _getFrameRate(long captureOutputRef);
+	
+	public void setSize(int width, int height) {
+		_setSize(captureOutputRef,width,height);
+	}
+	
+	public void setSize(Dimension size) {
+		_setSize(captureOutputRef,(int)size.getWidth(),(int)size.getHeight());
+	}		
+	
+	protected native void _setSize(long captureOutputRef,int width,int height);
+	
+	public int getWidth() {
+		return _getWidth(captureOutputRef); 
+	}
+	
+	public int getHeight() {
+		return _getHeight(captureOutputRef);
+	}
+	
+	public Dimension getSize() {
+		return new Dimension(_getWidth(captureOutputRef),_getHeight(captureOutputRef));
+	}
+	
+	protected native int _getWidth(long captureOutputRef);
 
+	protected native int _getHeight(long captureOutputRef);
 }
