@@ -8,6 +8,32 @@
 
 #import "QTKitCaptureDecompressedVideoOutput.h"
 
+void setPixelFormat(QTCaptureDecompressedVideoOutput * videoOutput, long nativeFormatNumber);
+
+jobject pixelFormatToJava(JNIEnv * env, int format) {
+	jclass pixelFormatEnumClass  = (*env)->FindClass(env,"net/mc_cubed/qtcubed/QTKitPixelFormat");
+	jmethodID valuesMethod       = (*env)->GetStaticMethodID(env,pixelFormatEnumClass,"values","()[Lnet/mc_cubed/qtcubed/QTKitPixelFormat;");
+	jmethodID nativeValueMethod  = (*env)->GetMethodID(env,pixelFormatEnumClass,"getNativeValue","()I");
+	jobjectArray enumValuesArray = (*env)->CallStaticObjectMethod(env,pixelFormatEnumClass,valuesMethod);
+	
+	int arrayLength = (*env)->GetArrayLength(env,enumValuesArray);
+	for (int i = 0; i < arrayLength; i++) {
+		jobject enumValue = (*env)->GetObjectArrayElement(env,enumValuesArray,i);
+		jint nativeValue = (*env)->CallIntMethod(env,enumValue,nativeValueMethod);
+		if (format == nativeValue) {
+			return enumValue;
+		}
+	}
+
+	return nil;
+}
+
+int javaToPixelFormat(JNIEnv * env, jobject pixelFormat) {
+	jclass pixelFormatEnumClass  = (*env)->FindClass(env,"net/mc_cubed/qtcubed/QTKitPixelFormat");
+	jmethodID nativeValueMethod  = (*env)->GetMethodID(env,pixelFormatEnumClass,"getNativeValue","()I");
+	jint nativeValue = (*env)->CallIntMethod(env,pixelFormat,nativeValueMethod);
+	return nativeValue;
+}
 /*
  * Class:     net_mc_cubed_qtcubed_QTKitCaptureDecompressedVideoOutput
  * Method:    _allocInit
@@ -29,6 +55,8 @@ JNIEXPORT jlong JNICALL Java_net_mc_1cubed_qtcubed_QTKitCaptureDecompressedVideo
 	[videoOutput setDelegate:delegate];
 	
 	[videoOutput setAutomaticallyDropsLateVideoFrames:YES];
+	
+	setPixelFormat(videoOutput, (long) kCVPixelFormatType_32ARGB);
 	
 	ref = (jlong) videoOutput;
 	
@@ -96,15 +124,16 @@ JNIEXPORT void JNICALL Java_net_mc_1cubed_qtcubed_QTKitCaptureDecompressedVideoO
 	QTCaptureDecompressedVideoOutput * videoOutput = (QTCaptureDecompressedVideoOutput *)videoOutputRef;
 
 	NSDictionary * pixelBufferAttributes = [videoOutput pixelBufferAttributes];
-	
-	NSNumber * width  = [NSNumber numberWithInt:newWidth];
-	NSString * widthKey = (NSString*)kCVPixelBufferWidthKey;
-	NSNumber * height = [NSNumber numberWithInt:newHeight];
-	NSString * heightKey = (NSString*)kCVPixelBufferHeightKey;	
-	
-	[pixelBufferAttributes setValue:width  forKey:widthKey];
-	[pixelBufferAttributes setValue:height forKey:heightKey];
-	
+	if (!pixelBufferAttributes) {
+		pixelBufferAttributes = [NSDictionary dictionaryWithObjectsAndKeys: 
+									[NSNumber numberWithInt:newWidth],(id)kCVPixelBufferWidthKey,
+									[NSNumber numberWithInt:newHeight],(id)kCVPixelBufferHeightKey,
+									nil,nil];
+	} else {	
+		pixelBufferAttributes = [NSMutableDictionary dictionaryWithDictionary:pixelBufferAttributes];
+		[pixelBufferAttributes setValue:[NSNumber numberWithInt:newWidth]  forKey:(id)kCVPixelBufferWidthKey];
+		[pixelBufferAttributes setValue:[NSNumber numberWithInt:newHeight] forKey:(id)kCVPixelBufferHeightKey];
+	}
 	[videoOutput setPixelBufferAttributes:pixelBufferAttributes];
 	
 	/* Autorelease and exception cleanup */
@@ -118,7 +147,25 @@ JNIEXPORT void JNICALL Java_net_mc_1cubed_qtcubed_QTKitCaptureDecompressedVideoO
  * Signature: (J)I
  */
 JNIEXPORT jint JNICALL Java_net_mc_1cubed_qtcubed_QTKitCaptureDecompressedVideoOutput__1getWidth
-(JNIEnv *, jobject, jlong);
+(JNIEnv *env, jobject objectRef, jlong videoOutputRef) {
+	jint jwidth;
+	
+	/* Set up autorelease and exception handling */
+	JNF_COCOA_ENTER(env);
+	
+	QTCaptureDecompressedVideoOutput * videoOutput = (QTCaptureDecompressedVideoOutput *)videoOutputRef;
+	
+	NSDictionary * pixelBufferAttributes = [videoOutput pixelBufferAttributes];
+	
+	NSNumber * width = [pixelBufferAttributes valueForKey:(id)kCVPixelBufferWidthKey];
+	
+	jwidth = [width intValue];
+	
+	/* Autorelease and exception cleanup */
+	JNF_COCOA_EXIT(env);	
+	
+	return jwidth;
+}
 
 /*
  * Class:     net_mc_cubed_qtcubed_QTKitCaptureDecompressedVideoOutput
@@ -126,7 +173,90 @@ JNIEXPORT jint JNICALL Java_net_mc_1cubed_qtcubed_QTKitCaptureDecompressedVideoO
  * Signature: (J)I
  */
 JNIEXPORT jint JNICALL Java_net_mc_1cubed_qtcubed_QTKitCaptureDecompressedVideoOutput__1getHeight
-(JNIEnv *, jobject, jlong);
+(JNIEnv *env, jobject objectRef, jlong videoOutputRef) {
+	jint jheight;
+	
+	/* Set up autorelease and exception handling */
+	JNF_COCOA_ENTER(env);
+	
+	QTCaptureDecompressedVideoOutput * videoOutput = (QTCaptureDecompressedVideoOutput *)videoOutputRef;
+		
+	NSDictionary * pixelBufferAttributes = [videoOutput pixelBufferAttributes];
+	
+	NSNumber * height = [pixelBufferAttributes valueForKey:(id)kCVPixelBufferHeightKey];
+	
+	jheight = [height intValue];
+	
+	/* Autorelease and exception cleanup */
+	JNF_COCOA_EXIT(env);	
+	
+	return jheight;	
+}
+
+/*
+ * Class:     net_mc_cubed_qtcubed_QTKitCaptureDecompressedVideoOutput
+ * Method:    _getPixelFormat
+ * Signature: (J)Lnet/mc_cubed/qtcubed/QTKitPixelFormat;
+ */
+JNIEXPORT jobject JNICALL Java_net_mc_1cubed_qtcubed_QTKitCaptureDecompressedVideoOutput__1getPixelFormat
+(JNIEnv *env, jobject objectRef, jlong videoOutputRef) {
+	jobject jpixelFormat;
+	
+	/* Set up autorelease and exception handling */
+	JNF_COCOA_ENTER(env);
+	
+	QTCaptureDecompressedVideoOutput * videoOutput = (QTCaptureDecompressedVideoOutput *)videoOutputRef;
+		
+	NSDictionary * pixelBufferAttributes = [videoOutput pixelBufferAttributes];
+	
+	NSNumber * format = [pixelBufferAttributes valueForKey:(id)kCVPixelBufferPixelFormatTypeKey];
+	
+	int formatValue = [format intValue];
+
+	jpixelFormat = pixelFormatToJava(env,formatValue);
+	
+	/* Autorelease and exception cleanup */
+	JNF_COCOA_EXIT(env);	
+	
+	return jpixelFormat;
+}
+
+void setPixelFormat(QTCaptureDecompressedVideoOutput * videoOutput, long nativeFormatNumber) {
+
+	NSDictionary * pixelBufferAttributes = [videoOutput pixelBufferAttributes];
+	
+	NSNumber * formatNSNumber = [NSNumber numberWithLong:nativeFormatNumber];
+	
+	if (!pixelBufferAttributes) {
+		pixelBufferAttributes = [NSDictionary dictionaryWithObjectsAndKeys: 
+								 formatNSNumber,(id)kCVPixelBufferPixelFormatTypeKey,
+								 nil,nil];
+	} else {
+		pixelBufferAttributes = [NSMutableDictionary dictionaryWithDictionary:pixelBufferAttributes];
+		[pixelBufferAttributes setValue:formatNSNumber forKey:(id)kCVPixelBufferPixelFormatTypeKey];
+	}
+	
+	[videoOutput setPixelBufferAttributes:pixelBufferAttributes];
+
+}
+
+/*
+ * Class:     net_mc_cubed_qtcubed_QTKitCaptureDecompressedVideoOutput
+ * Method:    _setPixelFormat
+ * Signature: (JJ)Lnet/mc_cubed/qtcubed/QTKitPixelFormat;
+ */
+JNIEXPORT jobject JNICALL Java_net_mc_1cubed_qtcubed_QTKitCaptureDecompressedVideoOutput__1setPixelFormat
+(JNIEnv *env, jobject objectRef, jlong videoOutputRef, jlong nativeFormatNumber) {
+	JNF_COCOA_ENTER(env);
+	
+	QTCaptureDecompressedVideoOutput * videoOutput = (QTCaptureDecompressedVideoOutput *)videoOutputRef;
+	
+	setPixelFormat(videoOutput, nativeFormatNumber);
+	
+	/* Autorelease and exception cleanup */
+	JNF_COCOA_EXIT(env);
+}
+
 
 
 @implementation QTKitCaptureDecompressedVideoOutput
@@ -144,7 +274,13 @@ JNIEXPORT jint JNICALL Java_net_mc_1cubed_qtcubed_QTKitCaptureDecompressedVideoO
 - (void)captureOutput:(QTCaptureOutput *)captureOutput didOutputVideoFrame:(CVImageBufferRef)videoFrame withSampleBuffer:(QTSampleBuffer *)sampleBuffer fromConnection:(QTCaptureConnection *)connection {
 	void * rawData = [sampleBuffer bytesForAllSamples];
 	int length = [sampleBuffer lengthForAllSamples];
-			
+	QTFormatDescription * formatDescription = [sampleBuffer formatDescription];
+	
+	int format = [formatDescription formatType];
+	NSLog(@"Got format %d",format);
+	
+	// TODO: Convert the content to the appropriate format and sizing
+
 	// Move into Java to deliver the data
 	JNIEnv *env;
 	(*g_vm)->AttachCurrentThread (g_vm, (void **) &env, NULL);

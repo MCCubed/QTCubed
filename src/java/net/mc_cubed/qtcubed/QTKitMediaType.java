@@ -30,5 +30,4 @@ public enum QTKitMediaType {
     QUARTZ_COMPOSER,
     SUBTITLE,
     CLOSED_CAPTION;
-
 }

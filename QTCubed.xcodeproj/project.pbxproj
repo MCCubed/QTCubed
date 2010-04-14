@@ -30,8 +30,13 @@
 		89D0F05C0F39404F007831A7 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1058C7A1FEA54F0111CA2CBB /* Cocoa.framework */; };
 		89D0F0850F394066007831A7 /* JavaNativeFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 89D0F0840F394066007831A7 /* JavaNativeFoundation.framework */; };
 		89D0F1870F3A2442007831A7 /* JavaVM.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 89D0F1860F3A2442007831A7 /* JavaVM.framework */; };
-		89D0F1BF0F3B68AD007831A7 /* GenericApp.icns in Resources */ = {isa = PBXBuildFile; fileRef = 89D0F1BE0F3B68AD007831A7 /* GenericApp.icns */; };
 		BF152CED112ED7BE008B4ECC /* QTMovieBridge.m in Sources */ = {isa = PBXBuildFile; fileRef = BFA7033E112EABF100D5157A /* QTMovieBridge.m */; };
+		BF3770C71175AB84008EB949 /* jmf.jar in Frameworks */ = {isa = PBXBuildFile; fileRef = BF3770C61175AB83008EB949 /* jmf.jar */; };
+		BF3770C81175AB88008EB949 /* jmf.jar in Copy Java Resources */ = {isa = PBXBuildFile; fileRef = BF3770C61175AB83008EB949 /* jmf.jar */; };
+		BF3771301175B20A008EB949 /* icon.icns in Resources */ = {isa = PBXBuildFile; fileRef = BF37712D1175B1CD008EB949 /* icon.icns */; };
+		BF76212111744B560016952D /* QuickTime.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BF98C14C1172EFA50059AA19 /* QuickTime.framework */; };
+		BF76212211744B560016952D /* CoreVideo.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BF76209E11744AA90016952D /* CoreVideo.framework */; };
+		BF7623411174D1CC0016952D /* CoreFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BF76233E1174D1C40016952D /* CoreFoundation.framework */; };
 		BF78591B112EDDC70064262B /* AppKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 29B97324FDCFA39411CA2CEA /* AppKit.framework */; };
 		BF98C1ED117301020059AA19 /* net_mc_cubed_qtcubed_QTKitMediaType.h in Headers */ = {isa = PBXBuildFile; fileRef = BF98C1EC117301020059AA19 /* net_mc_cubed_qtcubed_QTKitMediaType.h */; };
 		BFA701CD112EA8E400D5157A /* QTKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BFA701CC112EA8E400D5157A /* QTKit.framework */; };
@@ -120,6 +125,7 @@
 			dstPath = "";
 			dstSubfolderSpec = 15;
 			files = (
+				BF3770C81175AB88008EB949 /* jmf.jar in Copy Java Resources */,
 				BFC77B1F11310CC800F2D7A3 /* QTCubed.jar in Copy Java Resources */,
 				BFC77B1D11310CB000F2D7A3 /* libQTCubed.jnilib in Copy Java Resources */,
 			);
@@ -140,9 +146,12 @@
 		89D0F0840F394066007831A7 /* JavaNativeFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaNativeFoundation.framework; path = /System/Library/Frameworks/JavaVM.framework/Versions/A/Frameworks/JavaNativeFoundation.framework; sourceTree = "<absolute>"; };
 		89D0F1390F3948A9007831A7 /* make */ = {isa = PBXFileReference; lastKnownFileType = folder; path = make; sourceTree = "<group>"; };
 		89D0F1860F3A2442007831A7 /* JavaVM.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaVM.framework; path = /System/Library/Frameworks/JavaVM.framework; sourceTree = "<absolute>"; };
-		89D0F1BE0F3B68AD007831A7 /* GenericApp.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; name = GenericApp.icns; path = /System/Library/Frameworks/JavaVM.framework/Versions/A/Resources/GenericApp.icns; sourceTree = "<absolute>"; };
 		8D1107320486CEB800E47090 /* QTCubed.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = QTCubed.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		BF043E98115CB90D00B0B8A8 /* lib */ = {isa = PBXFileReference; lastKnownFileType = folder; path = lib; sourceTree = "<group>"; };
+		BF3770C61175AB83008EB949 /* jmf.jar */ = {isa = PBXFileReference; lastKnownFileType = archive.jar; name = jmf.jar; path = lib/jmf.jar; sourceTree = SOURCE_ROOT; };
+		BF37712D1175B1CD008EB949 /* icon.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; path = icon.icns; sourceTree = "<group>"; };
+		BF76209E11744AA90016952D /* CoreVideo.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreVideo.framework; path = /System/Library/Frameworks/CoreVideo.framework; sourceTree = "<absolute>"; };
+		BF76233E1174D1C40016952D /* CoreFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreFoundation.framework; path = /System/Library/Frameworks/CoreFoundation.framework; sourceTree = "<absolute>"; };
 		BF98C14C1172EFA50059AA19 /* QuickTime.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuickTime.framework; path = /System/Library/Frameworks/QuickTime.framework; sourceTree = "<absolute>"; };
 		BF98C1EC117301020059AA19 /* net_mc_cubed_qtcubed_QTKitMediaType.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = net_mc_cubed_qtcubed_QTKitMediaType.h; path = "build/QTCubed.build/Debug/Compile Native.build/DerivedSources/net_mc_cubed_qtcubed_QTKitMediaType.h"; sourceTree = "<group>"; };
 		BFA701CC112EA8E400D5157A /* QTKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QTKit.framework; path = /System/Library/Frameworks/QTKit.framework; sourceTree = "<absolute>"; };
@@ -187,11 +196,15 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				BF7623411174D1CC0016952D /* CoreFoundation.framework in Frameworks */,
+				BF76212111744B560016952D /* QuickTime.framework in Frameworks */,
+				BF76212211744B560016952D /* CoreVideo.framework in Frameworks */,
 				BF78591B112EDDC70064262B /* AppKit.framework in Frameworks */,
 				89D0F05C0F39404F007831A7 /* Cocoa.framework in Frameworks */,
 				89D0F0850F394066007831A7 /* JavaNativeFoundation.framework in Frameworks */,
 				89D0F1870F3A2442007831A7 /* JavaVM.framework in Frameworks */,
 				BFA701CD112EA8E400D5157A /* QTKit.framework in Frameworks */,
+				BF3770C71175AB84008EB949 /* jmf.jar in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -201,6 +214,8 @@
 		1058C7A0FEA54F0111CA2CBB /* Linked Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				BF98C14C1172EFA50059AA19 /* QuickTime.framework */,
+				BF76209E11744AA90016952D /* CoreVideo.framework */,
 				BFA701CC112EA8E400D5157A /* QTKit.framework */,
 				1058C7A1FEA54F0111CA2CBB /* Cocoa.framework */,
 				89D0F1860F3A2442007831A7 /* JavaVM.framework */,
@@ -214,7 +229,7 @@
 			children = (
 				29B97324FDCFA39411CA2CEA /* AppKit.framework */,
 				29B97325FDCFA39411CA2CEA /* Foundation.framework */,
-				BF98C14C1172EFA50059AA19 /* QuickTime.framework */,
+				BF76233E1174D1C40016952D /* CoreFoundation.framework */,
 			);
 			name = "Other Frameworks";
 			sourceTree = "<group>";
@@ -270,13 +285,14 @@
 		89D0F0200F392F20007831A7 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				BF37712D1175B1CD008EB949 /* icon.icns */,
+				BF3770C61175AB83008EB949 /* jmf.jar */,
 				BFC77A5B11301AD100F2D7A3 /* version.plist */,
 				BFC77A5A11301AC200F2D7A3 /* Manifest */,
 				89C3F2900F5250A300B0048E /* Credits.rtf */,
 				89D0F0230F392F20007831A7 /* Info.plist */,
 				89D0F0210F392F20007831A7 /* InfoPlist.strings */,
 				89D0F03E0F39304A007831A7 /* JavaApplicationStub */,
-				89D0F1BE0F3B68AD007831A7 /* GenericApp.icns */,
 			);
 			name = Resources;
 			path = resources;
@@ -429,8 +445,8 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				BF3771301175B20A008EB949 /* icon.icns in Resources */,
 				89D0F0240F392F20007831A7 /* InfoPlist.strings in Resources */,
-				89D0F1BF0F3B68AD007831A7 /* GenericApp.icns in Resources */,
 				89C3F2920F5250A300B0048E /* Credits.rtf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

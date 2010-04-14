@@ -70,7 +70,7 @@ public class QTCubedJMFInitializer {
 
     }
 
-    static void init() {
+    public static void init() {
         Logger.getAnonymousLogger().info("Initialized QTCubed JMF Plugin");
     }
 }

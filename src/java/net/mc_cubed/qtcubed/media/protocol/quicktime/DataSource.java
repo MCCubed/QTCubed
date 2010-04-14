@@ -68,7 +68,7 @@ public class DataSource extends BasicPushBufferDataSource {
         QTKitCaptureDevice selectedDevice = null;
         Collection<QTKitCaptureDevice> cds = QTKitCaptureDevice.inputDevices();
         for (QTKitCaptureDevice device : cds) {
-            if (device.localizedDisplayName().equalsIgnoreCase(captureDeviceName)) {
+            if (device.localizedDisplayName().equalsIgnoreCase(captureDeviceName) ||  device.uniqueId().equalsIgnoreCase(captureDeviceName)) {
                 selectedDevice = device;
                 break;
             }
@@ -113,7 +113,7 @@ public class DataSource extends BasicPushBufferDataSource {
         if (hasVideo) {
             QTKitCaptureDecompressedVideoOutput videoOut = new QTKitCaptureDecompressedVideoOutput();
             session.addOutput(videoOut);
-            QTKitVideoCapture videoCaptureStream = new QTKitVideoCapture(videoOut);
+            QTKitVideoCapture videoCaptureStream = new QTKitVideoCapture(this,videoOut);
             outStreams.add(videoCaptureStream);
         }
 

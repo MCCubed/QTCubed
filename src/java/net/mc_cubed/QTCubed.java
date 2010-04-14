@@ -60,6 +60,7 @@ import net.mc_cubed.qtcubed.QTKitCaptureSession;
 import net.mc_cubed.qtcubed.QTKitCaptureView;
 import net.mc_cubed.qtcubed.QTKitFormatDescription;
 import net.mc_cubed.qtcubed.QTKitMediaType;
+import net.mc_cubed.qtcubed.QTKitPixelFormat;
 
 /**
  * Starting point for the application. General initialization should be done inside
@@ -71,6 +72,8 @@ import net.mc_cubed.qtcubed.QTKitMediaType;
 public class QTCubed extends Frame implements ActionListener {
 
     static final boolean hasQTKit;
+
+	QTKitCaptureSession session;
 
     static {
         boolean qtKitLoaded = false;
@@ -122,14 +125,18 @@ public class QTCubed extends Frame implements ActionListener {
         }
 
         hasQTKit = qtKitLoaded;
+		
+		QTKitPixelFormat pf;
+		QTKitPixelFormat.values();
 
         // Reflexively call QTCubedJMFInitializer.init() to avoid classpath deps in case JMF is not present
         try {
-            Class clazz = Class.forName("net_mc_cubed.QTCubedJMFInitializer");
+            Class clazz = Class.forName("net.mc_cubed.QTCubedJMFInitializer");
             Method initMethod = clazz.getMethod("init");
             initMethod.invoke(null);
-        } catch (Exception ex) {
+        } catch (Throwable ex) {
             // Do nothing if we fail
+			ex.printStackTrace();
             Logger.getAnonymousLogger().info("Could not initialize JMF features of the QTCubed Library");
         }
     }
@@ -194,31 +201,46 @@ public class QTCubed extends Frame implements ActionListener {
             System.out.println("action performed");
 
             if (e.getActionCommand().equalsIgnoreCase("MOVIE")) {
+				if (session != null) {
+					session.stopRunning();
+				}
+				
                 FileDialog fd =
                         new FileDialog(this, "Select Movie...", FileDialog.LOAD);
                 fd.setVisible(true);
                 String fileName = fd.getFile();
                 if (fileName == null) {
+					if (session != null) {
+						session.startRunning();
+					}
                     return;
                 }
                 File f = new File(fd.getDirectory(), fd.getFile());
 
                 QTMovie movie = QTCubedFactory.initQTMovie(f);
                 System.out.println("Created movie");
-                this.remove(qtmv.getComponent());
-                this.remove(qtcv.getComponent());
+                remove(qtmv.getComponent());
+                remove(qtcv.getComponent());
 
-                this.add(qtmv.getComponent(), BorderLayout.CENTER);
+                add(qtmv.getComponent(), BorderLayout.CENTER);
                 // set movie on the view
                 qtmv.setMovie(movie);
                 System.out.println("Set movie on view");
+				
+				validateTree();
+				pack();
 
                 qtmv.play();
             }
 
             // Copying this from the apple developer docs and switching to Java syntax
             if (e.getActionCommand().equalsIgnoreCase("CAPTURE")) {
-                final QTKitCaptureSession session = new QTKitCaptureSession();
+				if (session != null) {
+					if (session.isRunning()) {
+						session.stopRunning();
+					}
+				}
+                session = new QTKitCaptureSession();
 
                 QTKitCaptureDevice videoDevice = QTKitCaptureDevice.defaultInputDevice(QTKitMediaType.VIDEO);
                 try {
@@ -226,9 +248,11 @@ public class QTCubed extends Frame implements ActionListener {
                     QTKitCaptureDeviceInput videoDeviceInput = new QTKitCaptureDeviceInput(videoDevice);
                     session.addInput(videoDeviceInput);
 					QTKitCaptureDecompressedVideoOutput videoOutput = new QTKitCaptureDecompressedVideoOutput();
-					videoOutput.setFrameRate(1.0f);
-					videoOutput.setSize(new Dimension(32,24));
+					videoOutput.setFrameRate(30.0f);
+					videoOutput.setSize(new Dimension(160,120));
                     session.addOutput(videoOutput);
+					System.out.println("Video Format: " + videoOutput.getPixelFormat());
+					System.out.println("Video Size: " + videoOutput.getSize());
 
                     SwingUtilities.invokeLater(new Runnable() {
 
