@@ -5,6 +5,30 @@
 //  Created by Chappell Charles on 10/04/09.
 //  Copyright 2010 MC Cubed, Inc. All rights reserved.
 //
+//  This program is free software; you can redistribute it and/or modify
+//  it under the terms of the GNU General Public License as published by
+//  the Free Software Foundation; either version 2 of the License, or
+//  (at your option) any later version.
+//  
+//  This program is distributed in the hope that it will be useful,
+//  but WITHOUT ANY WARRANTY; without even the implied warranty of
+//  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+//  GNU General Public License for more details.
+//  
+//  You should have received a copy of the GNU General Public License along
+//  with this program; if not, write to the Free Software Foundation, Inc.,
+//  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
+//  
+//  
+//  This is also dual licensed as proprietary software, and may be used in
+//  commercial/proprietary software products by obtaining a license from:
+//  MC Cubed, Inc
+//  1-3-4 Kamikizaki, Urawa-ku
+//  Saitama, Saitama, 330-0071
+//  Japan
+//
+//  Email: info@mc-cubed.net
+//  Website: http://www.mc-cubed.net/
 
 #import "QTKitCaptureDevice.h"
 
@@ -31,6 +55,22 @@ NSString * deviceTypeToMediaType(jint deviceType) {
 		case 18: return QTMediaTypeClosedCaption;
 		default: return nil;			
 	}
+}
+
+jobject compressionFormatToJava(JNIEnv * env, int format) {
+	jclass pixelFormatEnumClass  = (*env)->FindClass(env,"net/mc_cubed/qtcubed/QTKitCompressionFormat");
+	jmethodID nativeValueMethod  = (*env)->GetStaticMethodID(env,pixelFormatEnumClass,"forNative","(I)Lnet/mc_cubed/qtcubed/QTKitCompressionFormat;");
+	
+	return (*env)->CallObjectMethod(env,pixelFormatEnumClass,nativeValueMethod,format);
+	
+	return nil;
+}
+
+int javaToCompressionFormat(JNIEnv * env, jobject pixelFormat) {
+	jclass pixelFormatEnumClass  = (*env)->FindClass(env,"net/mc_cubed/qtcubed/QTKitCompressionFormat");
+	jmethodID nativeValueMethod  = (*env)->GetMethodID(env,pixelFormatEnumClass,"getNativeValue","()I");
+	jint nativeValue = (*env)->CallIntMethod(env,pixelFormat,nativeValueMethod);
+	return nativeValue;
 }
 
 /*
@@ -232,7 +272,7 @@ JNIEXPORT jobjectArray JNICALL Java_net_mc_1cubed_qtcubed_QTKitCaptureDevice__1g
 	JNF_COCOA_ENTER(env);
 	
 	NSArray* formatDescriptions = [captureDevice formatDescriptions];
-	
+		
 	NSUInteger objCount = [formatDescriptions count];
 
 	// Get the format description class
@@ -258,14 +298,13 @@ JNIEXPORT jobjectArray JNICALL Java_net_mc_1cubed_qtcubed_QTKitCaptureDevice__1g
 	
 	// Get the method signatures for setters we will use
 	jmethodID setMediaTypeMethodId = (*env)->GetMethodID(env,qtKitfdclass,"setMediaType","(Lnet/mc_cubed/qtcubed/QTKitMediaType;)V");
-	jmethodID setFormatTypeMethodId = (*env)->GetMethodID(env,qtKitfdclass,"setFormatType","(Ljava/lang/String;)V");
-	jclass propertiesClass = (*env)->FindClass(env,"java/util/Properties");
-	jmethodID setPropertyMethodId = (*env)->GetMethodID(env,propertiesClass,"setProperty","(Ljava/lang/String;Ljava/lang/String;)Ljava/lang/Object;");
-	jfieldID propertiesField = (*env)->GetFieldID(env,qtKitfdclass,"formatDescriptionAttributes","Ljava/util/Properties;");
+	jmethodID setFormatTypeMethodId = (*env)->GetMethodID(env,qtKitfdclass,"setFormatType","(Lnet/mc_cubed/qtcubed/QTKitCompressionFormat;)V");
+	jmethodID setWidthMethodId = (*env)->GetMethodID(env,qtKitfdclass,"setWidth","(I)V");
+	jmethodID setHeightMethodId = (*env)->GetMethodID(env,qtKitfdclass,"setHeight","(I)V");
 														  
 	// Loop through each element, creating new format descriptions for them
 	for (NSUInteger fdnum = 0; fdnum < objCount; fdnum++) {
-		QTFormatDescription* currentfd = [formatDescriptions objectAtIndex:fdnum];
+		QTFormatDescription* currentfd = [formatDescriptions objectAtIndex:fdnum];		
 		
 		// Construct the format descriptor object
 		jobject newfd = (*env)->NewObject(env,qtKitfdclass,fdConstructor);
@@ -283,45 +322,22 @@ JNIEXPORT jobjectArray JNICALL Java_net_mc_1cubed_qtcubed_QTKitCaptureDevice__1g
 		}
 
 		// Transfer the formatType
-		jsize buflength = 4;
-		unichar buffer[buflength];
 		UInt32 formatTypeInt = [currentfd formatType];
-		char* formatType = &formatTypeInt;
-		for (int i = 0; i < buflength; i++)
-			buffer[i] = formatType[i];
-		jstring formatTypeString = (*env)->NewString(env, (jchar *)buffer, buflength);
-		(*env)->CallVoidMethod(env,newfd,setFormatTypeMethodId,formatTypeString);
-		
+		NSLog(@"FormatTypeHex: %#x",formatTypeInt);
+		jobject formatTypeEnum = compressionFormatToJava(env, formatTypeInt);
+		NSLog(@"TypePointer: %#x",formatTypeEnum);
+		(*env)->CallVoidMethod(env,newfd,setFormatTypeMethodId,formatTypeEnum);		
 
-		// Transfer attributes
-		NSArray * keys;
-		int count;
-		keys = [[currentfd formatDescriptionAttributes] allKeys];
-		count = [keys count];
-		jobject newfdprops = (*env)->GetObjectField(env,newfd,propertiesField);
-		for (int i = 0; i < count; i++) {
-			id key = [keys objectAtIndex:i], object = [[currentfd formatDescriptionAttributes] objectForKey:key];
-			// Check to make sure both the key and attribute are NSStrings before transferring them over
-			if ([key respondsToSelector:@selector(getCharacters)] && [object respondsToSelector:@selector(getCharacters)]) {
-			
-				// Change the NSStrings into jstrings
-				jstring propKey,propVal;
-				jsize keybuflength = [key length];
-				unichar keybuffer[keybuflength];
-				[key getCharacters:keybuffer];	
-				propKey = (*env)->NewString(env, (jchar *)keybuffer, keybuflength);
-
-				jsize objectbuflength = [object length];
-				unichar objectbuffer[objectbuflength];
-				[object getCharacters:objectbuffer];	
-				propVal = (*env)->NewString(env, (jchar *)objectbuffer, objectbuflength);
-			
-				// Add them to the properties by using the set method
-				(*env)->CallVoidMethod(env,newfdprops,setPropertyMethodId,propKey,propVal);
-			}
+		// Transfer Size
+		NSValue * sizeValue = [currentfd attributeForKey:QTFormatDescriptionVideoEncodedPixelsSizeAttribute];
+		NSSize size;		
+		if (sizeValue != nil) {	
+			size = [sizeValue sizeValue];
+			NSLog(@"Frame size is: %f x %f",size.width,size.height);
+			(*env)->CallVoidMethod(env,newfd,setWidthMethodId,(int)size.width);
+			(*env)->CallVoidMethod(env,newfd,setHeightMethodId,(int)size.height);
 		}
 		
-		// Set it in the array
 		(*env)->SetObjectArrayElement(env,retval,fdnum,newfd);
 	}
 	

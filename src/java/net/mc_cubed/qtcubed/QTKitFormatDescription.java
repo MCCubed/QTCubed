@@ -26,6 +26,9 @@
 //  1-3-4 Kamikizaki, Urawa-ku
 //  Saitama, Saitama, 330-0071
 //  Japan
+//
+//  Email: info@mc-cubed.net
+//  Website: http://www.mc-cubed.net/
 
 package net.mc_cubed.qtcubed;
 
@@ -63,14 +66,14 @@ public class QTKitFormatDescription {
         this.mediaType = mediaType;
     }
 
-    protected String formatType;
+    protected QTKitCompressionFormat formatType;
 
     /**
      * Get the value of formatType
      *
      * @return the value of formatType
      */
-    public String getFormatType() {
+    public QTKitCompressionFormat getFormatType() {
         return formatType;
     }
 
@@ -79,8 +82,47 @@ public class QTKitFormatDescription {
      *
      * @param formatType new value of formatType
      */
-    public void setFormatType(String formatType) {
+    public void setFormatType(QTKitCompressionFormat formatType) {
         this.formatType = formatType;
+    }
+
+    protected Integer width;
+
+    /**
+     * Get the value of width
+     *
+     * @return the value of width
+     */
+    public Integer getWidth() {
+        return width;
+    }
+
+    /**
+     * Set the value of width
+     *
+     * @param width new value of width
+     */
+    public void setWidth(int width) {
+        this.width = width;
+    }
+    protected Integer height;
+
+    /**
+     * Get the value of height
+     *
+     * @return the value of height
+     */
+    public Integer getHeight() {
+        return height;
+    }
+
+    /**
+     * Set the value of height
+     *
+     * @param height new value of height
+     */
+    public void setHeight(int height) {
+        this.height = height;
     }
 
     public Object attributeForKey(String key) {

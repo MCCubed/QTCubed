@@ -1,7 +1,34 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
+//
+//  DataSource.java
+//  QTCubed
+//
+//  Created by Chappell Charles on 10/02/19.
+//  Copyright (c) 2010 MC Cubed, Inc. All rights reserved.
+//
+//  This program is free software; you can redistribute it and/or modify
+//  it under the terms of the GNU General Public License as published by
+//  the Free Software Foundation; either version 2 of the License, or
+//  (at your option) any later version.
+//
+//  This program is distributed in the hope that it will be useful,
+//  but WITHOUT ANY WARRANTY; without even the implied warranty of
+//  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+//  GNU General Public License for more details.
+//
+//  You should have received a copy of the GNU General Public License along
+//  with this program; if not, write to the Free Software Foundation, Inc.,
+//  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
+//
+//
+//  This is also dual licensed as proprietary software, and may be used in
+//  commercial/proprietary software products by obtaining a license from:
+//  MC Cubed, Inc
+//  1-3-4 Kamikizaki, Urawa-ku
+//  Saitama, Saitama, 330-0071
+//  Japan
+//
+//  Email: info@mc-cubed.net
+//  Website: http://www.mc-cubed.net/
 
 package net.mc_cubed.qtcubed.media.protocol.quicktime;
 
@@ -24,12 +51,13 @@ import net.mc_cubed.qtcubed.QTKitFormatDescription;
  * @author shadow
  */
 public class DataSource extends BasicPushBufferDataSource {
+
+    QTKitCaptureDevice selectedDevice;
     QTKitCaptureSession session;
     QTKitOutputBufferStream[] streams;
     private String captureDeviceName;
-    private Object captureParameters;
+    private String captureParameters;
 
-    
     @Override
     public PushBufferStream[] getStreams() {
         return streams;
@@ -65,10 +93,10 @@ public class DataSource extends BasicPushBufferDataSource {
 
         parseLocator();
 
-        QTKitCaptureDevice selectedDevice = null;
+        selectedDevice = null;
         Collection<QTKitCaptureDevice> cds = QTKitCaptureDevice.inputDevices();
         for (QTKitCaptureDevice device : cds) {
-            if (device.localizedDisplayName().equalsIgnoreCase(captureDeviceName) ||  device.uniqueId().equalsIgnoreCase(captureDeviceName)) {
+            if (device.localizedDisplayName().equalsIgnoreCase(captureDeviceName) || device.uniqueId().equalsIgnoreCase(captureDeviceName)) {
                 selectedDevice = device;
                 break;
             }
@@ -83,11 +111,15 @@ public class DataSource extends BasicPushBufferDataSource {
         for (QTKitFormatDescription desc : selectedDevice.getFormatDescriptions()) {
             switch (desc.getMediaType()) {
                 case SOUND:
-                    hasAudio = true; break;
+                    hasAudio = true;
+                    break;
                 case VIDEO:
-                    hasVideo = true; break;
+                    hasVideo = true;
+                    break;
                 case MUXED:
-                    hasAudio = true; hasVideo = true; break;
+                    hasAudio = true;
+                    hasVideo = true;
+                    break;
             }
         }
 
@@ -95,6 +127,11 @@ public class DataSource extends BasicPushBufferDataSource {
             throw new IOException("Selected capture device does not supply a supported media type");
         }
 
+        // Get the default format
+        
+
+        // Open the device
+        selectedDevice.open();
         // Get the input
         QTKitCaptureDeviceInput devInput = new QTKitCaptureDeviceInput(selectedDevice);
 
@@ -113,7 +150,7 @@ public class DataSource extends BasicPushBufferDataSource {
         if (hasVideo) {
             QTKitCaptureDecompressedVideoOutput videoOut = new QTKitCaptureDecompressedVideoOutput();
             session.addOutput(videoOut);
-            QTKitVideoCapture videoCaptureStream = new QTKitVideoCapture(this,videoOut);
+            QTKitVideoCapture videoCaptureStream = new QTKitVideoCapture(this, videoOut);
             outStreams.add(videoCaptureStream);
         }
 
@@ -147,16 +184,20 @@ public class DataSource extends BasicPushBufferDataSource {
 
     private void parseLocator() {
         String rest = getLocator().getRemainder();
-        int p1,p2;
+        System.out.println("Remainder of locator: " + rest);
+        int p1, p2;
         p1 = rest.indexOf("//");
-        p2 = rest.indexOf("/", p1+2);
-        captureDeviceName = rest.substring(p1 + 2, p2);
-        if (p2 != -1) {
-            captureParameters = rest.substring(p2);
+        if (p1 < 0) {
+            return;
         } else {
-            captureParameters = null;
+            p2 = rest.indexOf("/", p1 + 2);
+            if (p2 != -1) {
+                captureDeviceName = rest.substring(p1 + 2, p2);
+                captureParameters = rest.substring(p2);
+            } else {
+                captureDeviceName = rest.substring(p1 + 2);
+                captureParameters = null;
+            }
         }
     }
-
-
 }

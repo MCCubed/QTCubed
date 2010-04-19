@@ -26,6 +26,9 @@
 //  1-3-4 Kamikizaki, Urawa-ku
 //  Saitama, Saitama, 330-0071
 //  Japan
+//
+//  Email: info@mc-cubed.net
+//  Website: http://www.mc-cubed.net/
 
 package net.mc_cubed.qtcubed;
 
@@ -34,10 +37,10 @@ import java.awt.Dimension;
 import com.apple.eawt.CocoaComponent;
 import java.awt.Component;
 
-class QTKitMovieView extends CocoaComponent implements QTMovieView {
+public class QTKitMovieView extends CocoaComponent implements QTMovieView {
 
 	// Initialize the QTCubed Library
-	static final QTCubed cubed = new QTCubed();
+	static boolean usingQTKit = QTCubed.usesQTKit();
 
 	protected static final int SET_MOVIE = 1;
 	protected static final int PLAY_MOVIE = 2;

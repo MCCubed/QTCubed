@@ -1,5 +1,5 @@
 //
-//  QTKitMovieImpl.java
+//  QTKitMovie.java
 //  QTCubed
 //
 //  Created by Chappell Charles on 10/02/19.
@@ -26,6 +26,9 @@
 //  1-3-4 Kamikizaki, Urawa-ku
 //  Saitama, Saitama, 330-0071
 //  Japan
+//
+//  Email: info@mc-cubed.net
+//  Website: http://www.mc-cubed.net/
 
 package net.mc_cubed.qtcubed;
 

@@ -1,5 +1,5 @@
 //
-//  QTKitCompressionOptions.java
+//  QTKitVideoRenderer.java
 //  QTCubed
 //
 //  Created by Chappell Charles on 10/02/19.
@@ -30,12 +30,20 @@
 //  Email: info@mc-cubed.net
 //  Website: http://www.mc-cubed.net/
 
-package net.mc_cubed.qtcubed;
+package net.mc_cubed.qtcubed.jmf;
 
-/**
- *
- * @author shadow
- */
-public class QTKitCompressionOptions {
+import com.sun.media.renderer.video.BasicVideoRenderer;
+import javax.media.Buffer;
 
+public class QTKitVideoRenderer extends BasicVideoRenderer {
+
+    public QTKitVideoRenderer(String string) {
+        super(string);
+    }
+    
+    @Override
+    protected int doProcess(Buffer buffer) {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+    
 }

@@ -26,6 +26,10 @@
 //  1-3-4 Kamikizaki, Urawa-ku
 //  Saitama, Saitama, 330-0071
 //  Japan
+//
+//  Email: info@mc-cubed.net
+//  Website: http://www.mc-cubed.net/
+
 package net.mc_cubed.qtcubed;
 
 import java.util.logging.Logger;
@@ -46,15 +50,36 @@ public class QTKitCaptureDecompressedVideoOutput extends QTKitCaptureOutput impl
 
     native protected long _allocInit();
 
-    protected void pushFrame(byte[] frameData) {
+    protected void pushFrame(byte[] frameData,int formatInt, int width, int height, float frameRate) {
         if (dataDelegate != null) {
-            dataDelegate.nextSample(frameData);
+            QTKitSampleBuffer buffer = new QTKitSampleBuffer(QTKitPixelFormat.forNative(formatInt),width,height,frameRate,frameData);
+            dataDelegate.nextSample(buffer);
         } else {
             Logger.getAnonymousLogger().info("Got " + frameData.length + " bytes of data");
         }
-
+		
     }
 
+	protected void pushFrame(short[] frameData,int formatInt, int width, int height, float frameRate) {
+        if (dataDelegate != null) {
+            QTKitSampleBuffer buffer = new QTKitSampleBuffer(QTKitPixelFormat.forNative(formatInt),width,height,frameRate,frameData);
+            dataDelegate.nextSample(buffer);
+        } else {
+            Logger.getAnonymousLogger().info("Got " + frameData.length + " bytes of data");
+        }
+		
+    }
+
+	protected void pushFrame(int[] frameData,int formatInt, int width, int height, float frameRate) {
+        if (dataDelegate != null) {
+            QTKitSampleBuffer buffer = new QTKitSampleBuffer(QTKitPixelFormat.forNative(formatInt),width,height,frameRate,frameData);
+            dataDelegate.nextSample(buffer);
+        } else {
+            Logger.getAnonymousLogger().info("Got " + frameData.length + " bytes of data");
+        }
+		
+    }
+	
     public void setDataDelegate(QTKitCaptureDataDelegate dataDelegate) {
         this.dataDelegate = dataDelegate;
     }

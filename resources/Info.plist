@@ -28,11 +28,12 @@
 		<array>
 			<string>$JAVAROOT/QTCubed.jar</string>
 			<string>$JAVAROOT/jmf.jar</string>
+			<string>$JAVAROOT/mediaplayer.jar</string>
 		</array>
 		<key>JVMVersion</key>
 		<string>1.5+</string>
 		<key>MainClass</key>
-		<string>net.mc_cubed.QTCubed</string>
+		<string>net.mc_cubed.QTCubedJMF</string>
 		<key>Properties</key>
 		<dict>
 			<key>apple.laf.useScreenMenuBar</key>

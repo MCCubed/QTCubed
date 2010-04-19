@@ -32,9 +32,17 @@
 
 package net.mc_cubed;
 
+import com.sun.media.renderer.video.AWTRenderer;
 import java.util.Vector;
 import java.util.logging.Logger;
+import java.util.Collection;
+import javax.media.CaptureDeviceInfo;
+import javax.media.CaptureDeviceManager;
+import javax.media.Format;
+import javax.media.MediaLocator;
 import javax.media.PackageManager;
+import net.mc_cubed.qtcubed.QTKitCaptureDevice;
+import net.mc_cubed.qtcubed.QTKitFormatUtils;
 
 /**
  *
@@ -60,12 +68,27 @@ public class QTCubedJMFInitializer {
             // Save the changes to the package prefix list.
         }
 
+        for (QTKitCaptureDevice captureDevice : QTKitCaptureDevice.inputDevices()) {
+            String name = captureDevice.localizedDisplayName();
+            MediaLocator ml = new MediaLocator("quicktime://" + captureDevice.uniqueId());
+            Collection<Format> formats = QTKitFormatUtils.QTKitToJMF(captureDevice.getFormatDescriptions());
+            Format[] formatsArray = formats.toArray(new Format[0]);
+            CaptureDeviceInfo info = new CaptureDeviceInfo(name,ml,formatsArray);
+            CaptureDeviceManager.addDevice(info);
+            System.out.println("Added capture device: " + info);
+        }
+		
         // These are likely to generate exceptions, so do this last
         try {
             PackageManager.commitProtocolPrefixList();
             PackageManager.commitContentPrefixList();
         } catch (Exception ex) {
             // If we fail, we fail, no harm done.
+        }
+
+        AWTRenderer renderer = new AWTRenderer();
+        for (Format format :renderer.getSupportedInputFormats()) {
+            System.out.println("Supported Format: " + format);
         }
 
     }

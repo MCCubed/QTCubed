@@ -26,13 +26,95 @@
 //  1-3-4 Kamikizaki, Urawa-ku
 //  Saitama, Saitama, 330-0071
 //  Japan
+//
+//  Email: info@mc-cubed.net
+//  Website: http://www.mc-cubed.net/
 
 package net.mc_cubed.qtcubed;
+
+import javax.media.Format;
 
 /**
  *
  * @author shadow
  */
 public class QTKitSampleBuffer {
+    private final Class dataClass;
 
+    public Class getDataClass() {
+        return dataClass;
+    }
+
+    public QTKitSampleBuffer(QTKitPixelFormat pixelFormat, Integer width, Integer height, Float frameRate, byte[] rawData) {
+        this.pixelFormat = pixelFormat;
+        this.width = width;
+        this.height = height;
+        this.frameRate = frameRate;
+        this.rawData = rawData;
+        this.dataClass = Format.byteArray;
+    }
+
+    public QTKitSampleBuffer(QTKitPixelFormat pixelFormat, Integer width, Integer height, Float frameRate, short[] rawData) {
+        this.pixelFormat = pixelFormat;
+        this.width = width;
+        this.height = height;
+        this.frameRate = frameRate;
+        this.rawData = rawData;
+        this.dataClass = Format.shortArray;
+    }
+
+    public QTKitSampleBuffer(QTKitPixelFormat pixelFormat, Integer width, Integer height, Float frameRate, int[] rawData) {
+        this.pixelFormat = pixelFormat;
+        this.width = width;
+        this.height = height;
+        this.frameRate = frameRate;
+        this.rawData = rawData;
+        this.dataClass = Format.intArray;
+    }
+
+    final QTKitPixelFormat pixelFormat;
+
+    final Integer width;
+
+    final Integer height;
+
+    final Object rawData;
+
+    protected Float frameRate;
+
+    /**
+     * Get the value of frameRate
+     *
+     * @return the value of frameRate
+     */
+    public Float getFrameRate() {
+        return frameRate;
+    }
+
+    /**
+     * Set the value of frameRate
+     *
+     * @param frameRate new value of frameRate
+     */
+    public void setFrameRate(Float frameRate) {
+        this.frameRate = frameRate;
+    }
+
+    public Integer getHeight() {
+        return height;
+    }
+
+
+    public QTKitPixelFormat getPixelFormat() {
+        return pixelFormat;
+    }
+
+    public Object getRawData() {
+        return rawData;
+    }
+
+    public Integer getWidth() {
+        return width;
+    }
+    
 }

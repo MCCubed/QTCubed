@@ -1,8 +1,8 @@
 //
-//  QTCaptureViewBridge.m
+//  QTCodec.m
 //  QTCubed
 //
-//  Created by Chappell Charles on 10/04/09.
+//  Created by Chappell Charles on 10/04/15.
 //  Copyright 2010 MC Cubed, Inc. All rights reserved.
 //
 //  This program is free software; you can redistribute it and/or modify
@@ -30,49 +30,44 @@
 //  Email: info@mc-cubed.net
 //  Website: http://www.mc-cubed.net/
 
-#import "QTCaptureViewBridge.h"
-
+#import "QTCodec.h"
 
 /*
- * Class:     net_mc_cubed_qtcubed_QTKitCaptureView
- * Method:    createNSViewLong
- * Signature: ()J
+ * Class:     net_mc_cubed_qtcubed_media_codec_QTCodec
+ * Method:    _processIntoFrames
+ * Signature: ([B[BII)[B
  */
-JNIEXPORT jlong JNICALL Java_net_mc_1cubed_qtcubed_QTKitCaptureView_createNSViewLong
-(JNIEnv *env, jobject objectRef) {
-	jlong viewPointer;
+JNIEXPORT jbyteArray JNICALL Java_net_mc_1cubed_qtcubed_media_codec_QTCodec__1processIntoFrames
+(JNIEnv *env, jobject objectRef, jbyteArray headerBytes, jbyteArray javaDataBytes, jint dataOffset, jint dataLength) {
 	
 	/* Set up autorelease and exception handling */
 	JNF_COCOA_ENTER(env);
+
+	// Not auto-released, be careful with this!
+	jbyte* dataBytes = malloc(dataLength);
 	
-	viewPointer = (jlong)[[QTCaptureViewBridge alloc]init];
+	(*env)->GetByteArrayRegion(env,javaDataBytes,dataOffset,dataLength,dataBytes);
+	
+	// This will take care of our malloced databytes so they won't leak
+	NSData * nsDataBytes = [NSData dataWithBytesNoCopy:dataBytes length:dataLength freeWhenDone:YES];
+	
+	NSError * error = nil;	
+	QTMovie * movie = [QTMovie movieWithData:nsDataBytes error:&error];
+	
+	[movie gotoBeginning];
+	
+	for (;QTTimeCompare([movie duration],[movie currentTime]) != NSOrderedSame;[movie stepForward]) {
+		NSImage * frame = [movie currentFrameImage];		
+	}
+	
+	free(dataBytes);	
 	
 	/* Autorelease and exception cleanup */
 	JNF_COCOA_EXIT(env);
 	
-	return viewPointer;
 	
 }
 
-@implementation QTCaptureViewBridge
--(id)init
-{
-    return [super init];
-}
-
-
-- (void) awtMessage:(jint)messageID message:(jobject)message env:(JNIEnv *)env {
-	switch (messageID) {
-		case net_mc_cubed_qtcubed_QTKitCaptureView_SET_CAPTURE_SESSION:
-		{
-			jclass cls = (*env)->GetObjectClass(env,message);
-			jmethodID getLongMethod = (*env)->GetMethodID(env,cls,"longValue","()J");
-			jlong captureSessionRef = (*env)->CallLongMethod(env,message,getLongMethod);
-			[self setCaptureSession:(QTCaptureSession *) captureSessionRef];
-			break;
-		}
-			// more cases...
-	}
-}
+@implementation QTCodec
 
 @end

@@ -5,6 +5,30 @@
 //  Created by Chappell Charles on 10/04/09.
 //  Copyright 2010 MC Cubed, Inc. All rights reserved.
 //
+//  This program is free software; you can redistribute it and/or modify
+//  it under the terms of the GNU General Public License as published by
+//  the Free Software Foundation; either version 2 of the License, or
+//  (at your option) any later version.
+//  
+//  This program is distributed in the hope that it will be useful,
+//  but WITHOUT ANY WARRANTY; without even the implied warranty of
+//  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+//  GNU General Public License for more details.
+//  
+//  You should have received a copy of the GNU General Public License along
+//  with this program; if not, write to the Free Software Foundation, Inc.,
+//  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
+//  
+//  
+//  This is also dual licensed as proprietary software, and may be used in
+//  commercial/proprietary software products by obtaining a license from:
+//  MC Cubed, Inc
+//  1-3-4 Kamikizaki, Urawa-ku
+//  Saitama, Saitama, 330-0071
+//  Japan
+//
+//  Email: info@mc-cubed.net
+//  Website: http://www.mc-cubed.net/
 
 #import "QTKitCaptureDecompressedVideoOutput.h"
 
@@ -50,14 +74,19 @@ JNIEXPORT jlong JNICALL Java_net_mc_1cubed_qtcubed_QTKitCaptureDecompressedVideo
 	
 	QTCaptureDecompressedVideoOutput * videoOutput = [[QTCaptureDecompressedVideoOutput alloc] init];
 	
+	// Alloc the delegate which will receive the video data
 	QTKitCaptureDecompressedVideoOutput * delegate = [[QTKitCaptureDecompressedVideoOutput alloc] initWithEnv:env javaObject:objectRef];
-		
+	
+	// Connect the video delegate to the output object
 	[videoOutput setDelegate:delegate];
 	
+	// Java could potentially take some time to process the video data, so let's make sure we cover all bases
 	[videoOutput setAutomaticallyDropsLateVideoFrames:YES];
 	
-	setPixelFormat(videoOutput, (long) kCVPixelFormatType_32ARGB);
+	// Let's set a default video format for now
+	setPixelFormat(videoOutput, (long) kCVPixelFormatType_32BGRA);
 	
+	// Return a reference to the decompressed video output object
 	ref = (jlong) videoOutput;
 	
 	/* Autorelease and exception cleanup */
@@ -158,7 +187,7 @@ JNIEXPORT jint JNICALL Java_net_mc_1cubed_qtcubed_QTKitCaptureDecompressedVideoO
 	NSDictionary * pixelBufferAttributes = [videoOutput pixelBufferAttributes];
 	
 	NSNumber * width = [pixelBufferAttributes valueForKey:(id)kCVPixelBufferWidthKey];
-	
+
 	jwidth = [width intValue];
 	
 	/* Autorelease and exception cleanup */
@@ -272,37 +301,123 @@ JNIEXPORT jobject JNICALL Java_net_mc_1cubed_qtcubed_QTKitCaptureDecompressedVid
 }
 
 - (void)captureOutput:(QTCaptureOutput *)captureOutput didOutputVideoFrame:(CVImageBufferRef)videoFrame withSampleBuffer:(QTSampleBuffer *)sampleBuffer fromConnection:(QTCaptureConnection *)connection {
-	void * rawData = [sampleBuffer bytesForAllSamples];
-	int length = [sampleBuffer lengthForAllSamples];
-	QTFormatDescription * formatDescription = [sampleBuffer formatDescription];
-	
-	int format = [formatDescription formatType];
-	NSLog(@"Got format %d",format);
-	
-	// TODO: Convert the content to the appropriate format and sizing
-
 	// Move into Java to deliver the data
 	JNIEnv *env;
 	(*g_vm)->AttachCurrentThread (g_vm, (void **) &env, NULL);
 
-	/* Set up autorelease and exception handling */
-	JNF_COCOA_ENTER(env);
-	
-	// Create an appropriately sized byte array to hold the data
-	jbyteArray frameData = (*env)->NewByteArray(env,length);
-	// Copy the raw data into the byteArray
-	(*env)->SetByteArrayRegion(env,frameData,0,length,rawData);
-	
-	// Get the class reference for our object
-	jclass classRef = (*env)->GetObjectClass(env,objectRef);
-	// Get the pushFrame methodId
-	jmethodID methodId = (*env)->GetMethodID(env,classRef,"pushFrame","([B)V");
-	// Call pushFrame with the byte array
-	(*env)->CallVoidMethod(env,objectRef,methodId,frameData);
+	// Set up autorelease and exception handling
+//	JNF_COCOA_ENTER(env);
 
-	/* Autorelease and exception cleanup */
-	JNF_COCOA_EXIT(env);
+	void * rawData = [sampleBuffer bytesForAllSamples];
+	int length = [sampleBuffer lengthForAllSamples];
+	QTFormatDescription * formatDescription = [sampleBuffer formatDescription];
+	QTTime duration = [sampleBuffer duration];
 	
+	jint format = [formatDescription formatType];
+	NSValue * pixelSize = [formatDescription attributeForKey:QTFormatDescriptionVideoEncodedPixelsSizeAttribute];
+	NSSize size = [pixelSize sizeValue];
+	jint width = size.width;
+	jint height = size.height;
+	NSLog(@"Outputting frame sized %d x %d of length %d",width,height,length);
+	
+	// TODO: Convert the content to the appropriate format and sizing
+
+	switch (format) {
+			// 8 bit codecs
+		case kCVPixelFormatType_1Monochrome:
+		case kCVPixelFormatType_2Indexed:
+		case kCVPixelFormatType_4Indexed:
+		case kCVPixelFormatType_8Indexed:
+		case kCVPixelFormatType_1IndexedGray_WhiteIsZero:
+		case kCVPixelFormatType_2IndexedGray_WhiteIsZero:
+		case kCVPixelFormatType_4IndexedGray_WhiteIsZero:
+		case kCVPixelFormatType_8IndexedGray_WhiteIsZero:
+		case kCVPixelFormatType_422YpCbCr8:
+		case kCVPixelFormatType_4444YpCbCrA8:
+		case kCVPixelFormatType_4444YpCbCrA8R:
+		case kCVPixelFormatType_444YpCbCr8:
+		case kCVPixelFormatType_420YpCbCr8Planar:
+		case kCVPixelFormatType_422YpCbCr_4A_8BiPlanar:
+		case kCVPixelFormatType_24RGB:
+		case kCVPixelFormatType_24BGR:
+		{
+			// Re-use the existing array if possible
+			if (byteFrameData == nil || (*env)->GetArrayLength(env,byteFrameData) < length) {
+				// Create an appropriately sized byte array to hold the data
+				byteFrameData = (*env)->NewGlobalRef(env,(*env)->NewByteArray(env,length));
+			}
+			if (byteFrameData) {
+				// Copy the raw data into the byteArray
+				(*env)->SetByteArrayRegion(env,byteFrameData,0,length,rawData);
+			
+				// Get the class reference for our object
+				jclass classRef = (*env)->GetObjectClass(env,objectRef);
+				// Get the pushFrame methodId
+				jmethodID methodId = (*env)->GetMethodID(env,classRef,"pushFrame","([BIIIF)V");
+				// Call pushFrame with the byte array
+				(*env)->CallVoidMethod(env,objectRef,methodId,byteFrameData,format,width,height,-1.0f);
+			}
+			break;
+		}	
+			// 16 bit (short) storage of values
+		case kCVPixelFormatType_16BE555:
+		case kCVPixelFormatType_16LE555:
+		case kCVPixelFormatType_16LE5551:
+		case kCVPixelFormatType_16BE565:
+		case kCVPixelFormatType_16LE565:
+		case kCVPixelFormatType_16Gray:
+		case kCVPixelFormatType_422YpCbCr16:
+		case kCVPixelFormatType_422YpCbCr10:
+		case kCVPixelFormatType_444YpCbCr10:
+		{
+			// Re-use the existing array if possible
+			if (shortFrameData == nil || (*env)->GetArrayLength(env,shortFrameData) < length/2) {
+				// Create an appropriately sized byte array to hold the data
+				shortFrameData = (*env)->NewGlobalRef(env,(*env)->NewShortArray(env,length/2));
+			}
+			if (shortFrameData) {
+				// Copy the raw data into the byteArray
+				(*env)->SetShortArrayRegion(env,shortFrameData,0,length/2,rawData);
+			
+				// Get the class reference for our object
+				jclass classRef = (*env)->GetObjectClass(env,objectRef);
+				// Get the pushFrame methodId
+				jmethodID methodId = (*env)->GetMethodID(env,classRef,"pushFrame","([SIIIF)V");
+				// Call pushFrame with the short array
+				(*env)->CallVoidMethod(env,objectRef,methodId,shortFrameData,format,width,height,-1.0f);			
+			}
+			break;
+		}	
+			// 32 bit (int) storage of values
+		case kCVPixelFormatType_32ABGR:
+		case kCVPixelFormatType_32AlphaGray:
+		case kCVPixelFormatType_32ARGB:
+		case kCVPixelFormatType_32BGRA:
+		case kCVPixelFormatType_32RGBA:
+		{
+			// Re-use the existing array if possible
+			if (intFrameData == nil || (*env)->GetArrayLength(env,intFrameData) < length/4) {
+				// Create an appropriately sized byte array to hold the data
+				intFrameData = (*env)->NewGlobalRef(env,(*env)->NewIntArray(env,length/4));
+			}
+			if (intFrameData) {
+				// Copy the raw data into the byteArray
+				(*env)->SetByteArrayRegion(env,intFrameData,0,length/4,rawData);
+			
+				// Get the class reference for our object
+				jclass classRef = (*env)->GetObjectClass(env,objectRef);
+				// Get the pushFrame methodId
+				jmethodID methodId = (*env)->GetMethodID(env,classRef,"pushFrame","([IIIIF)V");
+				// Call pushFrame with the int array
+				(*env)->CallVoidMethod(env,objectRef,methodId,intFrameData,format,width,height,-1.0f);
+			}
+			break;
+		}	
+	}
+	// Autorelease and exception cleanup
+//	JNF_COCOA_EXIT(env);
+
+	// Detatch from Java
 	(*g_vm)->DetachCurrentThread (g_vm);
 }
 
