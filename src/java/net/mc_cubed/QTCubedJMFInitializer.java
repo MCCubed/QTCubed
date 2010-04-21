@@ -86,11 +86,6 @@ public class QTCubedJMFInitializer {
             // If we fail, we fail, no harm done.
         }
 
-        AWTRenderer renderer = new AWTRenderer();
-        for (Format format :renderer.getSupportedInputFormats()) {
-            System.out.println("Supported Format: " + format);
-        }
-
     }
 
     public static void init() {

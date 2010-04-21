@@ -36,6 +36,7 @@ import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Properties;
+import java.security.AllPermission;
 
 public class QTKitCaptureDevice {
 
@@ -48,7 +49,11 @@ public class QTKitCaptureDevice {
     protected final long deviceRef;
 
     protected QTKitCaptureDevice(long newDeviceRef) {
-        this.deviceRef = newDeviceRef;
+		SecurityManager security = System.getSecurityManager();
+		if (security != null) {
+			security.checkPermission(new AllPermission());
+		}
+        this.deviceRef = newDeviceRef;		
     }
     
     @Override

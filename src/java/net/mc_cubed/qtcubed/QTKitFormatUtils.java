@@ -36,8 +36,15 @@ import java.awt.Dimension;
 import java.util.Collection;
 import java.util.LinkedList;
 import javax.media.Format;
+import javax.media.format.VideoFormat;
+import javax.media.format.IndexedColorFormat;
 import javax.media.format.*;
 import javax.media.protocol.ContentDescriptor;
+import java.util.Map.Entry;
+import java.util.Map;
+import java.util.HashMap;
+import java.util.List;
+import java.util.LinkedList;
 
 /**
  *
@@ -45,6 +52,39 @@ import javax.media.protocol.ContentDescriptor;
  */
 public class QTKitFormatUtils {
 
+	public static final Map<QTKitPixelFormat,VideoFormat> pixelFormatMap;
+	
+	public static final RGBFormat rgb24;
+	static {
+		pixelFormatMap = new HashMap<QTKitPixelFormat,VideoFormat>();
+		pixelFormatMap.put(QTKitPixelFormat.e16BE555,new RGBFormat(null, Format.NOT_SPECIFIED, Format.shortArray, -1.0f, 16, 0x7c00, 0x3e0, 0x1f, 2, Format.NOT_SPECIFIED, RGBFormat.FALSE, RGBFormat.BIG_ENDIAN));
+		pixelFormatMap.put(QTKitPixelFormat.e16LE555,new RGBFormat(null, Format.NOT_SPECIFIED, Format.shortArray, -1.0f, 16, 0x7c00, 0x3e0, 0x1f, 2, Format.NOT_SPECIFIED, RGBFormat.FALSE, RGBFormat.LITTLE_ENDIAN));
+		pixelFormatMap.put(QTKitPixelFormat.e16LE5551,new RGBFormat(null, Format.NOT_SPECIFIED, Format.shortArray, -1.0f, 16, 0xf800, 0x7c0, 0x3e, 2, Format.NOT_SPECIFIED, RGBFormat.FALSE, RGBFormat.LITTLE_ENDIAN));
+		pixelFormatMap.put(QTKitPixelFormat.e16BE565,new RGBFormat(null, Format.NOT_SPECIFIED, Format.shortArray, -1.0f, 16, 0xf800, 0x7e0, 0x1f, 2, Format.NOT_SPECIFIED, RGBFormat.FALSE, RGBFormat.BIG_ENDIAN));
+		pixelFormatMap.put(QTKitPixelFormat.e16LE565,new RGBFormat(null, Format.NOT_SPECIFIED, Format.shortArray, -1.0f, 16, 0xf800, 0x7e0, 0x1f, 2, Format.NOT_SPECIFIED, RGBFormat.FALSE, RGBFormat.LITTLE_ENDIAN));
+		rgb24 = new RGBFormat(null, Format.NOT_SPECIFIED, Format.byteArray, -1.0f, 24, 1, 2, 3, 3, Format.NOT_SPECIFIED, RGBFormat.FALSE, RGBFormat.BIG_ENDIAN);
+		pixelFormatMap.put(QTKitPixelFormat.e24RGB,rgb24);
+		pixelFormatMap.put(QTKitPixelFormat.e24BGR,new RGBFormat(null, Format.NOT_SPECIFIED, Format.byteArray, -1.0f, 24, 3, 2, 1, 3, Format.NOT_SPECIFIED, RGBFormat.FALSE, RGBFormat.BIG_ENDIAN));
+		pixelFormatMap.put(QTKitPixelFormat.e32ARGB,new RGBFormat(null, Format.NOT_SPECIFIED, Format.intArray, -1.0f, 32, 0xff00, 0xff0000, 0xff000000, 1, Format.NOT_SPECIFIED, RGBFormat.FALSE, RGBFormat.BIG_ENDIAN));
+		pixelFormatMap.put(QTKitPixelFormat.e32BGRA,new RGBFormat(null, Format.NOT_SPECIFIED, Format.intArray, -1.0f, 32, 0xff0000, 0xff00, 0xff, 1, Format.NOT_SPECIFIED, RGBFormat.FALSE, RGBFormat.BIG_ENDIAN));
+		pixelFormatMap.put(QTKitPixelFormat.e32ABGR,new RGBFormat(null, Format.NOT_SPECIFIED, Format.intArray, -1.0f, 32, 0xff, 0xff00, 0xff0000, 1, Format.NOT_SPECIFIED, RGBFormat.FALSE, RGBFormat.BIG_ENDIAN));
+		pixelFormatMap.put(QTKitPixelFormat.e32RGBA,new RGBFormat(null, Format.NOT_SPECIFIED, Format.intArray, -1.0f, 32, 0xff000000, 0xff0000, 0xff00, 1, Format.NOT_SPECIFIED, RGBFormat.FALSE, RGBFormat.BIG_ENDIAN));
+		pixelFormatMap.put(QTKitPixelFormat.e422YpCbCr8,new YUVFormat(null, Format.NOT_SPECIFIED, Format.byteArray, -1.0f, YUVFormat.YUV_YUYV | YUVFormat.YUV_SIGNED, Format.NOT_SPECIFIED, 1, 0, 4, 6));
+		pixelFormatMap.put(QTKitPixelFormat.e420YpCbCr8Planar,new YUVFormat(null,Format.NOT_SPECIFIED,Format.byteArray, -1.0f,YUVFormat.YUV_420,Format.NOT_SPECIFIED, 8, 0, 4, 6));
+		pixelFormatMap.put(QTKitPixelFormat.e1Monochrome,new IndexedColorFormat(null,Format.NOT_SPECIFIED,Format.byteArray,-1.0f,Format.NOT_SPECIFIED,1,spacedByteValues(1),spacedByteValues(1),spacedByteValues(1)));
+		pixelFormatMap.put(QTKitPixelFormat.e2Indexed,new IndexedColorFormat(null,Format.NOT_SPECIFIED,Format.byteArray,-1.0f,Format.NOT_SPECIFIED,2,spacedByteValues(2),spacedByteValues(2),spacedByteValues(2)));
+		pixelFormatMap.put(QTKitPixelFormat.e4Indexed,new IndexedColorFormat(null,Format.NOT_SPECIFIED,Format.byteArray,-1.0f,Format.NOT_SPECIFIED,2,spacedByteValues(4),spacedByteValues(4),spacedByteValues(4)));
+		pixelFormatMap.put(QTKitPixelFormat.e8Indexed,new IndexedColorFormat(null,Format.NOT_SPECIFIED,Format.byteArray,-1.0f,Format.NOT_SPECIFIED,2,spacedByteValues(8),spacedByteValues(8),spacedByteValues(8)));
+	}
+	
+	public static byte[] spacedByteValues(int bits) {
+		int numValues = (int)Math.pow(2, bits);
+		byte[] retval = new byte[numValues];
+		for (int i = 0;i<numValues;i++) {
+			retval[0] = (byte)(((float)i/(numValues-1)) * 255);
+		}
+		return retval;
+	}
     public static Collection<Format> QTKitToJMF(Collection<QTKitFormatDescription> formatDescriptions) {
         Collection<Format> retval = new LinkedList<Format>();
         for (QTKitFormatDescription formatDescription : formatDescriptions) {
@@ -121,97 +161,206 @@ public class QTKitFormatUtils {
         }
     }
 
+	public static VideoFormat CompleteFormat(VideoFormat videoFormat,Dimension size, float frameRate) {
+		VideoFormat format;
+		int lineSize, dataSize,pixelStride;
+
+		if (videoFormat instanceof RGBFormat) {
+			RGBFormat baseFormat = (RGBFormat)videoFormat;
+			pixelStride = baseFormat.getPixelStride();
+			lineSize = (size != null) ? (int) size.getWidth() * pixelStride : Format.NOT_SPECIFIED;
+			dataSize = (size != null) ? lineSize * (int) size.getHeight() : Format.NOT_SPECIFIED;
+			format = new RGBFormat(size, dataSize, baseFormat.getDataType(), frameRate, baseFormat.getBitsPerPixel(), baseFormat.getRedMask(), baseFormat.getGreenMask(), baseFormat.getBlueMask(), baseFormat.getPixelStride(), lineSize, baseFormat.getFlipped(), baseFormat.getEndian());
+		} else if (videoFormat instanceof YUVFormat) {
+			YUVFormat baseFormat = (YUVFormat)videoFormat;
+			dataSize = (size != null) ? (int) size.getWidth() * (int) size.getHeight() : Format.NOT_SPECIFIED;
+			format = new YUVFormat(size, dataSize, baseFormat.getDataType(), frameRate, baseFormat.getYuvType(), (int) size.getWidth(), 1, baseFormat.getOffsetY(), baseFormat.getOffsetU(), baseFormat.getOffsetV());			
+		} else if (videoFormat instanceof IndexedColorFormat) {
+			IndexedColorFormat baseFormat = (IndexedColorFormat)videoFormat;
+			int bpp = baseFormat.getMapSize();
+			lineSize = (size != null) ? (int) size.getWidth() * bpp / 8 : Format.NOT_SPECIFIED;
+			dataSize = (size != null) ? (int) size.getHeight() * lineSize : Format.NOT_SPECIFIED;
+			format = new IndexedColorFormat(size,dataSize,baseFormat.getDataType(),frameRate,lineSize,baseFormat.getMapSize(),baseFormat.getRedValues(),baseFormat.getGreenValues(),baseFormat.getBlueValues());
+		} else {
+			format = null;
+		}
+		return format;
+	}
     public static Format PixelFormatToJMF(QTKitPixelFormat pixelFormat, Dimension size, float frameRate) {
         Format format;
-        int lineSize, dataSize,pixelStride;
         if (pixelFormat == null) {
             return null;
         }
 
+		VideoFormat videoFormat = pixelFormatMap.get(pixelFormat);
+		if (videoFormat == null) {
+			return null;
+		}
+		
+		return CompleteFormat(videoFormat,size,frameRate);
+					   
+		/*
         switch (pixelFormat) {
             // RGB Formats
             case e16BE555:
+			{
+				RGBFormat baseFormat = (RGBFormat)pixelFormatMap.get(pixelFormat);
                 lineSize = (int) size.getWidth() * 2;
                 dataSize = lineSize * (int) size.getHeight();
-                format = new RGBFormat(size, dataSize, Format.shortArray, frameRate, 16, 0x7c00, 0x3e0, 0x1f, 2, lineSize, RGBFormat.FALSE, RGBFormat.BIG_ENDIAN);
+                format = new RGBFormat(size, dataSize, baseFormat.getDataType(), frameRate, baseFormat.getBitsPerPixel(), baseFormat.getRedMask(), baseFormat.getGreenMask(), baseFormat.getBlueMask(), baseFormat.getPixelStride(), lineSize, baseFormat.getFlipped(), baseFormat.getEndian());
                 break;
+			}
             case e16LE555:
+			{
+				RGBFormat baseFormat = (RGBFormat)pixelFormatMap.get(pixelFormat);
                 lineSize = (int) size.getWidth() * 2;
                 dataSize = lineSize * (int) size.getHeight();
-                format = new RGBFormat(size, dataSize, Format.shortArray, frameRate, 16, 0x7c00, 0x3e0, 0x1f, 2, lineSize, RGBFormat.FALSE, RGBFormat.LITTLE_ENDIAN);
+                format = new RGBFormat(size, dataSize, baseFormat.getDataType(), frameRate, baseFormat.getBitsPerPixel(), baseFormat.getRedMask(), baseFormat.getGreenMask(), baseFormat.getBlueMask(), baseFormat.getPixelStride(), lineSize, baseFormat.getFlipped(), baseFormat.getEndian());
                 break;
+			}
             case e16LE5551:
+			{
+				RGBFormat baseFormat = (RGBFormat)pixelFormatMap.get(pixelFormat);
                 lineSize = (int) size.getWidth() * 2;
                 dataSize = lineSize * (int) size.getHeight();
-                format = new RGBFormat(size, dataSize, Format.shortArray, frameRate, 16, 0xf800, 0x7c0, 0x3e, 2, lineSize, RGBFormat.FALSE, RGBFormat.LITTLE_ENDIAN);
+                format = new RGBFormat(size, dataSize, baseFormat.getDataType(), frameRate, baseFormat.getBitsPerPixel(), baseFormat.getRedMask(), baseFormat.getGreenMask(), baseFormat.getBlueMask(), baseFormat.getPixelStride(), lineSize, baseFormat.getFlipped(), baseFormat.getEndian());
                 break;
+			}
             case e16BE565:
+			{
+				RGBFormat baseFormat = (RGBFormat)pixelFormatMap.get(pixelFormat);
                 lineSize = (int) size.getWidth() * 2;
                 dataSize = lineSize * (int) size.getHeight();
-                format = new RGBFormat(size, dataSize, Format.shortArray, frameRate, 16, 0xf800, 0x7e0, 0x1f, 2, lineSize, RGBFormat.FALSE, RGBFormat.BIG_ENDIAN);
+                format = new RGBFormat(size, dataSize, baseFormat.getDataType(), frameRate, baseFormat.getBitsPerPixel(), baseFormat.getRedMask(), baseFormat.getGreenMask(), baseFormat.getBlueMask(), baseFormat.getPixelStride(), lineSize, baseFormat.getFlipped(), baseFormat.getEndian());
                 break;
+			}
             case e16LE565:
-                lineSize = (int) size.getWidth() * 2;
+			{
+				RGBFormat baseFormat = (RGBFormat)pixelFormatMap.get(pixelFormat);
+                pixelStride = baseFormat.getPixelStride();
+                lineSize = (int) size.getWidth() * pixelStride;
                 dataSize = lineSize * (int) size.getHeight();
-                format = new RGBFormat(size, dataSize, Format.shortArray, frameRate, 16, 0xf800, 0x7e0, 0x1f, 2, lineSize, RGBFormat.FALSE, RGBFormat.LITTLE_ENDIAN);
+                format = new RGBFormat(size, dataSize, baseFormat.getDataType(), frameRate, baseFormat.getBitsPerPixel(), baseFormat.getRedMask(), baseFormat.getGreenMask(), baseFormat.getBlueMask(), baseFormat.getPixelStride(), lineSize, baseFormat.getFlipped(), baseFormat.getEndian());
                 break;
+			}
             case e24RGB:
-                pixelStride = 3;
+			{
+				RGBFormat baseFormat = (RGBFormat)pixelFormatMap.get(pixelFormat);
+                pixelStride = baseFormat.getPixelStride();
                 lineSize = (int) size.getWidth() * pixelStride;
                 dataSize = lineSize * (int) size.getHeight();
-                format = new RGBFormat(size, dataSize, Format.byteArray, frameRate, 24, 1, 2, 3, pixelStride, lineSize, RGBFormat.FALSE, RGBFormat.BIG_ENDIAN);
+                format = new RGBFormat(size, dataSize, baseFormat.getDataType(), frameRate, baseFormat.getBitsPerPixel(), baseFormat.getRedMask(), baseFormat.getGreenMask(), baseFormat.getBlueMask(), baseFormat.getPixelStride(), lineSize, baseFormat.getFlipped(), baseFormat.getEndian());
                 break;
+			}
             case e24BGR:
+			{
+				RGBFormat baseFormat = (RGBFormat)pixelFormatMap.get(pixelFormat);
                 pixelStride = 3;
                 lineSize = (int) size.getWidth() * pixelStride;
                 dataSize = lineSize * (int) size.getHeight();
-                format = new RGBFormat(size, dataSize, Format.byteArray, frameRate, 24, 3, 2, 1, pixelStride, lineSize, RGBFormat.FALSE, RGBFormat.BIG_ENDIAN);
+                format = new RGBFormat(size, dataSize, baseFormat.getDataType(), frameRate, baseFormat.getBitsPerPixel(), baseFormat.getRedMask(), baseFormat.getGreenMask(), baseFormat.getBlueMask(), baseFormat.getPixelStride(), lineSize, baseFormat.getFlipped(), baseFormat.getEndian());
                 break;
+			}
             case e32ARGB:
-                pixelStride = 1;
+			{
+				RGBFormat baseFormat = (RGBFormat)pixelFormatMap.get(pixelFormat);
+                pixelStride = baseFormat.getPixelStride();
                 lineSize = (int) size.getWidth() * pixelStride;
                 dataSize = lineSize * (int) size.getHeight();
-                format = new RGBFormat(size, dataSize, Format.intArray, frameRate, 32, 0xff00, 0xff0000, 0xff000000, pixelStride, lineSize, RGBFormat.FALSE, RGBFormat.BIG_ENDIAN);
+                format = new RGBFormat(size, dataSize, baseFormat.getDataType(), frameRate, baseFormat.getBitsPerPixel(), baseFormat.getRedMask(), baseFormat.getGreenMask(), baseFormat.getBlueMask(), baseFormat.getPixelStride(), lineSize, baseFormat.getFlipped(), baseFormat.getEndian());
                 break;
+			}
             case e32BGRA:
-                pixelStride = 1;
+			{
+				RGBFormat baseFormat = (RGBFormat)pixelFormatMap.get(pixelFormat);
+                pixelStride = baseFormat.getPixelStride();
                 lineSize = (int) size.getWidth() * pixelStride;
                 dataSize = lineSize * (int) size.getHeight();
-                format = new RGBFormat(size, dataSize, Format.intArray, frameRate, 32, 0xff0000, 0xff00, 0xff, pixelStride, lineSize, RGBFormat.FALSE, RGBFormat.BIG_ENDIAN);
+                format = new RGBFormat(size, dataSize, baseFormat.getDataType(), frameRate, baseFormat.getBitsPerPixel(), baseFormat.getRedMask(), baseFormat.getGreenMask(), baseFormat.getBlueMask(), baseFormat.getPixelStride(), lineSize, baseFormat.getFlipped(), baseFormat.getEndian());
                 break;
+			}
             case e32ABGR:
+			{
+				RGBFormat baseFormat = (RGBFormat)pixelFormatMap.get(pixelFormat);
                 pixelStride = 1;
                 lineSize = (int) size.getWidth() * pixelStride;
                 dataSize = lineSize * (int) size.getHeight();
-                format = new RGBFormat(size, dataSize, Format.intArray, frameRate, 32, 0xff, 0xff00, 0xff0000, pixelStride, lineSize, RGBFormat.FALSE, RGBFormat.BIG_ENDIAN);
+                format = new RGBFormat(size, dataSize, baseFormat.getDataType(), frameRate, baseFormat.getBitsPerPixel(), baseFormat.getRedMask(), baseFormat.getGreenMask(), baseFormat.getBlueMask(), baseFormat.getPixelStride(), lineSize, baseFormat.getFlipped(), baseFormat.getEndian());
                 break;
+			}
             case e32RGBA:
-                pixelStride = 1;
+			{
+				RGBFormat baseFormat = (RGBFormat)pixelFormatMap.get(pixelFormat);
+                pixelStride = baseFormat.getPixelStride();
                 lineSize = (int) size.getWidth() * pixelStride;
                 dataSize = lineSize * (int) size.getHeight();
-                format = new RGBFormat(size, dataSize, Format.intArray, frameRate, 32, 0xff000000, 0xff0000, 0xff00, pixelStride, lineSize, RGBFormat.FALSE, RGBFormat.BIG_ENDIAN);
+                format = new RGBFormat(size, dataSize, baseFormat.getDataType(), frameRate, baseFormat.getBitsPerPixel(), baseFormat.getRedMask(), baseFormat.getGreenMask(), baseFormat.getBlueMask(), baseFormat.getPixelStride(), lineSize, baseFormat.getFlipped(), baseFormat.getEndian());
                 break;
-
+			}
             case e422YpCbCr8:
+			{
+				YUVFormat baseFormat = (YUVFormat)pixelFormatMap.get(pixelFormat);
                 dataSize = (int) size.getWidth() * (int) size.getHeight();
-                format = new YUVFormat(size, dataSize, Format.byteArray, frameRate, YUVFormat.YUV_YUYV | YUVFormat.YUV_SIGNED, (int) size.getWidth(), 1, 0, 4, 6);
+                format = new YUVFormat(size, dataSize, baseFormat.getDataType(), frameRate, baseFormat.getYuvType(), (int) size.getWidth(), 1, baseFormat.getOffsetY(), baseFormat.getOffsetU(), baseFormat.getOffsetV());
 //NS, Format.byteArray, NS,
 //			  YUVFormat.YUV_YUYV | YUVFormat.YUV_SIGNED,
 //			  NS, NS, 0, 1, 3)
                 break;
+			}
             case e420YpCbCr8Planar:
+			{
+				YUVFormat baseFormat = (YUVFormat)pixelFormatMap.get(pixelFormat);
                 dataSize = (int) size.getWidth() * (int) size.getHeight();
-                format = new YUVFormat(size,dataSize,Format.byteArray, frameRate,YUVFormat.YUV_420,(int) size.getWidth()*2, 8, 0, 4, 6);
+                format = new YUVFormat(size,dataSize,baseFormat.getDataType(), frameRate,baseFormat.getYuvType(),(int) size.getWidth()*2, 8, baseFormat.getOffsetY(), baseFormat.getOffsetU(), baseFormat.getOffsetV());
                 break;
+			}
             // Something else we can't represent
             default:
                 format = null;
                 break;
         }
-        return format;
+        return format; */
     }
 
     public static Collection<QTKitFormatDescription> JMFToQTKit(Collection<Format> formats) {
-        throw new UnsupportedOperationException("Not yet implemented");
+		// Create a list to hold the result
+		Collection<QTKitFormatDescription> retval = new LinkedList<QTKitFormatDescription>();
+
+		// Do format conversions one by one
+		for (Format format : formats) {
+			retval.add(JMFToQTKit(format));
+		}
+			
+		// return the result
+		return retval;
     }
+	
+	public static QTKitFormatDescription JMFToQTKit(Format format) {
+		throw new java.lang.UnsupportedOperationException("Not implemented");
+	}
+	
+	public static Collection<QTKitPixelFormat> JMFToPixelFormat(Collection<Format> formats) {
+		// Create a list to hold the result
+		Collection<QTKitPixelFormat> retval = new LinkedList<QTKitPixelFormat>();
+		
+		// Do format conversions one by one
+		for (Format format : formats) {
+			retval.add(JMFToPixelFormat(format));
+		}
+		
+		// return the result
+		return retval;
+		
+	}
+
+	public static QTKitPixelFormat JMFToPixelFormat(Format format) {
+		for (Entry<QTKitPixelFormat,VideoFormat> entry : pixelFormatMap.entrySet()) {
+			VideoFormat videoFormat = entry.getValue();
+			if (videoFormat.isSameEncoding(format) && format.relax().matches(videoFormat.relax())) {
+				// TODO: Do some other checks
+				return entry.getKey();
+			}
+		}
+		return null;
+	}
 }

@@ -84,7 +84,7 @@ JNIEXPORT jlong JNICALL Java_net_mc_1cubed_qtcubed_QTKitCaptureDecompressedVideo
 	[videoOutput setAutomaticallyDropsLateVideoFrames:YES];
 	
 	// Let's set a default video format for now
-	setPixelFormat(videoOutput, (long) kCVPixelFormatType_32BGRA);
+//	setPixelFormat(videoOutput, (long) kCVPixelFormatType_32BGRA);
 	
 	// Return a reference to the decompressed video output object
 	ref = (jlong) videoOutput;
@@ -313,15 +313,16 @@ JNIEXPORT jobject JNICALL Java_net_mc_1cubed_qtcubed_QTKitCaptureDecompressedVid
 	QTFormatDescription * formatDescription = [sampleBuffer formatDescription];
 	QTTime duration = [sampleBuffer duration];
 	
+	float frameDuration = duration.timeValue/duration.timeScale;
+	float fps = 1/frameDuration;
+	
 	jint format = [formatDescription formatType];
 	NSValue * pixelSize = [formatDescription attributeForKey:QTFormatDescriptionVideoEncodedPixelsSizeAttribute];
 	NSSize size = [pixelSize sizeValue];
 	jint width = size.width;
 	jint height = size.height;
-	NSLog(@"Outputting frame sized %d x %d of length %d",width,height,length);
+	NSLog(@"Outputting frame sized %d x %d of length %d with format: %#x",width,height,length,format);
 	
-	// TODO: Convert the content to the appropriate format and sizing
-
 	switch (format) {
 			// 8 bit codecs
 		case kCVPixelFormatType_1Monochrome:
@@ -340,6 +341,7 @@ JNIEXPORT jobject JNICALL Java_net_mc_1cubed_qtcubed_QTKitCaptureDecompressedVid
 		case kCVPixelFormatType_422YpCbCr_4A_8BiPlanar:
 		case kCVPixelFormatType_24RGB:
 		case kCVPixelFormatType_24BGR:
+		default:
 		{
 			// Re-use the existing array if possible
 			if (byteFrameData == nil || (*env)->GetArrayLength(env,byteFrameData) < length) {
@@ -355,7 +357,7 @@ JNIEXPORT jobject JNICALL Java_net_mc_1cubed_qtcubed_QTKitCaptureDecompressedVid
 				// Get the pushFrame methodId
 				jmethodID methodId = (*env)->GetMethodID(env,classRef,"pushFrame","([BIIIF)V");
 				// Call pushFrame with the byte array
-				(*env)->CallVoidMethod(env,objectRef,methodId,byteFrameData,format,width,height,-1.0f);
+				(*env)->CallVoidMethod(env,objectRef,methodId,byteFrameData,format,width,height,fps);
 			}
 			break;
 		}	
@@ -384,7 +386,7 @@ JNIEXPORT jobject JNICALL Java_net_mc_1cubed_qtcubed_QTKitCaptureDecompressedVid
 				// Get the pushFrame methodId
 				jmethodID methodId = (*env)->GetMethodID(env,classRef,"pushFrame","([SIIIF)V");
 				// Call pushFrame with the short array
-				(*env)->CallVoidMethod(env,objectRef,methodId,shortFrameData,format,width,height,-1.0f);			
+				(*env)->CallVoidMethod(env,objectRef,methodId,shortFrameData,format,width,height,fps);			
 			}
 			break;
 		}	
@@ -409,10 +411,10 @@ JNIEXPORT jobject JNICALL Java_net_mc_1cubed_qtcubed_QTKitCaptureDecompressedVid
 				// Get the pushFrame methodId
 				jmethodID methodId = (*env)->GetMethodID(env,classRef,"pushFrame","([IIIIF)V");
 				// Call pushFrame with the int array
-				(*env)->CallVoidMethod(env,objectRef,methodId,intFrameData,format,width,height,-1.0f);
+				(*env)->CallVoidMethod(env,objectRef,methodId,intFrameData,format,width,height,fps);
 			}
 			break;
-		}	
+		}
 	}
 	// Autorelease and exception cleanup
 //	JNF_COCOA_EXIT(env);

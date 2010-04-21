@@ -128,6 +128,14 @@ public class QTKitCaptureDecompressedVideoOutput extends QTKitCaptureOutput impl
 	
 	protected native QTKitPixelFormat _getPixelFormat(long captureOutputRef);
 	
+	public void setPixelFormat(QTKitPixelFormat format) {
+		if (format != null) {
+			_setPixelFormat(captureOutputRef, format.getNativeValue());
+		} else {
+			throw new IllegalArgumentException("Format must not be null");
+		}
+	}
+	
 	protected native QTKitPixelFormat _setPixelFormat(long captureOutputRef,long nativePixelFormat);
 	
 }

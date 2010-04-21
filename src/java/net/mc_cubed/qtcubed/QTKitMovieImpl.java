@@ -36,6 +36,8 @@ import java.net.URL;
 import java.io.File;
 import java.util.Properties;
 import java.io.IOException;
+import java.lang.SecurityManager;
+import java.security.AllPermission;
 
 /**
  * Placeholder (for now) for QTMovie bridge class
@@ -69,10 +71,19 @@ class QTKitMovieImpl implements QTMovie {
 
 	public QTKitMovieImpl(URL url) throws InstantiationException {
 		this(_movieWithURL(url.toString()));
+		SecurityManager security = System.getSecurityManager();
+		if (security != null) {
+			security.checkConnect(url.getHost(),url.getPort());
+		}
 	}
 	
 	public QTKitMovieImpl(File file) throws InstantiationException,IOException {
 		this(_movieWithFile(file.getCanonicalPath()));
+		SecurityManager security = System.getSecurityManager();
+		if (security != null) {
+			security.checkRead(file.getAbsolutePath());
+		}
+		
 	}
 	
 	public QTKitMovieImpl(byte[] bytes) throws InstantiationException {
@@ -81,6 +92,10 @@ class QTKitMovieImpl implements QTMovie {
 	
 	public QTKitMovieImpl(Properties attributes) throws InstantiationException {
 		this(_movieWithAttributes(attributes));
+		SecurityManager security = System.getSecurityManager();
+		if (security != null) {
+			security.checkPermission(new AllPermission());
+		}
 	}
 	
 	public QTKitMovieImpl(String name) throws InstantiationException {
@@ -104,6 +119,15 @@ class QTKitMovieImpl implements QTMovie {
 	native public static boolean _canInitWithFile(String filename) throws InstantiationException;
 	
 	public boolean canInit(File file) throws InstantiationException,IOException {
+		SecurityManager security = System.getSecurityManager();
+		if (security != null) {
+			try {
+				security.checkRead(file.getAbsolutePath());
+			} catch (SecurityException se) {
+				return false;
+			}
+		}
+		
 		return _canInitWithFile(file.getCanonicalPath());
 	}
 	
@@ -117,6 +141,15 @@ class QTKitMovieImpl implements QTMovie {
 	native public static boolean _canInitWithURL(String url);
 	
 	public boolean canInit(URL url) {
+		SecurityManager security = System.getSecurityManager();
+		if (security != null) {
+			try {
+				security.checkConnect(url.getHost(),url.getPort());
+			} catch (SecurityException se) {
+				return false;
+			}
+		}
+		
 		return _canInitWithURL(url.toString());
 	}
 	
