@@ -138,4 +138,10 @@ public class QTKitCaptureDecompressedVideoOutput extends QTKitCaptureOutput impl
 	
 	protected native QTKitPixelFormat _setPixelFormat(long captureOutputRef,long nativePixelFormat);
 	
+	protected void finalize() {
+		_release(captureOutputRef);
+	}
+	
+	protected native void _release(long captureOutputRef);
+	
 }

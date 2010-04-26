@@ -1,8 +1,8 @@
 //
-//  QTCodec.m
+//  EncodingServerMain.m
 //  QTCubed
 //
-//  Created by Chappell Charles on 10/04/15.
+//  Created by Chappell Charles on 10/04/26.
 //  Copyright 2010 MC Cubed, Inc. All rights reserved.
 //
 //  This program is free software; you can redistribute it and/or modify
@@ -30,45 +30,48 @@
 //  Email: info@mc-cubed.net
 //  Website: http://www.mc-cubed.net/
 
+#import "EncodingServerMain.h"
 #import "QTCodec.h"
 
-@implementation QTCodec
+int main( int argc, const char* argv[] ) {
+	NSLog(@"Starting Encoding Server");
+	// Be responsible about memory management
+	NSAutoreleasePool * pool = [[NSAutoreleasePool alloc] init];
 
-#if !__LP64__
-	// Do the work locally, we're 32 bit
+	// Allocate our server object
+	EncodingServerMain * serverMain = [[[EncodingServerMain alloc] init] autorelease];
+	// Run it and collect a return value
+	int retval = [serverMain run];
+	// Drain the top level auto-release pool (including our server!)
+	[pool drain];
+
+	NSLog(@"Encoding Server Exiting");
+	
+	// Return a value to the OS
+	return retval;
+}
+
+@implementation EncodingServerMain
+
+/**
+ * Publish the distributed objects nessisary to encode and decode video frames using Quicktime.  These are not available in 64-bit, and so MUST be accessed via this IPC channel.
+ */
+
 - (id) init {
 	[super init];
-	
-	// TODO: Initialize the codec
-	
+
+	encodeConnection = [[NSConnection alloc] init];
+	[encodeConnection setRootObject:[[QTCodec alloc] init]];
+	[encodeConnection registerName:@"net.mc_cubed.qtcubed.QTCubedEncodingServer"];
+
 	return self;
 }
 
-- (NSString *) isAlive {
-	return @"Alive and well!";
-}
-#else
-	// Create an IPC proxy to the 32 bit process
-- (id) init {
-	[super init];
+- (int) run {
 	
-	proxy = [[NSConnection
-				 rootProxyForConnectionWithRegisteredName:@"net.mc_cubed.qtcubed.QTCubedEncodingServer"
-				 host:nil] retain];
-	[proxy setProtocolForProxy:@protocol(QTCodecProtocol)];
-	
-	return self;
+	printf("Starting main runloop");
+
+	CFRunLoopRun();	
+	return 0;
 }
-
-- (NSString *) isAlive {
-	return [proxy isAlive];
-}
-
-- (void) dealloc {
-	[proxy release];
-	proxy = nil;
-}
-#endif
-
-
 @end

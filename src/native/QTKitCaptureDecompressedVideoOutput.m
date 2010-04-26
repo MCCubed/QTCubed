@@ -32,7 +32,7 @@
 
 #import "QTKitCaptureDecompressedVideoOutput.h"
 
-void setPixelFormat(QTCaptureDecompressedVideoOutput * videoOutput, long nativeFormatNumber);
+long setPixelFormat(QTCaptureDecompressedVideoOutput * videoOutput, long nativeFormatNumber);
 
 jobject pixelFormatToJava(JNIEnv * env, int format) {
 	jclass pixelFormatEnumClass  = (*env)->FindClass(env,"net/mc_cubed/qtcubed/QTKitPixelFormat");
@@ -250,7 +250,7 @@ JNIEXPORT jobject JNICALL Java_net_mc_1cubed_qtcubed_QTKitCaptureDecompressedVid
 	return jpixelFormat;
 }
 
-void setPixelFormat(QTCaptureDecompressedVideoOutput * videoOutput, long nativeFormatNumber) {
+long setPixelFormat(QTCaptureDecompressedVideoOutput * videoOutput, long nativeFormatNumber) {
 
 	NSDictionary * pixelBufferAttributes = [videoOutput pixelBufferAttributes];
 	
@@ -266,6 +266,8 @@ void setPixelFormat(QTCaptureDecompressedVideoOutput * videoOutput, long nativeF
 	}
 	
 	[videoOutput setPixelBufferAttributes:pixelBufferAttributes];
+	
+	return nativeFormatNumber;
 
 }
 
@@ -282,10 +284,31 @@ JNIEXPORT jobject JNICALL Java_net_mc_1cubed_qtcubed_QTKitCaptureDecompressedVid
 	
 	setPixelFormat(videoOutput, nativeFormatNumber);
 	
+	
 	/* Autorelease and exception cleanup */
 	JNF_COCOA_EXIT(env);
 }
 
+/*
+ * Class:     net_mc_cubed_qtcubed_QTKitCaptureDecompressedVideoOutput
+ * Method:    _release
+ * Signature: (J)V
+ */
+JNIEXPORT void JNICALL Java_net_mc_1cubed_qtcubed_QTKitCaptureDecompressedVideoOutput__1release
+(JNIEnv * env, jobject objectRef, jlong videoOutputRef) {
+	QTCaptureDecompressedVideoOutput * videoOutput = (QTCaptureDecompressedVideoOutput *)videoOutputRef;
+
+	JNF_COCOA_ENTER(env);	
+	
+	id delegate = [videoOutput delegate];
+	
+	[delegate release];
+	
+	[videoOutput release];
+	
+	/* Autorelease and exception cleanup */
+	JNF_COCOA_EXIT(env);
+}
 
 
 @implementation QTKitCaptureDecompressedVideoOutput
@@ -304,9 +327,6 @@ JNIEXPORT jobject JNICALL Java_net_mc_1cubed_qtcubed_QTKitCaptureDecompressedVid
 	// Move into Java to deliver the data
 	JNIEnv *env;
 	(*g_vm)->AttachCurrentThread (g_vm, (void **) &env, NULL);
-
-	// Set up autorelease and exception handling
-//	JNF_COCOA_ENTER(env);
 
 	void * rawData = [sampleBuffer bytesForAllSamples];
 	int length = [sampleBuffer lengthForAllSamples];
@@ -345,6 +365,11 @@ JNIEXPORT jobject JNICALL Java_net_mc_1cubed_qtcubed_QTKitCaptureDecompressedVid
 		{
 			// Re-use the existing array if possible
 			if (byteFrameData == nil || (*env)->GetArrayLength(env,byteFrameData) < length) {
+				// Clean up the previously allocated global reference
+				if (byteFrameData != nil) {
+					(*env)->DeleteGlobalRef(env,byteFrameData);
+					byteFrameData = nil;
+				}
 				// Create an appropriately sized byte array to hold the data
 				byteFrameData = (*env)->NewGlobalRef(env,(*env)->NewByteArray(env,length));
 			}
@@ -374,6 +399,11 @@ JNIEXPORT jobject JNICALL Java_net_mc_1cubed_qtcubed_QTKitCaptureDecompressedVid
 		{
 			// Re-use the existing array if possible
 			if (shortFrameData == nil || (*env)->GetArrayLength(env,shortFrameData) < length/2) {
+				// Clean up the previously allocated global reference
+				if (shortFrameData != nil) {
+					(*env)->DeleteGlobalRef(env,shortFrameData);
+					shortFrameData = nil;
+				}
 				// Create an appropriately sized byte array to hold the data
 				shortFrameData = (*env)->NewGlobalRef(env,(*env)->NewShortArray(env,length/2));
 			}
@@ -399,6 +429,11 @@ JNIEXPORT jobject JNICALL Java_net_mc_1cubed_qtcubed_QTKitCaptureDecompressedVid
 		{
 			// Re-use the existing array if possible
 			if (intFrameData == nil || (*env)->GetArrayLength(env,intFrameData) < length/4) {
+				// Clean up the previously allocated global reference
+				if (intFrameData != nil) {
+					(*env)->DeleteGlobalRef(env,intFrameData);
+					intFrameData = nil;
+				}
 				// Create an appropriately sized byte array to hold the data
 				intFrameData = (*env)->NewGlobalRef(env,(*env)->NewIntArray(env,length/4));
 			}
@@ -416,21 +451,40 @@ JNIEXPORT jobject JNICALL Java_net_mc_1cubed_qtcubed_QTKitCaptureDecompressedVid
 			break;
 		}
 	}
-	// Autorelease and exception cleanup
-//	JNF_COCOA_EXIT(env);
 
 	// Detatch from Java
 	(*g_vm)->DetachCurrentThread (g_vm);
 }
 
-- (void) dealloc
-{
-	// Dealloc the global Java object reference, and nil both references to the VM
+/* Clean up java references so they can be properly GCed in java */
+- (void) dealloc {
+	
+	// Attach to java so we can release references
 	JNIEnv *env;
 	(*g_vm)->AttachCurrentThread (g_vm, (void **) &env, NULL);
-	(*env)->DeleteGlobalRef(env,objectRef);
-	objectRef = nil;
+	
+	// release the references we hold
+	
+	if (objectRef != nil) {
+		(*env)->DeleteGlobalRef(env,objectRef);
+		objectRef = nil;		
+	}
+	if (byteFrameData != nil) {
+		(*env)->DeleteGlobalRef(env,byteFrameData);
+		byteFrameData = nil;		
+	}
+	if (shortFrameData != nil) {
+		(*env)->DeleteGlobalRef(env,shortFrameData);
+		shortFrameData = nil;		
+	}
+	if (intFrameData != nil) {
+		(*env)->DeleteGlobalRef(env,intFrameData);
+		intFrameData = nil;		
+	}
+	
+	// Detatch from Java
 	(*g_vm)->DetachCurrentThread (g_vm);
+	
 	g_vm = nil;
 	
 	[super dealloc];

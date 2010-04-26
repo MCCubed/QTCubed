@@ -43,12 +43,32 @@ public class QTKitCaptureDecompressedAudioOutput extends QTKitCaptureOutput impl
     protected QTKitCaptureDataDelegate dataDelegate;
 
     public QTKitCaptureDecompressedAudioOutput() {
-        super(_allocInit());
+		this.captureOutputRef = _allocInit();
     }
 
-    native static protected long _allocInit();
+    native protected long _allocInit();
 
     public void setDataDelegate(QTKitCaptureDataDelegate dataDelegate) {
         this.dataDelegate = dataDelegate;
     }
+	
+	void pushBuffer(byte[] buffer, int length, int formatNum, int sampleRate, int bitsPerSample, int channels, boolean isSigned) {	
+		
+	}
+	void pushBuffer(short[] buffer, int length, int formatNum, int sampleRate, int bitsPerSample, int channels, boolean isSigned) {
+		
+	}
+	void pushBuffer(int[] buffer, int length, int formatNum, int sampleRate, int bitsPerSample, int channels, boolean isSigned) {
+		
+	}
+	void pushBuffer(float[] buffer, int length, int formatNum, int sampleRate, int bitsPerSample, int channels) {
+		
+	}
+
+	protected void finalize() {
+		_release(captureOutputRef);
+	}
+	
+	protected native void _release(long captureOutputRef);
+	
 }

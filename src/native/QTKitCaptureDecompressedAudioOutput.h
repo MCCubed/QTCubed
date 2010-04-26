@@ -33,3 +33,21 @@
 #import <QTKit/QTKit.h>
 #import <JavaNativeFoundation/JavaNativeFoundation.h>
 #import "net_mc_cubed_qtcubed_QTKitCaptureDecompressedAudioOutput.h"
+
+@interface QTKitCaptureDecompressedAudioOutput : NSObject {
+@private
+	JavaVM * g_vm;
+	jobject objectRef;
+	jintArray intBufferData;
+	jbyteArray byteBufferData;
+	jshortArray shortBufferData;
+	jfloatArray floatBufferData;
+}
+
+- (QTKitCaptureDecompressedAudioOutput *)initWithEnv:(JNIEnv *) env javaObject:(jobject) objectRef;
+
+- (void)captureOutput:(QTCaptureOutput *)captureOutput didOutputAudioSampleBuffer:(QTSampleBuffer *)sampleBuffer fromConnection:(QTCaptureConnection *)connection;
+
+- (void)dealloc;
+
+@end

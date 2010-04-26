@@ -1,8 +1,8 @@
 //
-//  QTCodec.h
+//  EncodingServerMain.h
 //  QTCubed
 //
-//  Created by Chappell Charles on 10/04/15.
+//  Created by Chappell Charles on 10/04/26.
 //  Copyright 2010 MC Cubed, Inc. All rights reserved.
 //
 //  This program is free software; you can redistribute it and/or modify
@@ -30,25 +30,15 @@
 //  Email: info@mc-cubed.net
 //  Website: http://www.mc-cubed.net/
 
-#import <QuickTime/QuickTime.h>
-#import <QuickTime/ImageCompression.h>
-#import "QTCodecProtocol.h"
+#import <Cocoa/Cocoa.h>
 
 
+@interface EncodingServerMain : NSObject {
 
-@interface QTCodec : NSObject <QTCodecProtocol> {
-#if !__LP64__
-	// Do the work locally, we're 32 bit
-@private
-	ICMCompressionSessionRef session;	
-	
-#else
-	// Create an IPC proxy to the 32 bit process
-	id proxy;
-#endif
-	
+	@private
+	NSConnection * encodeConnection, * decodeConnection;
 }
 
-- (id) init;
+- (int) run;
 
 @end

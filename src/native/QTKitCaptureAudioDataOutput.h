@@ -1,8 +1,8 @@
 //
-//  QTCodec.h
+//  QTKitCaptureAudioDataOutput.h
 //  QTCubed
 //
-//  Created by Chappell Charles on 10/04/15.
+//  Created by Chappell Charles on 10/04/23.
 //  Copyright 2010 MC Cubed, Inc. All rights reserved.
 //
 //  This program is free software; you can redistribute it and/or modify
@@ -30,25 +30,18 @@
 //  Email: info@mc-cubed.net
 //  Website: http://www.mc-cubed.net/
 
-#import <QuickTime/QuickTime.h>
-#import <QuickTime/ImageCompression.h>
-#import "QTCodecProtocol.h"
+#import <QTKit/QTKit.h>
+#import <Quicktime/Quicktime.h>
+#import <AudioUnit/AudioUnit.h>
+#import <AudioToolbox/AudioToolbox.h>
+#import <JavaNativeFoundation/JavaNativeFoundation.h>
+#import "net_mc_cubed_qtcubed_QTKitCaptureAudioDataOutput.h"	
 
+@class QTCaptureAudioDataOutput;
 
-
-@interface QTCodec : NSObject <QTCodecProtocol> {
-#if !__LP64__
-	// Do the work locally, we're 32 bit
-@private
-	ICMCompressionSessionRef session;	
-	
-#else
-	// Create an IPC proxy to the 32 bit process
-	id proxy;
-#endif
-	
+@interface QTKitCaptureAudioDataOutput : NSObject {
+	@private
+	QTCaptureAudioDataOutput    *captureAudioDataOutput;
 }
-
-- (id) init;
 
 @end
