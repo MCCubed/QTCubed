@@ -127,14 +127,14 @@
 			isa = PBXContainerItemProxy;
 			containerPortal = 29B97313FDCFA39411CA2CEA /* Project object */;
 			proxyType = 1;
-			remoteGlobalIDString = BF44E7BC1185880A00F308F1 /* EncodingServer */;
+			remoteGlobalIDString = BF44E7BC1185880A00F308F1;
 			remoteInfo = EncodingServer;
 		};
 		BF44E86B11859AC200F308F1 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 29B97313FDCFA39411CA2CEA /* Project object */;
 			proxyType = 1;
-			remoteGlobalIDString = BF44E7BC1185880A00F308F1 /* EncodingServer */;
+			remoteGlobalIDString = BF44E7BC1185880A00F308F1;
 			remoteInfo = EncodingServer;
 		};
 /* End PBXContainerItemProxy section */
@@ -201,7 +201,7 @@
 		BF3770C61175AB83008EB949 /* jmf.jar */ = {isa = PBXFileReference; lastKnownFileType = archive.jar; name = jmf.jar; path = lib/jmf.jar; sourceTree = SOURCE_ROOT; };
 		BF37712D1175B1CD008EB949 /* icon.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; path = icon.icns; sourceTree = "<group>"; };
 		BF44E67C1185681A00F308F1 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = /System/Library/Frameworks/QuartzCore.framework; sourceTree = "<absolute>"; };
-		BF44E773118583A200F308F1 /* EncodingServer-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "EncodingServer-Info.plist"; sourceTree = "<group>"; };
+		BF44E773118583A200F308F1 /* EncodingServer-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = "EncodingServer-Info.plist"; path = "../EncodingServer-Info.plist"; sourceTree = "<group>"; };
 		BF44E777118583C700F308F1 /* EncodingServerMain.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EncodingServerMain.h; sourceTree = "<group>"; };
 		BF44E778118583C700F308F1 /* EncodingServerMain.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EncodingServerMain.m; sourceTree = "<group>"; };
 		BF44E7BD1185880A00F308F1 /* EncodingServer */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = EncodingServer; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -359,7 +359,6 @@
 				29B97323FDCFA39411CA2CEA /* Frameworks */,
 				19C28FACFE9D520D11CA2CBB /* Products */,
 				BF44E67C1185681A00F308F1 /* QuartzCore.framework */,
-				BF44E773118583A200F308F1 /* EncodingServer-Info.plist */,
 			);
 			name = QTCubed;
 			sourceTree = "<group>";
@@ -385,6 +384,7 @@
 				89D0F0230F392F20007831A7 /* Info.plist */,
 				89D0F0210F392F20007831A7 /* InfoPlist.strings */,
 				89D0F03E0F39304A007831A7 /* JavaApplicationStub */,
+				BF44E773118583A200F308F1 /* EncodingServer-Info.plist */,
 			);
 			name = Resources;
 			path = resources;

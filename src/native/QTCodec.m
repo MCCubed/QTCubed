@@ -32,13 +32,35 @@
 
 #import "QTCodec.h"
 
+#if !__LP64__
+/***********************************************
+ * Required C Callback functions for Quicktime *
+ ***********************************************/
+static OSStatus _CompressionFrameOutputCallback(void* qtCodecRefCon, ICMCompressionSessionRef session, OSStatus error, ICMEncodedFrameRef frame, void* reserved)
+{
+	if (error == noErr)
+		[(QTCodec *)qtCodecRefCon doneCompressingFrame: frame];
+	
+	return error;
+}
+
+static OSStatus _DecompressionFrameOutputCallback(void *qtCodecRefCon, OSStatus result, ICMDecompressionTrackingFlags decompressionTrackingFlags, CVPixelBufferRef pixelBuffer, TimeValue64 displayTime, TimeValue64 displayDuration, ICMValidTimeFlags validTimeFlags, void *reserved, void *sourceFrameRefCon) {
+	if (result == noErr)
+		[(QTCodec *)qtCodecRefCon doneDecompressingFrame: pixelBuffer];
+
+}
+#endif
+
 @implementation QTCodec
 
 #if !__LP64__
-	// Do the work locally, we're 32 bit
+/****************************
+ * Begin actual worker code *
+ ****************************/
 - (id) init {
 	[super init];
 	
+	EnterMovies();
 	// TODO: Initialize the codec
 	
 	return self;
@@ -47,8 +69,146 @@
 - (NSString *) isAlive {
 	return @"Alive and well!";
 }
+
+- (void) doneCompressingFrame: (ICMEncodedFrameRef) frame {
+	NSLog(@"Got compressed frame");
+	// TODO: Compress frame
+}
+
+- (void) doneDecompressingFrame {
+}
+
++ (ICMCompressionSessionOptionsRef) defaultOptions
+{
+	ICMCompressionSessionOptionsRef options;
+	OSStatus						theError;
+	
+	// Create the default compression options
+	theError = ICMCompressionSessionOptionsCreate(kCFAllocatorDefault, &options);
+	if (theError) {
+		NSLog(@"ICMCompressionSessionOptionsCreate failed with error %i",theError);
+		return NULL;
+	}
+	
+	return (ICMCompressionSessionOptionsRef)[(id)options autorelease];
+}
+- (BOOL) startCompressionSession:(CodecType)codec pixelsWide:(unsigned)width pixelsHigh:(unsigned)height options:(ICMCompressionSessionOptionsRef)options
+{
+	ICMEncodedFrameOutputRecord record = {_CompressionFrameOutputCallback,self,NULL};
+	OSStatus					theError;
+	
+	// Check parameters
+	if ((codec == 0) || (width == 0) || (height == 0) || (options == NULL)) {
+		return NO;
+	}
+	
+	theError = ICMCompressionSessionCreate(kCFAllocatorDefault, width, height, codec, kTimeScale, options, NULL, &record, &compressionSession);
+	
+	if (theError) {
+		NSLog(@"ICMCompressionSessionCreate() failed with error %i",theError);
+		return NO;
+	}
+	
+	return YES;
+}
+
+- (BOOL) startDecompressingSession:(ImageDescriptionHandle)imageDescription
+{
+	ICMDecompressionTrackingCallbackRecord  record = {_DecompressionFrameOutputCallback,self};
+	OSStatus								theError;
+
+	theError = ICMDecompressionSessionCreate(NULL,imageDescription,NULL,NULL,&record,&decompressionSession);
+	
+	if (theError) {
+		NSLog(@"ICMDecompressionSessionCreate() failed with error %i",theError);
+		return NO;
+	}
+	
+	return YES;	
+}
+
+- (BOOL) decompressFrame:(void *)data length:(int)length timeStamp:(NSTimeInterval)timestamp duration:(NSTimeInterval)duration
+{
+	OSStatus theError;
+	
+	ICMFrameTimeRecord timeRecord;
+	UInt64 time64 = timestamp * kTimeScale;
+	timeRecord.value.lo = (int) time64 & 0xFFFFFFFF;
+	timeRecord.value.hi = time64 >>32;
+	timeRecord.scale = kTimeScale;
+	timeRecord.duration = (int)duration * kTimeScale;
+	timeRecord.recordSize = sizeof(ICMFrameTimeRecord);
+	timeRecord.frameNumber = 0;
+	timeRecord.flags = icmFrameTimeDecodeImmediately;
+	
+	
+	theError = ICMDecompressionSessionDecodeFrame(decompressionSession,
+												  data,length,
+												  NULL,&timeRecord,NULL);	
+
+	if (theError)
+		NSLog(@"ICMDecompressionSessionDecodeFrame() failed with error %i",theError);
+	
+	return (theError == noErr ? YES : NO);
+}
+
+- (BOOL) decompressFrame:(void *)data length:(int)length
+{
+	OSStatus theError;
+	
+	ICMFrameTimeRecord timeRecord;
+	timeRecord.scale = kTimeScale;
+	timeRecord.recordSize = sizeof(ICMFrameTimeRecord);
+	timeRecord.frameNumber = 0;
+	timeRecord.flags = icmFrameTimeDecodeImmediately;	
+	
+	theError = ICMDecompressionSessionDecodeFrame(decompressionSession,
+												  data,length,
+												  NULL,&timeRecord,NULL);	
+	
+	if (theError)
+		NSLog(@"ICMDecompressionSessionDecodeFrame() failed with error %i",theError);
+	
+	return (theError == noErr ? YES : NO);
+}
+
+- (BOOL) compressFrame:(CVPixelBufferRef)frame timeStamp:(NSTimeInterval)timestamp duration:(NSTimeInterval)duration
+{
+	OSStatus theError;
+	
+	theError = ICMCompressionSessionEncodeFrame(compressionSession,
+												frame, (timestamp >= 0.0 ? (SInt64)(timestamp * kTimeScale) : 0),
+												(duration >= 0.0 ? (SInt64)(duration * kTimeScale) : 0),
+												((timestamp >= 0.0 ? kICMValidTime_DisplayTimeStampIsValid : 0) |
+												 (duration >= 0.0 ? kICMValidTime_DisplayDurationIsValid : 0)),
+												NULL,NULL,NULL);
+	if (theError)
+		NSLog(@"ICMCompressionSessionEncodeFrame() failed with error %i",theError);
+	
+	return (theError == noErr ? YES : NO);
+}
+
+- (BOOL) flushFrames
+{
+	OSStatus theError;
+	
+	// Flush pending frames in compression session
+	theError = ICMCompressionSessionCompleteFrames(compressionSession,
+												   true,0,0);
+	if (theError)
+		NSLog(@"ICMCompressionSessionCompleteFrames() failed with error %i",theError);
+	
+	return (theError == noErr ? YES: NO);
+}
+
+- (void) shutdownServer
+{
+	CFRunLoopStop(CFRunLoopGetMain());
+}
 #else
-	// Create an IPC proxy to the 32 bit process
+/*************************
+ * Begin Proxy Only code *
+ *************************/
 - (id) init {
 	[super init];
 	
@@ -67,7 +227,21 @@
 - (void) dealloc {
 	[proxy release];
 	proxy = nil;
+	[super dealloc];
 }
+
+- (BOOL) compressFrame:(CVPixelBufferRef)frame timeStamp:(NSTimeInterval)timestamp duration:(NSTimeInterval)duration {
+	return [proxy compressFrame:frame timeStamp:timestamp duration:duration];
+}
+
+- (BOOL) flushFrames {
+	return [proxy flushFrames];
+}
+
+- (void) shutdownServer {
+	[proxy shutdownServer];
+}
+
 #endif
 
 

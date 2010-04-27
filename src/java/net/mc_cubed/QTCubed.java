@@ -289,4 +289,8 @@ public class QTCubed extends Frame implements ActionListener {
 	native static private long startEncodingServer();
 	
 	native static private void _shutdown(long taskRef);
+	
+	protected void finalize() {
+		_shutdown(taskRef);
+	}
 }

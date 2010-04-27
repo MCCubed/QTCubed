@@ -287,6 +287,8 @@ JNIEXPORT jobject JNICALL Java_net_mc_1cubed_qtcubed_QTKitCaptureDecompressedVid
 	
 	/* Autorelease and exception cleanup */
 	JNF_COCOA_EXIT(env);
+	
+	return nil;
 }
 
 /*

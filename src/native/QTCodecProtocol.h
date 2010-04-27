@@ -31,10 +31,13 @@
 //  Website: http://www.mc-cubed.net/
 
 #import <Cocoa/Cocoa.h>
-
+#import <CoreVideo/CoreVideo.h>
 
 @protocol QTCodecProtocol
 
 - (NSString *) isAlive;
+- (BOOL) compressFrame:(CVPixelBufferRef)frame timeStamp:(NSTimeInterval)timestamp duration:(NSTimeInterval)duration;
+- (BOOL) flushFrames;
+- (void) shutdownServer;
 
 @end

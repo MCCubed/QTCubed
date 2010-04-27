@@ -102,7 +102,7 @@ JNIEXPORT void JNICALL Java_net_mc_1cubed_qtcubed_QTKitCaptureDecompressedAudioO
 	void * rawData = [sampleBuffer bytesForAllSamples];
 	int length = [sampleBuffer lengthForAllSamples];
 	QTFormatDescription * formatDescription = [sampleBuffer formatDescription];
-	QTTime duration = [sampleBuffer duration];
+//	QTTime duration = [sampleBuffer duration];
 	
 	NSData * audioDescriptionData = [formatDescription attributeForKey:QTFormatDescriptionAudioStreamBasicDescriptionAttribute];
 	AudioStreamBasicDescription * audioDescription = (AudioStreamBasicDescription *)[audioDescriptionData bytes];

@@ -34,21 +34,31 @@
 #import <QuickTime/ImageCompression.h>
 #import "QTCodecProtocol.h"
 
-
+#define kTimeScale 100000
 
 @interface QTCodec : NSObject <QTCodecProtocol> {
 #if !__LP64__
 	// Do the work locally, we're 32 bit
 @private
-	ICMCompressionSessionRef session;	
-	
+	ICMCompressionSessionRef    compressionSession;
+	ICMDecompressionSessionRef  decompressionSession;
 #else
 	// Create an IPC proxy to the 32 bit process
 	id proxy;
 #endif
 	
 }
+#if !__LP64__
+- (void) doneCompressingFrame:(ICMEncodedFrameRef)frame;
++ (ICMCompressionSessionOptionsRef) defaultOptions;
+- (BOOL) startCompressionSession:(CodecType)codec pixelsWide:(unsigned)width pixelsHigh:(unsigned)height options:(ICMCompressionSessionOptionsRef)options;
+#endif
 
+/*************************************************************** 
+ * These functions are common to both the proxy and the worker *
+ ***************************************************************/
 - (id) init;
-
+- (BOOL) compressFrame:(CVPixelBufferRef)frame timeStamp:(NSTimeInterval)timestamp duration:(NSTimeInterval)duration;
+- (BOOL) flushFrames;
+- (void) shutdownServer;
 @end

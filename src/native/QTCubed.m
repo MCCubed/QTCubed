@@ -53,19 +53,15 @@ JNIEXPORT jlong JNICALL Java_net_mc_1cubed_QTCubed_startEncodingServer
 	
 	NSPipe *readPipe = [NSPipe pipe];
     NSFileHandle *readHandle = [readPipe fileHandleForReading];
-	
-    NSPipe *writePipe = [NSPipe pipe];
-    NSFileHandle *writeHandle = [writePipe fileHandleForWriting];
-	
-    [task setStandardInput: writePipe];
+		
     [task setStandardOutput: readPipe];
 	
 	[task launch];
 	
-	[readHandle availableData]; // Block until a message is emitted
+	[readHandle availableData]; // Block until a message is emitted (Library initialization complete)
 
 	// Test the link or codec linkage if linked locally (32-bit)
-	QTCodec * codec = [[QTCodec alloc] init];	
+	QTCodec * codec = [[[QTCodec alloc] init] autorelease];	
 	NSLog(@"Got response from QTCodec: %@",[codec isAlive]);
 	
 	/* Autorelease and exception cleanup */
@@ -90,7 +86,10 @@ JNIEXPORT void JNICALL Java_net_mc_1cubed_QTCubed__1shutdown
 	/* Set up autorelease and exception handling */
 	JNF_COCOA_ENTER(env);
 
-	// TODO: Kill the task
+	// Kill the task
+	[[[[QTCodec alloc] init] autorelease] shutdownServer];
+	
+	// Release the reference
 	[task release];
 
 	/* Autorelease and exception cleanup */
