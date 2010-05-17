@@ -31,6 +31,8 @@
 		89D0F05C0F39404F007831A7 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1058C7A1FEA54F0111CA2CBB /* Cocoa.framework */; };
 		89D0F0850F394066007831A7 /* JavaNativeFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 89D0F0840F394066007831A7 /* JavaNativeFoundation.framework */; };
 		89D0F1870F3A2442007831A7 /* JavaVM.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 89D0F1860F3A2442007831A7 /* JavaVM.framework */; };
+		BF05F5AB1186CDC60027D4A3 /* EncodingServer in CopyFiles */ = {isa = PBXBuildFile; fileRef = BF44E7BD1185880A00F308F1 /* EncodingServer */; };
+		BF05F5AC1186CDCA0027D4A3 /* QTCubed.jar in CopyFiles */ = {isa = PBXBuildFile; fileRef = BFC77B1E11310CC100F2D7A3 /* QTCubed.jar */; };
 		BF152CED112ED7BE008B4ECC /* QTMovieBridge.m in Sources */ = {isa = PBXBuildFile; fileRef = BFA7033E112EABF100D5157A /* QTMovieBridge.m */; };
 		BF3329161181341C00A39409 /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BF3328F01181340A00A39409 /* AudioToolbox.framework */; };
 		BF3329171181341C00A39409 /* AudioUnit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BF3328F11181340A00A39409 /* AudioUnit.framework */; };
@@ -62,7 +64,7 @@
 		BF57FD101176F1F4003E7A8E /* net_mc_cubed_qtcubed_media_codec_QTCodec.h in Headers */ = {isa = PBXBuildFile; fileRef = BF57FD0F1176F1F4003E7A8E /* net_mc_cubed_qtcubed_media_codec_QTCodec.h */; };
 		BF57FD131176F21F003E7A8E /* QTCodec.h in Headers */ = {isa = PBXBuildFile; fileRef = BF57FD111176F21F003E7A8E /* QTCodec.h */; };
 		BF57FD141176F21F003E7A8E /* QTCodec.m in Sources */ = {isa = PBXBuildFile; fileRef = BF57FD121176F21F003E7A8E /* QTCodec.m */; };
-		BF76212111744B560016952D /* QuickTime.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BF98C14C1172EFA50059AA19 /* QuickTime.framework */; };
+		BF76212111744B560016952D /* QuickTime.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BF98C14C1172EFA50059AA19 /* QuickTime.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
 		BF76212211744B560016952D /* CoreVideo.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BF76209E11744AA90016952D /* CoreVideo.framework */; };
 		BF7623411174D1CC0016952D /* CoreFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BF76233E1174D1C40016952D /* CoreFoundation.framework */; };
 		BF78591B112EDDC70064262B /* AppKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 29B97324FDCFA39411CA2CEA /* AppKit.framework */; };
@@ -123,14 +125,14 @@
 			remoteGlobalIDString = 89D0F0480F393A6F007831A7;
 			remoteInfo = "Compile Java";
 		};
-		BF44E86611859A9800F308F1 /* PBXContainerItemProxy */ = {
+		BF44E86B11859AC200F308F1 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 29B97313FDCFA39411CA2CEA /* Project object */;
 			proxyType = 1;
 			remoteGlobalIDString = BF44E7BC1185880A00F308F1;
 			remoteInfo = EncodingServer;
 		};
-		BF44E86B11859AC200F308F1 /* PBXContainerItemProxy */ = {
+		BFF56A1B1186DAFA007F75F1 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 29B97313FDCFA39411CA2CEA /* Project object */;
 			proxyType = 1;
@@ -146,6 +148,8 @@
 			dstPath = /Library/Java/Extensions;
 			dstSubfolderSpec = 0;
 			files = (
+				BF05F5AC1186CDCA0027D4A3 /* QTCubed.jar in CopyFiles */,
+				BF05F5AB1186CDC60027D4A3 /* EncodingServer in CopyFiles */,
 				56E9FCDC113270D100570103 /* libQTCubed.jnilib in CopyFiles */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -483,6 +487,7 @@
 			buildToolPath = /usr/bin/ant;
 			buildWorkingDirectory = "";
 			dependencies = (
+				BFF56A1C1186DAFA007F75F1 /* PBXTargetDependency */,
 			);
 			name = "Compile Java";
 			passBuildSettingsInEnvironment = 1;
@@ -504,7 +509,6 @@
 			buildRules = (
 			);
 			dependencies = (
-				BF44E86711859A9800F308F1 /* PBXTargetDependency */,
 			);
 			name = "Compile Native";
 			productName = "Compile Native";
@@ -551,7 +555,7 @@
 		29B97313FDCFA39411CA2CEA /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				BuildIndependentTargetsInParallel = YES;
+				BuildIndependentTargetsInParallel = NO;
 			};
 			buildConfigurationList = C01FCF4E08A954540054247B /* Build configuration list for PBXProject "QTCubed" */;
 			compatibilityVersion = "Xcode 3.2";
@@ -646,15 +650,15 @@
 			target = 89D0F0480F393A6F007831A7 /* Compile Java */;
 			targetProxy = 89D0F1D00F3B7062007831A7 /* PBXContainerItemProxy */;
 		};
-		BF44E86711859A9800F308F1 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = BF44E7BC1185880A00F308F1 /* EncodingServer */;
-			targetProxy = BF44E86611859A9800F308F1 /* PBXContainerItemProxy */;
-		};
 		BF44E86C11859AC200F308F1 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = BF44E7BC1185880A00F308F1 /* EncodingServer */;
 			targetProxy = BF44E86B11859AC200F308F1 /* PBXContainerItemProxy */;
+		};
+		BFF56A1C1186DAFA007F75F1 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = BF44E7BC1185880A00F308F1 /* EncodingServer */;
+			targetProxy = BFF56A1B1186DAFA007F75F1 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 

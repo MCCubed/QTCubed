@@ -50,8 +50,10 @@
 }
 #if !__LP64__
 - (void) doneCompressingFrame:(ICMEncodedFrameRef)frame;
+- (void) doneDecompressingFrame:(CVPixelBufferRef)buffer;
 + (ICMCompressionSessionOptionsRef) defaultOptions;
 - (BOOL) startCompressionSession:(CodecType)codec pixelsWide:(unsigned)width pixelsHigh:(unsigned)height options:(ICMCompressionSessionOptionsRef)options;
+
 #endif
 
 /*************************************************************** 

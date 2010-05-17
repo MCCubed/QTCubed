@@ -48,7 +48,7 @@ JNIEXPORT jlong JNICALL Java_net_mc_1cubed_QTCubed_startEncodingServer
 	JNF_COCOA_ENTER(env);
 			
 	// Startup the 32-bit daemon process
-	task = [[NSTask alloc] init]; 
+	task = [[NSTask alloc] init];
     [task setLaunchPath:@"EncodingServer"];
 	
 	NSPipe *readPipe = [NSPipe pipe];
@@ -56,13 +56,20 @@ JNIEXPORT jlong JNICALL Java_net_mc_1cubed_QTCubed_startEncodingServer
 		
     [task setStandardOutput: readPipe];
 	
-	[task launch];
-	
-	[readHandle availableData]; // Block until a message is emitted (Library initialization complete)
 
-	// Test the link or codec linkage if linked locally (32-bit)
-	QTCodec * codec = [[[QTCodec alloc] init] autorelease];	
-	NSLog(@"Got response from QTCodec: %@",[codec isAlive]);
+	@try {
+		[task launch];	
+		
+		[readHandle availableData]; // Block until a message is emitted (Library initialization complete)
+
+		// Test the link or codec linkage if linked locally (32-bit)
+		QTCodec * codec = [[[QTCodec alloc] init] autorelease];	
+		NSLog(@"Got response from QTCodec: %@",[codec isAlive]);
+	}
+	
+	@catch (NSException * ex) {
+		NSLog(@"Unable to launch helper, path is: %@, error is: %@",[task launchPath],[ex reason]);
+	}
 	
 	/* Autorelease and exception cleanup */
 	JNF_COCOA_EXIT(env);	

@@ -46,8 +46,9 @@ static OSStatus _CompressionFrameOutputCallback(void* qtCodecRefCon, ICMCompress
 
 static OSStatus _DecompressionFrameOutputCallback(void *qtCodecRefCon, OSStatus result, ICMDecompressionTrackingFlags decompressionTrackingFlags, CVPixelBufferRef pixelBuffer, TimeValue64 displayTime, TimeValue64 displayDuration, ICMValidTimeFlags validTimeFlags, void *reserved, void *sourceFrameRefCon) {
 	if (result == noErr)
-		[(QTCodec *)qtCodecRefCon doneDecompressingFrame: pixelBuffer];
-
+		[(QTCodec *)qtCodecRefCon doneDecompressingFrame:pixelBuffer];
+	
+	return result;
 }
 #endif
 
@@ -70,12 +71,14 @@ static OSStatus _DecompressionFrameOutputCallback(void *qtCodecRefCon, OSStatus 
 	return @"Alive and well!";
 }
 
-- (void) doneCompressingFrame: (ICMEncodedFrameRef) frame {
+- (void) doneCompressingFrame:(ICMEncodedFrameRef)frame {
 	NSLog(@"Got compressed frame");
-	// TODO: Compress frame
+	// TODO: grab compressed frame and hand it over to java
 }
 
-- (void) doneDecompressingFrame {
+- (void) doneDecompressingFrame:(CVPixelBufferRef)buffer {
+	NSLog(@"Got decompressed frame");
+	// TODO: grab decompressed frame and hand it over to java
 }
 
 + (ICMCompressionSessionOptionsRef) defaultOptions
