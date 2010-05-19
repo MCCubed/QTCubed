@@ -32,30 +32,24 @@
 
 package net.mc_cubed.qtcubed;
 
-import quicktime.QTSession;
 import quicktime.QTException;
 import quicktime.app.view.MoviePlayer;
 import quicktime.app.view.QTFactory;
 import quicktime.app.view.QTJComponent;
-import quicktime.std.StdQTConstants;
 import quicktime.std.StdQTException;
 import quicktime.std.movies.Movie;
-import quicktime.std.movies.MovieController;
-import java.net.URL;
-import java.io.File;
-import java.util.Properties;
-import java.lang.InstantiationException;
-import java.io.IOException;
 import java.awt.Component;
 
 class QTJavaMovieView implements QTMovieView {
 
 	QTJComponent component;
 	MoviePlayer player;
+        boolean controllerVisible = false;
+        boolean preservesAspect = true;
 	
 	public QTJavaMovieView() throws InstantiationException {
 		try {
-			Movie newMovie = Movie.fromScrap(0);
+			Movie newMovie = new Movie();
 			player = new MoviePlayer(newMovie);
 			component = QTFactory.makeQTJComponent(player);		
 			
@@ -96,11 +90,12 @@ class QTJavaMovieView implements QTMovieView {
 	}
 	
 	public boolean isControllerVisible() {
-		throw new java.lang.UnsupportedOperationException("Not supported yet");
+		return controllerVisible;
 	}
 	
 	public void setControllerVisisble(boolean visible) {
-		throw new java.lang.UnsupportedOperationException("Not supported yet");
+		this.controllerVisible = visible;
+                // TODO: implement controller visibility switching
 	}
 	
 	public boolean preservesAspectRatio() {
