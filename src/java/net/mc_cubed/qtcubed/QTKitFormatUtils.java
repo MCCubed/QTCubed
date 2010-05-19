@@ -55,6 +55,7 @@ public class QTKitFormatUtils {
 	public static final Map<QTKitPixelFormat,VideoFormat> pixelFormatMap;
 	
 	public static final RGBFormat rgb24;
+	public static final RGBFormat rgba32;
 	static {
 		pixelFormatMap = new HashMap<QTKitPixelFormat,VideoFormat>();
 		pixelFormatMap.put(QTKitPixelFormat.e16BE555,new RGBFormat(null, Format.NOT_SPECIFIED, Format.shortArray, -1.0f, 16, 0x7c00, 0x3e0, 0x1f, 2, Format.NOT_SPECIFIED, RGBFormat.FALSE, RGBFormat.BIG_ENDIAN));
@@ -68,7 +69,8 @@ public class QTKitFormatUtils {
 		pixelFormatMap.put(QTKitPixelFormat.e32ARGB,new RGBFormat(null, Format.NOT_SPECIFIED, Format.intArray, -1.0f, 32, 0xff00, 0xff0000, 0xff000000, 1, Format.NOT_SPECIFIED, RGBFormat.FALSE, RGBFormat.BIG_ENDIAN));
 		pixelFormatMap.put(QTKitPixelFormat.e32BGRA,new RGBFormat(null, Format.NOT_SPECIFIED, Format.intArray, -1.0f, 32, 0xff0000, 0xff00, 0xff, 1, Format.NOT_SPECIFIED, RGBFormat.FALSE, RGBFormat.BIG_ENDIAN));
 		pixelFormatMap.put(QTKitPixelFormat.e32ABGR,new RGBFormat(null, Format.NOT_SPECIFIED, Format.intArray, -1.0f, 32, 0xff, 0xff00, 0xff0000, 1, Format.NOT_SPECIFIED, RGBFormat.FALSE, RGBFormat.BIG_ENDIAN));
-		pixelFormatMap.put(QTKitPixelFormat.e32RGBA,new RGBFormat(null, Format.NOT_SPECIFIED, Format.intArray, -1.0f, 32, 0xff000000, 0xff0000, 0xff00, 1, Format.NOT_SPECIFIED, RGBFormat.FALSE, RGBFormat.BIG_ENDIAN));
+		rgba32 = new RGBFormat(null, Format.NOT_SPECIFIED, Format.intArray, -1.0f, 32, 0xff000000, 0xff0000, 0xff00, 1, Format.NOT_SPECIFIED, RGBFormat.FALSE, RGBFormat.BIG_ENDIAN);
+		pixelFormatMap.put(QTKitPixelFormat.e32RGBA,rgba32);
 		pixelFormatMap.put(QTKitPixelFormat.e422YpCbCr8,new YUVFormat(null, Format.NOT_SPECIFIED, Format.byteArray, -1.0f, YUVFormat.YUV_YUYV | YUVFormat.YUV_SIGNED, Format.NOT_SPECIFIED, 1, 0, 4, 6));
 		pixelFormatMap.put(QTKitPixelFormat.e420YpCbCr8Planar,new YUVFormat(null,Format.NOT_SPECIFIED,Format.byteArray, -1.0f,YUVFormat.YUV_420,Format.NOT_SPECIFIED, 8, 0, 4, 6));
 		pixelFormatMap.put(QTKitPixelFormat.e1Monochrome,new IndexedColorFormat(null,Format.NOT_SPECIFIED,Format.byteArray,-1.0f,Format.NOT_SPECIFIED,1,spacedByteValues(1),spacedByteValues(1),spacedByteValues(1)));

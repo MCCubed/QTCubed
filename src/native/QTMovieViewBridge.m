@@ -46,12 +46,168 @@ JNIEXPORT jlong JNICALL Java_net_mc_1cubed_qtcubed_QTKitMovieView_createNSViewLo
 
 	viewPointer = (jlong)[[QTMovieViewBridge alloc]init];
 
+	NSLog(@"Allocated new view instance: %x",viewPointer);
+	
 	/* Autorelease and exception cleanup */
 	JNF_COCOA_EXIT(env);
 	
 	return viewPointer;
 }
+/*
+ * Class:     net_mc_cubed_qtcubed_QTKitMovieView
+ * Method:    _getFillColor
+ * Signature: (J)Ljava/lang/String;
+ */
+JNIEXPORT jint JNICALL Java_net_mc_1cubed_qtcubed_QTKitMovieView__1getFillColor
+(JNIEnv * env, jobject objectRef, jlong qtMovieViewRef) {
+	jint retval;
+	QTMovieViewBridge* view = (QTMovieViewBridge*) qtMovieViewRef;
 
+	/* Set up autorelease and exception handling */
+	JNF_COCOA_ENTER(env);
+		
+	NSColor * nsColor = [view fillColor];
+	
+	int red = [nsColor redComponent] * 255,
+	green = [nsColor greenComponent] * 255,
+	blue = [nsColor blueComponent] * 255;
+	
+	retval = red << 16 & green << 8 & blue;
+		
+	/* Autorelease and exception cleanup */
+	JNF_COCOA_EXIT(env);
+
+	return retval;
+}
+
+/*
+ * Class:     net_mc_cubed_qtcubed_QTKitMovieView
+ * Method:    _setFillColor
+ * Signature: (JLjava/lang/String;)V
+ */
+JNIEXPORT void JNICALL Java_net_mc_1cubed_qtcubed_QTKitMovieView__1setFillColor
+(JNIEnv * env, jobject objectRef, jlong qtMovieViewRef, jint colorjint) {
+	QTMovieViewBridge* view = (QTMovieViewBridge*) qtMovieViewRef;
+	
+	/* Set up autorelease and exception handling */
+	JNF_COCOA_ENTER(env);
+
+	CGFloat red = ((colorjint * 0xff0000) >> 16) / 255.0,
+	green = ((colorjint & 0xff00) >> 8) / 255.0,
+	blue = (colorjint & 0xff) / 255.0;
+	
+	NSColor * nsColor = [NSColor colorWithCalibratedRed:red green:green blue:blue alpha:0.0f];
+						 
+	[view performSelectorOnMainThread:@selector(setFillColor) withObject:nsColor waitUntilDone:NO];
+
+	/* Autorelease and exception cleanup */
+	JNF_COCOA_EXIT(env);
+}
+
+/*
+ * Class:     net_mc_cubed_qtcubed_QTKitMovieView
+ * Method:    _gotoBeginning
+ * Signature: (J)V
+ */
+JNIEXPORT void JNICALL Java_net_mc_1cubed_qtcubed_QTKitMovieView__1gotoBeginning
+(JNIEnv * env, jobject objectRef, jlong qtMovieViewRef) {
+	QTMovieViewBridge* view = (QTMovieViewBridge*) qtMovieViewRef;
+	
+	/* Set up autorelease and exception handling */
+	JNF_COCOA_ENTER(env);
+	
+	// Do on the main thread
+	[view performSelectorOnMainThread:@selector(gotoBeginning) withObject:view waitUntilDone:NO];
+	
+	/* Autorelease and exception cleanup */
+	JNF_COCOA_EXIT(env);
+}
+
+/*
+ * Class:     net_mc_cubed_qtcubed_QTKitMovieView
+ * Method:    _gotoEnd
+ * Signature: (J)V
+ */
+JNIEXPORT void JNICALL Java_net_mc_1cubed_qtcubed_QTKitMovieView__1gotoEnd
+(JNIEnv * env, jobject objectRef, jlong qtMovieViewRef) {
+	QTMovieViewBridge* view = (QTMovieViewBridge*) qtMovieViewRef;
+	
+	/* Set up autorelease and exception handling */
+	JNF_COCOA_ENTER(env);
+	
+	// Do on the main thread
+	[view performSelectorOnMainThread:@selector(gotoEnd) withObject:view waitUntilDone:NO];
+	
+	/* Autorelease and exception cleanup */
+	JNF_COCOA_EXIT(env);
+}
+
+/*
+ * Class:     net_mc_cubed_qtcubed_QTKitMovieView
+ * Method:    _gotoPosterFrame
+ * Signature: (J)V
+ */
+JNIEXPORT void JNICALL Java_net_mc_1cubed_qtcubed_QTKitMovieView__1gotoPosterFrame
+(JNIEnv * env, jobject objectRef, jlong qtMovieViewRef) {
+	QTMovieViewBridge* view = (QTMovieViewBridge*) qtMovieViewRef;
+	
+	/* Set up autorelease and exception handling */
+	JNF_COCOA_ENTER(env);
+	
+	// Do on the main thread
+	[view performSelectorOnMainThread:@selector(gotoPosterFrame) withObject:view waitUntilDone:NO];
+	
+	/* Autorelease and exception cleanup */
+	JNF_COCOA_EXIT(env);
+}
+
+/*
+ * Class:     net_mc_cubed_qtcubed_QTKitMovieView
+ * Method:    _stepForward
+ * Signature: (J)V
+ */
+JNIEXPORT void JNICALL Java_net_mc_1cubed_qtcubed_QTKitMovieView__1stepForward
+(JNIEnv * env, jobject objectRef, jlong qtMovieViewRef) {
+	QTMovieViewBridge* view = (QTMovieViewBridge*) qtMovieViewRef;
+	
+	/* Set up autorelease and exception handling */
+	JNF_COCOA_ENTER(env);
+	
+	// Do on the main thread
+	[view performSelectorOnMainThread:@selector(stepForward) withObject:view waitUntilDone:NO];
+	
+	/* Autorelease and exception cleanup */
+	JNF_COCOA_EXIT(env);
+}
+
+/*
+ * Class:     net_mc_cubed_qtcubed_QTKitMovieView
+ * Method:    _stepBackward
+ * Signature: (J)V
+ */
+JNIEXPORT void JNICALL Java_net_mc_1cubed_qtcubed_QTKitMovieView__1stepBackward
+(JNIEnv * env, jobject objectRef, jlong qtMovieViewRef) {
+	QTMovieViewBridge* view = (QTMovieViewBridge*) qtMovieViewRef;
+	
+	/* Set up autorelease and exception handling */
+	JNF_COCOA_ENTER(env);
+		
+	// Do on the main thread
+	[view performSelectorOnMainThread:@selector(stepBackward) withObject:view waitUntilDone:NO];
+	
+	/* Autorelease and exception cleanup */
+	JNF_COCOA_EXIT(env);
+}
+
+jboolean booleanFromObject(JNIEnv * env,jobject booleanObject) {
+	jclass booleanClass = (*env)->GetObjectClass(env,booleanObject);
+	jmethodID booleanValueMethod = (*env)->GetMethodID(env,booleanClass,"booleanValue","()Z");
+	if (booleanValueMethod) {
+		return (*env)->CallBooleanMethod(env,booleanObject,booleanValueMethod);
+	} else {
+		return JNI_FALSE;
+	}	
+}
 @implementation QTMovieViewBridge
 
 -(id)init
@@ -79,6 +235,30 @@ JNIEXPORT jlong JNICALL Java_net_mc_1cubed_qtcubed_QTKitMovieView_createNSViewLo
 		{
 			[self pause:self];
 			break;
+		}
+		case net_mc_cubed_qtcubed_QTKitMovieView_SET_PRESERVES_ASPECT:
+		{
+			// get the boolean value from the Boolean object
+			jboolean jboolValue = booleanFromObject(env,message);
+			BOOL preserveAspect;
+			if (jboolValue == JNI_TRUE) {
+				preserveAspect = YES;
+			} else {
+				preserveAspect = NO;
+			}
+			[self setPreservesAspectRatio:preserveAspect];
+		}
+		case net_mc_cubed_qtcubed_QTKitMovieView_SET_CONTROLLER_VISIBILITY:
+		{
+			// get the boolean value from the Boolean object
+			jboolean jboolValue = booleanFromObject(env,message);
+			BOOL controllerVisible;
+			if (jboolValue == JNI_TRUE) {
+				controllerVisible = YES;
+			} else {
+				controllerVisible = NO;
+			}
+			[self setControllerVisible:controllerVisible];
 		}
 			// more cases...
 	}

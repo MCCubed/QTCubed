@@ -32,6 +32,7 @@
 
 package net.mc_cubed;
 
+import net.mc_cubed.qtcubed.QTKitFormatUtils;
 import javax.swing.SwingUtilities;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -135,9 +136,10 @@ public class QTCubedJMF extends Frame implements ActionListener {
 
             // Copying this from the apple developer docs and switching to Java syntax
             if (e.getActionCommand().equalsIgnoreCase("CAPTURE")) {
-                for (CaptureDeviceInfo deviceInfo : (Vector<CaptureDeviceInfo>) CaptureDeviceManager.getDeviceList(null)) {
+/*                for (CaptureDeviceInfo deviceInfo : (Vector<CaptureDeviceInfo>) CaptureDeviceManager.getDeviceList(null)) {
                     System.out.println(deviceInfo);
                 }
+*/
                 CaptureDeviceInfo videoDevice = null;
                 for (CaptureDeviceInfo device : (Vector<CaptureDeviceInfo>) CaptureDeviceManager.getDeviceList(null)) {
                     for (Format format : device.getFormats()) {
@@ -152,18 +154,24 @@ public class QTCubedJMF extends Frame implements ActionListener {
                 }
 
                 try {
+					
                     DataSource videoSource = Manager.createDataSource(videoDevice.getLocator());
 
-					videoSource.connect();
-					videoSource.start();
+//					videoSource.connect();
+//					videoSource.start();
 
                     FormatControl formatControl = (FormatControl) videoSource.getControl("javax.media.control.FormatControl");
 					if (formatControl != null) {
+						formatControl.setFormat(QTKitFormatUtils.CompleteFormat(QTKitFormatUtils.rgb24,((VideoFormat) formatControl.getFormat()).getSize(),30.0f));
 						System.out.println("Video Format: " + formatControl.getFormat());
 						System.out.println("Video Size: " + ((VideoFormat) formatControl.getFormat()).getSize());
 					}
-					
-                    mp.setDataSource(videoSource);
+
+					mp.setDataSource(videoSource);
+					javax.media.Manager.createPlayer(videoSource);
+//					*/
+//					javax.media.Manager.createPlayer(videoDevice.getLocator());
+//					mp.setMediaLocator(videoDevice.getLocator());
                     mp.start();
                 } catch (Exception ex) {
                     ex.printStackTrace();

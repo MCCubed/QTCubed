@@ -33,18 +33,24 @@
 package net.mc_cubed.qtcubed.media.protocol.quicktime;
 
 import com.sun.media.protocol.BasicPushBufferDataSource;
+import java.awt.Component;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.logging.Logger;
+import javax.media.CachingControl;
+import javax.media.control.FormatControl;
 import javax.media.Time;
 import javax.media.protocol.PushBufferStream;
+import javax.swing.JLabel;
 import net.mc_cubed.qtcubed.QTKitCaptureDecompressedAudioOutput;
 import net.mc_cubed.qtcubed.QTKitCaptureDecompressedVideoOutput;
 import net.mc_cubed.qtcubed.QTKitCaptureDevice;
 import net.mc_cubed.qtcubed.QTKitCaptureDeviceInput;
 import net.mc_cubed.qtcubed.QTKitCaptureSession;
 import net.mc_cubed.qtcubed.QTKitFormatDescription;
+import net.mc_cubed.qtcubed.QTKitCaptureOutput;
 
 /**
  *
@@ -57,9 +63,14 @@ public class DataSource extends BasicPushBufferDataSource {
     QTKitOutputBufferStream[] streams;
     private String captureDeviceName;
     private String captureParameters;
+	
+	public DataSource() {
+		this.controls = new Object[] { new QTCubedDSCachingControl(), new QTCubedDSFormatControl() };
+	}
 
     @Override
     public PushBufferStream[] getStreams() {
+		Logger.getAnonymousLogger().info("Getting Streams");
         return streams;
     }
 
@@ -70,13 +81,18 @@ public class DataSource extends BasicPushBufferDataSource {
 
     @Override
     public Object getControl(String controlType) {
-        return super.getControl(controlType);
+		Logger.getAnonymousLogger().info("Getting control: " + controlType);
+		Object retval = super.getControl(controlType);
+		Logger.getAnonymousLogger().info("Found: " + retval);
+        return retval;
     }
 
     @Override
     public Object[] getControls() {
         return super.getControls();
     }
+	
+	
 
     @Override
     public Time getDuration() {
@@ -86,7 +102,7 @@ public class DataSource extends BasicPushBufferDataSource {
     @Override
     public void connect() throws IOException {
         initCheck();
-
+		
         if (streams != null) {
             disconnect();
         }
@@ -155,6 +171,7 @@ public class DataSource extends BasicPushBufferDataSource {
         }
 
         streams = outStreams.toArray(new QTKitOutputBufferStream[0]);
+		super.connect();
     }
 
     @Override
@@ -167,24 +184,30 @@ public class DataSource extends BasicPushBufferDataSource {
                     ex.printStackTrace();
                 }
             }
-
-
         }
+		
+		// Remove all the outputs from the stream
+		for (QTKitCaptureOutput output : session.getOutputList()) {
+			session.removeOutput(output);
+		}
+		
+		super.disconnect();
     }
 
     @Override
     public void start() throws IOException {
         session.startRunning();
+		super.start();
     }
 
     @Override
     public void stop() throws IOException {
         session.stopRunning();
+		super.stop();
     }
 
     private void parseLocator() {
         String rest = getLocator().getRemainder();
-        System.out.println("Remainder of locator: " + rest);
         int p1, p2;
         p1 = rest.indexOf("//");
         if (p1 < 0) {
@@ -200,4 +223,56 @@ public class DataSource extends BasicPushBufferDataSource {
             }
         }
     }
+	
+	@Override
+	public String toString() {
+		return getClass().getName() + "[Locator=" + getLocator() + "]";
+	}
+	
+	protected class QTCubedDSCachingControl implements javax.media.CachingControl {
+		public long getContentLength() {
+			return CachingControl.LENGTH_UNKNOWN;
+		}
+		
+		public long getContentProgress() {
+			return 0;
+		}
+		
+		public boolean isDownloading() {
+			return true;
+		}
+		
+		public Component getProgressBarComponent() {
+			return new JLabel("Live Capture");
+		}
+		
+		public Component getControlComponent() {
+			return null;
+		}
+	}
+	protected class QTCubedDSFormatControl implements javax.media.control.FormatControl {
+		public Component getControlComponent() {
+			return null;
+		}
+
+		public javax.media.Format getFormat() {
+			return ((FormatControl)streams[0].getControl(FormatControl.class.getName())).getFormat();
+		}
+		
+		public javax.media.Format setFormat(javax.media.Format format) {
+			return ((FormatControl)streams[0].getControl(FormatControl.class.getName())).setFormat(format);
+		}
+		
+		public javax.media.Format[] getSupportedFormats() {
+			return ((FormatControl)streams[0].getControl(FormatControl.class.getName())).getSupportedFormats();
+		}				
+		
+		public boolean isEnabled() {
+			return true;
+		}
+		
+		public void setEnabled(boolean enabled) {
+		}
+		 
+	}
 }

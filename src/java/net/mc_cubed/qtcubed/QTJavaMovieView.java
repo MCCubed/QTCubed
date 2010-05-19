@@ -94,4 +94,56 @@ class QTJavaMovieView implements QTMovieView {
 			qte.printStackTrace();
 		}
 	}
+	
+	public boolean isControllerVisible() {
+		throw new java.lang.UnsupportedOperationException("Not supported yet");
+	}
+	
+	public void setControllerVisisble(boolean visible) {
+		throw new java.lang.UnsupportedOperationException("Not supported yet");
+	}
+	
+	public boolean preservesAspectRatio() {
+		throw new java.lang.UnsupportedOperationException("Not supported yet");
+	}
+	
+	public void setPreservesAspectRatio(boolean preserves) {
+		throw new java.lang.UnsupportedOperationException("Not supported yet");
+	}
+	
+	public java.awt.Color getFillColor() {
+		throw new java.lang.UnsupportedOperationException("Not supported yet");
+	}
+	
+	public void setFillColor(java.awt.Color fillColor) {
+		throw new java.lang.UnsupportedOperationException("Not supported yet");
+	}
+	
+	public void gotoBeginning() {
+		throw new java.lang.UnsupportedOperationException("Not supported yet");
+	}
+	
+	public void gotoEnd() {
+		throw new java.lang.UnsupportedOperationException("Not supported yet");
+	}
+	
+	public void gotoNextSelectionPoint() {
+		throw new java.lang.UnsupportedOperationException("Not supported yet");
+	}
+	
+	public void gotoPreviousSelectionPoint() {
+		throw new java.lang.UnsupportedOperationException("Not supported yet");
+	}
+	
+	public void gotoPosterFrame() {
+		throw new java.lang.UnsupportedOperationException("Not supported yet");
+	}
+	
+	public void stepForward() {
+		throw new java.lang.UnsupportedOperationException("Not supported yet");
+	}
+	
+	public void stepBackward() {
+		throw new java.lang.UnsupportedOperationException("Not supported yet");
+	}
 }

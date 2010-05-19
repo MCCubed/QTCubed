@@ -323,9 +323,9 @@ JNIEXPORT jobjectArray JNICALL Java_net_mc_1cubed_qtcubed_QTKitCaptureDevice__1g
 
 		// Transfer the formatType
 		UInt32 formatTypeInt = [currentfd formatType];
-		NSLog(@"FormatTypeHex: %#x",formatTypeInt);
+//		NSLog(@"FormatTypeHex: %#x",formatTypeInt);
 		jobject formatTypeEnum = compressionFormatToJava(env, formatTypeInt);
-		NSLog(@"TypePointer: %#x",formatTypeEnum);
+//		NSLog(@"TypePointer: %#x",formatTypeEnum);
 		(*env)->CallVoidMethod(env,newfd,setFormatTypeMethodId,formatTypeEnum);		
 
 		// Transfer Size
@@ -333,7 +333,7 @@ JNIEXPORT jobjectArray JNICALL Java_net_mc_1cubed_qtcubed_QTKitCaptureDevice__1g
 		NSSize size;		
 		if (sizeValue != nil) {	
 			size = [sizeValue sizeValue];
-			NSLog(@"Frame size is: %f x %f",size.width,size.height);
+//			NSLog(@"Frame size is: %f x %f",size.width,size.height);
 			(*env)->CallVoidMethod(env,newfd,setWidthMethodId,(int)size.width);
 			(*env)->CallVoidMethod(env,newfd,setHeightMethodId,(int)size.height);
 		}

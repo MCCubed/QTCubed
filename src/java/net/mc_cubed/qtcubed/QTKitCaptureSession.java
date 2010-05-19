@@ -51,6 +51,11 @@ public class QTKitCaptureSession {
 
     native static protected long _allocInit();
 
+	public List<QTKitCaptureOutput> getOutputList() {
+		List<QTKitCaptureOutput> retval = new LinkedList<QTKitCaptureOutput>();
+		retval.addAll(outputList);
+		return retval;
+	}
     protected QTKitCaptureSession(long captureSessionRef) {
         this.captureSessionRef = captureSessionRef;
     }

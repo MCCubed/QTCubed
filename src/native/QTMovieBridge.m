@@ -148,12 +148,43 @@ JNIEXPORT jlong JNICALL Java_net_mc_1cubed_qtcubed_QTKitMovieImpl__1movie
 }
 
 /*
- * Class:     net_mc_cubed_qtcubed_QTMovie
+ * Class:     net_mc_cubed_qtcubed_QTKitMovieImpl
  * Method:    _movieWithURL
- * Signature: (Ljava/net/URL;)J
+ * Signature: (Ljava/lang/String;)J
  */
 JNIEXPORT jlong JNICALL Java_net_mc_1cubed_qtcubed_QTKitMovieImpl__1movieWithURL
-(JNIEnv *, jclass, jobject);
+(JNIEnv * env, jclass classRef, jstring urljString) {
+	jlong movieRef;
+	
+	/* Set up autorelease and exception handling */
+	JNF_COCOA_ENTER(env);
+	
+	// Convert the resulting jstring into an NSString *
+	const jchar *chars = (*env)->GetStringChars(env, urljString, NULL);
+	NSString *url = [NSString stringWithCharacters:(UniChar *)chars
+												 length:(*env)->GetStringLength(env, urljString)];
+	(*env)->ReleaseStringChars(env, url, chars);
+	
+	// Create an NSUrl from the string (autoreleased)
+	NSURL * nsUrl = [NSURL URLWithString:url];
+	
+	// Initialize the movie from the NSData object contents
+	NSError * error = nil;
+	QTMovie *qtMovie = [QTMovie movieWithURL:nsUrl error:&error];
+	if (qtMovie != nil && error == nil) {
+		// We want to keep this, and pass the pointer back to java to store
+		[qtMovie retain];
+		movieRef = (jlong)qtMovie;
+	} else {
+		jclass exClass = (*env)->FindClass(env,INST_EXCEPTION);
+		(*env)->ThrowNew(env,exClass,[[error localizedDescription] UTF8String]);
+	}
+	
+	/* Autorelease and exception cleanup */
+	JNF_COCOA_EXIT(env);
+	
+	return movieRef;	
+}
 
 /*
  * Class:     net_mc_cubed_qtcubed_QTMovie

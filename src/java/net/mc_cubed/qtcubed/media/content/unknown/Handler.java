@@ -33,8 +33,11 @@
 package net.mc_cubed.qtcubed.media.content.unknown;
 
 import com.sun.media.BasicPlayer;
+import javax.swing.SwingUtilities;
 import java.awt.Component;
 import java.io.IOException;
+import java.io.File;
+import java.net.URL;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.media.IncompatibleSourceException;
@@ -72,15 +75,28 @@ public class Handler extends BasicPlayer {
     public void setSource(DataSource source) throws IOException, IncompatibleSourceException {
         super.setSource(source);
         try {
-            view.setMovie(QTCubedFactory.initQTMovie(source.getLocator().getURL()));
+			URL url = source.getLocator().getURL();
+			if (url.getProtocol().equalsIgnoreCase("file")) {
+				final File file = new File(url.getFile());
+				view.setMovie(QTCubedFactory.initQTMovie(file));
+			} else {
+				view.setMovie(QTCubedFactory.initQTMovie(url));
+			}
         } catch (InstantiationException ex) {
+			ex.printStackTrace();
             throw new IncompatibleSourceException(ex.getLocalizedMessage());
-        }
+        } catch (java.net.MalformedURLException mue) {
+			mue.printStackTrace();
+			throw new IncompatibleSourceException(mue.getLocalizedMessage());
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		}
     }
 
     @Override
     protected void doStart() {
         super.doStart();
+		
         view.play();
     }
 

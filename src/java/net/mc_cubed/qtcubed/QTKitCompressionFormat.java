@@ -137,10 +137,10 @@ public enum QTKitCompressionFormat {
     }
 
     static public QTKitCompressionFormat forNative(int nativeValue) {
-        Logger.getAnonymousLogger().info("Looking for: "+ Integer.toHexString(nativeValue));
+//        Logger.getAnonymousLogger().info("Looking for: "+ Integer.toHexString(nativeValue));
         for (QTKitCompressionFormat format : values()) {
             if (nativeValue == format.getNativeValue()) {
-                Logger.getAnonymousLogger().info("Translated " + Integer.toHexString(nativeValue) + " to " + format);
+//                Logger.getAnonymousLogger().info("Translated " + Integer.toHexString(nativeValue) + " to " + format);
                 return format;
             }
         }
