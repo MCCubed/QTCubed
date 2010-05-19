@@ -39,6 +39,7 @@ import quicktime.app.view.QTJComponent;
 import quicktime.std.StdQTException;
 import quicktime.std.movies.Movie;
 import java.awt.Component;
+import java.util.logging.Logger;
 
 class QTJavaMovieView implements QTMovieView {
 
@@ -49,11 +50,17 @@ class QTJavaMovieView implements QTMovieView {
 	
 	public QTJavaMovieView() throws InstantiationException {
 		try {
-			Movie newMovie = new Movie();
+
+                    /**
+                     * TODO: Initialize a placeholder movie from a jar resource
+                     * and use that to avoid problems.
+                     */
+                    Movie newMovie = new Movie();
 			player = new MoviePlayer(newMovie);
 			component = QTFactory.makeQTJComponent(player);		
 			
 		} catch (QTException ex) {
+                    Logger.getAnonymousLogger().severe(ex.getLocalizedMessage());
 			throw new RuntimeException(ex);
 		}
 		

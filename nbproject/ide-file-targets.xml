@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project basedir=".." name="QTCubed-IDE">
+    <property name="ant.script" value="make/build.xml"/>
+    <!-- TODO: edit the following target according to your needs -->
+    <!-- (more info: http://www.netbeans.org/kb/articles/freeform-config.html#runsingle) -->
+    <import file="../${ant.script}"/>
+
+    <target name="run-selected-file-in-java" depends="jar">
+        <fail unless="run.class">Must set property 'run.class'</fail>
+        <java classname="${run.class}" failonerror="true" fork="true">
+            <classpath>
+                <path refid="libs"/>
+                <fileset dir="${dst}" includes="${product}.jar"/>
+            </classpath>
+        </java>
+    </target>
+</project>
