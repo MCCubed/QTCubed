@@ -73,7 +73,9 @@
     </target>
 
     <target name="jar" depends="compile, copy" description="Assemble Jar file">
-        <jar jarfile="${dst}/${product}.jar" basedir="${obj}/${product}" manifest="resources/Manifest" index="true"/>
+        <jar jarfile="${dst}/${product}.jar" basedir="${obj}/${product}" manifest="resources/Manifest" index="true">
+            <fileset dir="${src}/resources"/>
+        </jar>
     </target>
 
     <target name="install" depends="jar" description="Alias for 'jar'">

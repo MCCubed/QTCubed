@@ -32,6 +32,8 @@
 
 package net.mc_cubed.qtcubed;
 
+import java.io.IOException;
+import java.util.logging.Level;
 import quicktime.QTException;
 import quicktime.app.view.MoviePlayer;
 import quicktime.app.view.QTFactory;
@@ -39,7 +41,10 @@ import quicktime.app.view.QTJComponent;
 import quicktime.std.StdQTException;
 import quicktime.std.movies.Movie;
 import java.awt.Component;
+import java.io.DataInputStream;
 import java.util.logging.Logger;
+import quicktime.std.StdQTConstants;
+import quicktime.std.movies.MovieController;
 
 class QTJavaMovieView implements QTMovieView {
 
@@ -49,20 +54,25 @@ class QTJavaMovieView implements QTMovieView {
         boolean preservesAspect = true;
 	
 	public QTJavaMovieView() throws InstantiationException {
-		try {
-
-                    /**
-                     * TODO: Initialize a placeholder movie from a jar resource
-                     * and use that to avoid problems.
-                     */
-                    Movie newMovie = new Movie();
-			player = new MoviePlayer(newMovie);
-			component = QTFactory.makeQTJComponent(player);		
-			
-		} catch (QTException ex) {
-                    Logger.getAnonymousLogger().severe(ex.getLocalizedMessage());
-			throw new RuntimeException(ex);
-		}
+        {
+            try {
+                // Create a blank movie from the file Blank.mp4
+                quicktime.app.players.QTPlayer qtplayer =
+                    (quicktime.app.players.QTPlayer)
+                    quicktime.app.QTFactory.makeDrawable(
+                        getClass().getResource("/Blank.mp4").openStream(),
+                        StdQTConstants.kDataRefFileExtensionTag, ".mp4");
+                MovieController mc = qtplayer.getMovieController();
+                Movie newMovie = mc.getMovie();
+                player = new MoviePlayer(newMovie);
+                component = QTFactory.makeQTJComponent(player);
+            } catch (IOException ex) {
+                Logger.getLogger(QTJavaMovieView.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (QTException ex) {
+                Logger.getAnonymousLogger().severe(ex.getLocalizedMessage());
+                throw new RuntimeException(ex);
+            }
+        }
 		
 	}
 	
