@@ -160,18 +160,19 @@ public class QTCubedJMF extends Frame implements ActionListener {
 //					videoSource.connect();
 //					videoSource.start();
 
+					System.out.println("Content Type: " + videoSource.getContentType());
                     FormatControl formatControl = (FormatControl) videoSource.getControl("javax.media.control.FormatControl");
 					if (formatControl != null) {
-						formatControl.setFormat(QTKitFormatUtils.CompleteFormat(QTKitFormatUtils.rgb24,((VideoFormat) formatControl.getFormat()).getSize(),30.0f));
 						System.out.println("Video Format: " + formatControl.getFormat());
 						System.out.println("Video Size: " + ((VideoFormat) formatControl.getFormat()).getSize());
+//						formatControl.setFormat(QTKitFormatUtils.CompleteFormat(QTKitFormatUtils.rgb24,((VideoFormat) formatControl.getFormat()).getSize(),30.0f));
 					}
 
-					mp.setDataSource(videoSource);
-					javax.media.Manager.createPlayer(videoSource);
+//					mp.setDataSource(videoSource);
+//					javax.media.Manager.createPlayer(videoSource);
 //					*/
 //					javax.media.Manager.createPlayer(videoDevice.getLocator());
-//					mp.setMediaLocator(videoDevice.getLocator());
+					mp.setMediaLocator(videoDevice.getLocator());
                     mp.start();
                 } catch (Exception ex) {
                     ex.printStackTrace();

@@ -42,6 +42,7 @@ import java.util.logging.Logger;
 import javax.media.CachingControl;
 import javax.media.control.FormatControl;
 import javax.media.Time;
+import javax.media.protocol.ContentDescriptor;
 import javax.media.protocol.PushBufferStream;
 import javax.swing.JLabel;
 import net.mc_cubed.qtcubed.QTKitCaptureDecompressedAudioOutput;
@@ -76,7 +77,8 @@ public class DataSource extends BasicPushBufferDataSource {
 
     @Override
     public String getContentType() {
-        return super.getContentType();
+        return ContentDescriptor.RAW;
+//        return super.getContentType();
     }
 
     @Override

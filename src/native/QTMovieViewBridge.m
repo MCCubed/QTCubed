@@ -98,7 +98,7 @@ JNIEXPORT void JNICALL Java_net_mc_1cubed_qtcubed_QTKitMovieView__1setFillColor
 	
 	NSColor * nsColor = [NSColor colorWithCalibratedRed:red green:green blue:blue alpha:0.0f];
 						 
-	[view performSelectorOnMainThread:@selector(setFillColor) withObject:nsColor waitUntilDone:NO];
+	[view performSelectorOnMainThread:@selector(setFillColor:) withObject:nsColor waitUntilDone:NO];
 
 	/* Autorelease and exception cleanup */
 	JNF_COCOA_EXIT(env);

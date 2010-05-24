@@ -14,8 +14,8 @@
 			);
 			dependencies = (
 				89D0F1D10F3B7062007831A7 /* PBXTargetDependency */,
-				BF44E86C11859AC200F308F1 /* PBXTargetDependency */,
 				89D0F1CF0F3B7062007831A7 /* PBXTargetDependency */,
+				BF44E86C11859AC200F308F1 /* PBXTargetDependency */,
 				89D0F1CD0F3B7062007831A7 /* PBXTargetDependency */,
 			);
 			name = QTCubed;
@@ -218,6 +218,7 @@
 		BF57FD0F1176F1F4003E7A8E /* net_mc_cubed_qtcubed_media_codec_QTCodec.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = net_mc_cubed_qtcubed_media_codec_QTCodec.h; path = "build/QTCubed.build/Debug/Compile Native.build/DerivedSources/net_mc_cubed_qtcubed_media_codec_QTCodec.h"; sourceTree = "<group>"; };
 		BF57FD111176F21F003E7A8E /* QTCodec.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = QTCodec.h; sourceTree = "<group>"; };
 		BF57FD121176F21F003E7A8E /* QTCodec.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = QTCodec.m; sourceTree = "<group>"; };
+		BF70B1C111A3C8B8009B794B /* Japanese */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = Japanese; path = Japanese.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		BF76209E11744AA90016952D /* CoreVideo.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreVideo.framework; path = /System/Library/Frameworks/CoreVideo.framework; sourceTree = "<absolute>"; };
 		BF76233E1174D1C40016952D /* CoreFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreFoundation.framework; path = /System/Library/Frameworks/CoreFoundation.framework; sourceTree = "<absolute>"; };
 		BF98C14C1172EFA50059AA19 /* QuickTime.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuickTime.framework; path = /System/Library/Frameworks/QuickTime.framework; sourceTree = "<absolute>"; };
@@ -679,6 +680,7 @@
 			isa = PBXVariantGroup;
 			children = (
 				89D0F0220F392F20007831A7 /* English */,
+				BF70B1C111A3C8B8009B794B /* Japanese */,
 			);
 			name = InfoPlist.strings;
 			sourceTree = "<group>";
@@ -696,7 +698,7 @@
 		89D0F04A0F393A6F007831A7 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				PRODUCT_NAME = AddressBook;
+				PRODUCT_NAME = QTCubed;
 			};
 			name = Release;
 		};

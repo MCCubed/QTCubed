@@ -29,7 +29,6 @@
 //
 //  Email: info@mc-cubed.net
 //  Website: http://www.mc-cubed.net/
-
 package net.mc_cubed.qtcubed.media.content.unknown;
 
 import com.sun.media.BasicPlayer;
@@ -55,7 +54,7 @@ public class Handler extends BasicPlayer {
     final QTMovieView view;
 
     public Handler() {
-		Logger.getLogger(getClass().getName()).info("Instantiating QTCubed Handler");
+        Logger.getLogger(getClass().getName()).info("Instantiating QTCubed Handler");
         QTMovieView newView = null;
         try {
             newView = QTCubedFactory.initQTMovieView();
@@ -75,28 +74,28 @@ public class Handler extends BasicPlayer {
     public void setSource(DataSource source) throws IOException, IncompatibleSourceException {
         super.setSource(source);
         try {
-			URL url = source.getLocator().getURL();
-			if (url.getProtocol().equalsIgnoreCase("file")) {
-				final File file = new File(url.getFile());
-				view.setMovie(QTCubedFactory.initQTMovie(file));
-			} else {
-				view.setMovie(QTCubedFactory.initQTMovie(url));
-			}
+            URL url = source.getLocator().getURL();
+            if (url.getProtocol().equalsIgnoreCase("file")) {
+                final File file = new File(url.getFile());
+                view.setMovie(QTCubedFactory.initQTMovie(file));
+            } else {
+                view.setMovie(QTCubedFactory.initQTMovie(url));
+            }
         } catch (InstantiationException ex) {
-			ex.printStackTrace();
+            ex.printStackTrace();
             throw new IncompatibleSourceException(ex.getLocalizedMessage());
         } catch (java.net.MalformedURLException mue) {
-			mue.printStackTrace();
-			throw new IncompatibleSourceException(mue.getLocalizedMessage());
-		} catch (Exception ex) {
-			ex.printStackTrace();
-		}
+            mue.printStackTrace();
+            throw new IncompatibleSourceException(mue.getLocalizedMessage());
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
     }
 
     @Override
     protected void doStart() {
         super.doStart();
-		
+
         view.play();
     }
 
@@ -125,6 +124,4 @@ public class Handler extends BasicPlayer {
     public void updateStats() {
         // Do nothing
     }
-
-
 }

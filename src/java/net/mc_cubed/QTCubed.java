@@ -29,7 +29,6 @@
 //
 //  Email: info@mc-cubed.net
 //  Website: http://www.mc-cubed.net/
-
 package net.mc_cubed;
 
 import javax.swing.SwingUtilities;
@@ -72,29 +71,28 @@ import net.mc_cubed.qtcubed.QTKitPixelFormat;
 public class QTCubed extends Frame implements ActionListener {
 
     static final boolean hasQTKit;
-	static final long taskRef;
-
-	QTKitCaptureSession session;
+    static final long taskRef;
+    QTKitCaptureSession session;
 
     static {
         boolean qtKitLoaded = false;
-		long localTaskRef = 0;
-        try {						
+        long localTaskRef = 0;
+        try {
             // Disable Cocoa Compatibility Mode
             System.setProperty("com.apple.eawt.CocoaComponent.CompatibilityMode", "false");
 
             Logger.getAnonymousLogger().log(Level.INFO, "Loading QTCubed Library");
             // Ensure native JNI library is loaded
-            Long innerTaskRef = (Long)AccessController.doPrivileged(new PrivilegedAction() {
+            Long innerTaskRef = (Long) AccessController.doPrivileged(new PrivilegedAction() {
 
                 public Object run() {
                     // privileged code goes here
                     System.loadLibrary("QTCubed");
-                    return startEncodingServer(); 
+                    return startEncodingServer();
                 }
             });
-			
-			localTaskRef = innerTaskRef.longValue();
+
+            localTaskRef = innerTaskRef.longValue();
 
             Logger.getAnonymousLogger().log(Level.INFO, "Successfully Loaded QTCubed Library!");
             qtKitLoaded = true;
@@ -129,10 +127,10 @@ public class QTCubed extends Frame implements ActionListener {
         }
 
         hasQTKit = qtKitLoaded;
-		taskRef = localTaskRef;
-		
-		QTKitPixelFormat pf;
-		QTKitPixelFormat.values();
+        taskRef = localTaskRef;
+
+        QTKitPixelFormat pf;
+        QTKitPixelFormat.values();
 
         // Reflexively call QTCubedJMFInitializer.init() to avoid classpath deps in case JMF is not present
         try {
@@ -141,7 +139,7 @@ public class QTCubed extends Frame implements ActionListener {
             initMethod.invoke(null);
         } catch (Throwable ex) {
             // Do nothing if we fail
-			ex.printStackTrace();
+            ex.printStackTrace();
             Logger.getAnonymousLogger().info("Could not initialize JMF features of the QTCubed Library");
         }
     }
@@ -193,8 +191,8 @@ public class QTCubed extends Frame implements ActionListener {
             Logger.getAnonymousLogger().info(" ----- " + device.uniqueId() + " (" + device.localizedDisplayName() + ") ----- ");
             for (QTKitFormatDescription format : device.getFormatDescriptions()) {
                 Logger.getAnonymousLogger().info("Format Type: " + format.getMediaType() + ": " + format.getFormatType());
-                Set<Entry<Object,Object>> props = format.getFormatDescriptionAttributes().entrySet();
-                for (Entry<Object,Object> prop: props) {
+                Set<Entry<Object, Object>> props = format.getFormatDescriptionAttributes().entrySet();
+                for (Entry<Object, Object> prop : props) {
                     Logger.getAnonymousLogger().info("    " + prop.getKey() + ": " + prop.getValue());
                 }
             }
@@ -206,18 +204,18 @@ public class QTCubed extends Frame implements ActionListener {
             System.out.println("action performed");
 
             if (e.getActionCommand().equalsIgnoreCase("MOVIE")) {
-				if (session != null) {
-					session.stopRunning();
-				}
-				
+                if (session != null) {
+                    session.stopRunning();
+                }
+
                 FileDialog fd =
                         new FileDialog(this, "Select Movie...", FileDialog.LOAD);
                 fd.setVisible(true);
                 String fileName = fd.getFile();
                 if (fileName == null) {
-					if (session != null) {
-						session.startRunning();
-					}
+                    if (session != null) {
+                        session.startRunning();
+                    }
                     return;
                 }
                 File f = new File(fd.getDirectory(), fd.getFile());
@@ -231,20 +229,20 @@ public class QTCubed extends Frame implements ActionListener {
                 // set movie on the view
                 qtmv.setMovie(movie);
                 System.out.println("Set movie on view");
-				
-				validateTree();
-				pack();
+
+                validateTree();
+                pack();
 
                 qtmv.play();
             }
 
             // Copying this from the apple developer docs and switching to Java syntax
             if (e.getActionCommand().equalsIgnoreCase("CAPTURE")) {
-				if (session != null) {
-					if (session.isRunning()) {
-						session.stopRunning();
-					}
-				}
+                if (session != null) {
+                    if (session.isRunning()) {
+                        session.stopRunning();
+                    }
+                }
                 session = new QTKitCaptureSession();
 
                 QTKitCaptureDevice videoDevice = QTKitCaptureDevice.defaultInputDevice(QTKitMediaType.VIDEO);
@@ -252,12 +250,12 @@ public class QTCubed extends Frame implements ActionListener {
                     videoDevice.open();
                     QTKitCaptureDeviceInput videoDeviceInput = new QTKitCaptureDeviceInput(videoDevice);
                     session.addInput(videoDeviceInput);
-					QTKitCaptureDecompressedVideoOutput videoOutput = new QTKitCaptureDecompressedVideoOutput();
-					videoOutput.setFrameRate(30.0f);
-					videoOutput.setSize(new Dimension(160,120));
+                    QTKitCaptureDecompressedVideoOutput videoOutput = new QTKitCaptureDecompressedVideoOutput();
+                    videoOutput.setFrameRate(30.0f);
+                    videoOutput.setSize(new Dimension(160, 120));
                     session.addOutput(videoOutput);
-					System.out.println("Video Format: " + videoOutput.getPixelFormat());
-					System.out.println("Video Size: " + videoOutput.getSize());
+                    System.out.println("Video Format: " + videoOutput.getPixelFormat());
+                    System.out.println("Video Size: " + videoOutput.getSize());
 
                     SwingUtilities.invokeLater(new Runnable() {
 
@@ -285,12 +283,12 @@ public class QTCubed extends Frame implements ActionListener {
             ex.printStackTrace();
         }
     }
-	
-	native static private long startEncodingServer();
-	
-	native static private void _shutdown(long taskRef);
-	
-	protected void finalize() {
-		_shutdown(taskRef);
-	}
+
+    native static private long startEncodingServer();
+
+    native static private void _shutdown(long taskRef);
+
+    protected void finalize() {
+        _shutdown(taskRef);
+    }
 }

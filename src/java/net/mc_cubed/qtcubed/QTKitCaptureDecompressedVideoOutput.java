@@ -29,7 +29,6 @@
 //
 //  Email: info@mc-cubed.net
 //  Website: http://www.mc-cubed.net/
-
 package net.mc_cubed.qtcubed;
 
 import java.util.logging.Logger;
@@ -50,98 +49,98 @@ public class QTKitCaptureDecompressedVideoOutput extends QTKitCaptureOutput impl
 
     native protected long _allocInit();
 
-    protected void pushFrame(byte[] frameData,int formatInt, int width, int height, float frameRate) {
+    protected void pushFrame(byte[] frameData, int formatInt, int width, int height, float frameRate) {
         if (dataDelegate != null) {
-            QTKitSampleBuffer buffer = new QTKitSampleBuffer(QTKitPixelFormat.forNative(formatInt),width,height,frameRate,frameData);
+            QTKitSampleBuffer buffer = new QTKitSampleBuffer(QTKitPixelFormat.forNative(formatInt), width, height, frameRate, frameData);
             dataDelegate.nextSample(buffer);
         } else {
             Logger.getAnonymousLogger().info("Got " + frameData.length + " bytes of data");
         }
-		
+
     }
 
-	protected void pushFrame(short[] frameData,int formatInt, int width, int height, float frameRate) {
+    protected void pushFrame(short[] frameData, int formatInt, int width, int height, float frameRate) {
         if (dataDelegate != null) {
-            QTKitSampleBuffer buffer = new QTKitSampleBuffer(QTKitPixelFormat.forNative(formatInt),width,height,frameRate,frameData);
+            QTKitSampleBuffer buffer = new QTKitSampleBuffer(QTKitPixelFormat.forNative(formatInt), width, height, frameRate, frameData);
             dataDelegate.nextSample(buffer);
         } else {
             Logger.getAnonymousLogger().info("Got " + frameData.length + " bytes of data");
         }
-		
+
     }
 
-	protected void pushFrame(int[] frameData,int formatInt, int width, int height, float frameRate) {
+    protected void pushFrame(int[] frameData, int formatInt, int width, int height, float frameRate) {
         if (dataDelegate != null) {
-            QTKitSampleBuffer buffer = new QTKitSampleBuffer(QTKitPixelFormat.forNative(formatInt),width,height,frameRate,frameData);
+            QTKitSampleBuffer buffer = new QTKitSampleBuffer(QTKitPixelFormat.forNative(formatInt), width, height, frameRate, frameData);
             dataDelegate.nextSample(buffer);
         } else {
             Logger.getAnonymousLogger().info("Got " + frameData.length + " bytes of data");
         }
-		
+
     }
-	
+
     public void setDataDelegate(QTKitCaptureDataDelegate dataDelegate) {
         this.dataDelegate = dataDelegate;
     }
-	
-	public void setFrameRate(float newFrameRate) {
-		_setFrameRate(captureOutputRef,newFrameRate);
-	}
 
-	protected native void _setFrameRate(long captureOutputRef,float newFrameRate);
-	
-	public float getFrameRate() {
-		return _getFrameRate(captureOutputRef);
-	}
-	
-	protected native float _getFrameRate(long captureOutputRef);
-	
-	public void setSize(int width, int height) {
-		_setSize(captureOutputRef,width,height);
-	}
-	
-	public void setSize(Dimension size) {
-		_setSize(captureOutputRef,(int)size.getWidth(),(int)size.getHeight());
-	}		
-	
-	protected native void _setSize(long captureOutputRef,int width,int height);
-	
-	public int getWidth() {
-		return _getWidth(captureOutputRef); 
-	}
-	
-	public int getHeight() {
-		return _getHeight(captureOutputRef);
-	}
-	
-	public Dimension getSize() {
-		return new Dimension(_getWidth(captureOutputRef),_getHeight(captureOutputRef));
-	}
-	
-	protected native int _getWidth(long captureOutputRef);
+    public void setFrameRate(float newFrameRate) {
+        _setFrameRate(captureOutputRef, newFrameRate);
+    }
 
-	protected native int _getHeight(long captureOutputRef);
-	
-	public QTKitPixelFormat getPixelFormat() {
-		return _getPixelFormat(captureOutputRef);
-	}
-	
-	protected native QTKitPixelFormat _getPixelFormat(long captureOutputRef);
-	
-	public void setPixelFormat(QTKitPixelFormat format) {
-		if (format != null) {
-			_setPixelFormat(captureOutputRef, format.getNativeValue());
-		} else {
-			throw new IllegalArgumentException("Format must not be null");
-		}
-	}
-	
-	protected native QTKitPixelFormat _setPixelFormat(long captureOutputRef,long nativePixelFormat);
-	
-	protected void finalize() {
-		_release(captureOutputRef);
-	}
-	
-	protected native void _release(long captureOutputRef);
-	
+    protected native void _setFrameRate(long captureOutputRef, float newFrameRate);
+
+    public float getFrameRate() {
+        return _getFrameRate(captureOutputRef);
+    }
+
+    protected native float _getFrameRate(long captureOutputRef);
+
+    public void setSize(int width, int height) {
+        _setSize(captureOutputRef, width, height);
+    }
+
+    public void setSize(Dimension size) {
+        _setSize(captureOutputRef, (int) size.getWidth(), (int) size.getHeight());
+    }
+
+    protected native void _setSize(long captureOutputRef, int width, int height);
+
+    public int getWidth() {
+        return _getWidth(captureOutputRef);
+    }
+
+    public int getHeight() {
+        return _getHeight(captureOutputRef);
+    }
+
+    public Dimension getSize() {
+        return new Dimension(_getWidth(captureOutputRef), _getHeight(captureOutputRef));
+    }
+
+    protected native int _getWidth(long captureOutputRef);
+
+    protected native int _getHeight(long captureOutputRef);
+
+    public QTKitPixelFormat getPixelFormat() {
+        return _getPixelFormat(captureOutputRef);
+    }
+
+    protected native QTKitPixelFormat _getPixelFormat(long captureOutputRef);
+
+    public void setPixelFormat(QTKitPixelFormat format) {
+        if (format != null) {
+            _setPixelFormat(captureOutputRef, format.getNativeValue());
+        } else {
+            throw new IllegalArgumentException("Format must not be null");
+        }
+    }
+
+    protected native QTKitPixelFormat _setPixelFormat(long captureOutputRef, long nativePixelFormat);
+
+    @Override
+    protected void finalize() {
+        _release(captureOutputRef);
+    }
+
+    protected native void _release(long captureOutputRef);
 }

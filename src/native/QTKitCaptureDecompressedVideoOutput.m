@@ -108,9 +108,11 @@ JNIEXPORT void JNICALL Java_net_mc_1cubed_qtcubed_QTKitCaptureDecompressedVideoO
 		
 	QTCaptureDecompressedVideoOutput * videoOutput = (QTCaptureDecompressedVideoOutput *)videoOutputRef;
 		
-	NSTimeInterval frameInterval = 1.0f / newFrameRate;
-		 
-	[videoOutput setMinimumVideoFrameInterval:frameInterval];
+	double tiFrameInterval = 1.0f / newFrameRate;
+	
+	NSNumber * frameInterval = [NSNumber numberWithDouble:tiFrameInterval];
+
+	[videoOutput performSelectorOnMainThread:@selector(setMinimumVideoFrameInterval:) withObject:frameInterval waitUntilDone:YES];
 	
 	/* Autorelease and exception cleanup */
 	JNF_COCOA_EXIT(env);
@@ -163,7 +165,8 @@ JNIEXPORT void JNICALL Java_net_mc_1cubed_qtcubed_QTKitCaptureDecompressedVideoO
 		[pixelBufferAttributes setValue:[NSNumber numberWithInt:newWidth]  forKey:(id)kCVPixelBufferWidthKey];
 		[pixelBufferAttributes setValue:[NSNumber numberWithInt:newHeight] forKey:(id)kCVPixelBufferHeightKey];
 	}
-	[videoOutput setPixelBufferAttributes:pixelBufferAttributes];
+	
+	[videoOutput performSelectorOnMainThread:@selector(setPixelBufferAttributes:) withObject:pixelBufferAttributes waitUntilDone:YES];
 	
 	/* Autorelease and exception cleanup */
 	JNF_COCOA_EXIT(env);
@@ -265,7 +268,7 @@ long setPixelFormat(QTCaptureDecompressedVideoOutput * videoOutput, long nativeF
 		[pixelBufferAttributes setValue:formatNSNumber forKey:(id)kCVPixelBufferPixelFormatTypeKey];
 	}
 	
-	[videoOutput setPixelBufferAttributes:pixelBufferAttributes];
+	[videoOutput performSelectorOnMainThread:@selector(setPixelBufferAttributes:) withObject:pixelBufferAttributes waitUntilDone:YES];
 	
 	return nativeFormatNumber;
 
