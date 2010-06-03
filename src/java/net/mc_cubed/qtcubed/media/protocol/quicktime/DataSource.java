@@ -162,7 +162,7 @@ public class DataSource extends BasicPushBufferDataSource {
         if (hasAudio) {
             QTKitCaptureDecompressedAudioOutput audioOut = new QTKitCaptureDecompressedAudioOutput();
             session.addOutput(audioOut);
-            QTKitAudioCapture audioCaptureStream = new QTKitAudioCapture(audioOut);
+            QTKitAudioCapture audioCaptureStream = new QTKitAudioCapture(this, audioOut);
             outStreams.add(audioCaptureStream);
         }
         if (hasVideo) {

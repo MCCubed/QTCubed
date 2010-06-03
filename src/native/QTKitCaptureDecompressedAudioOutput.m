@@ -104,16 +104,20 @@ JNIEXPORT void JNICALL Java_net_mc_1cubed_qtcubed_QTKitCaptureDecompressedAudioO
 	QTFormatDescription * formatDescription = [sampleBuffer formatDescription];
 //	QTTime duration = [sampleBuffer duration];
 	
-	NSData * audioDescriptionData = [formatDescription attributeForKey:QTFormatDescriptionAudioStreamBasicDescriptionAttribute];
-	AudioStreamBasicDescription * audioDescription = (AudioStreamBasicDescription *)[audioDescriptionData bytes];
+	NSValue * audioDescriptionData = [formatDescription attributeForKey:QTFormatDescriptionAudioStreamBasicDescriptionAttribute];
 	
-	NSLog(@"Outputting buffer of length %d ms with format: %#x and flags: %#x",length,audioDescription->mFormatID,audioDescription->mFormatFlags);
+	AudioStreamBasicDescription audioDescription = {0};
+    [audioDescriptionData getValue:&audioDescription]; 
+//	AudioStreamBasicDescription * audioDescription = (AudioStreamBasicDescription *)[audioDescriptionData bytesForAllSamples];
 	
-	switch (audioDescription->mFormatFlags & 0x05) {
+//	NSLog(@"Outputting buffer of length %d with format: %#x and flags: %#x and channels: %d and bpc: %d",length,audioDescription.mFormatID,audioDescription.mFormatFlags,audioDescription.mChannelsPerFrame,audioDescription.mBitsPerChannel);
+	
+	switch (audioDescription.mFormatFlags & 0x05) {
 		case kAudioFormatFlagIsFloat:
 		{
 			// Number of array slots of floats we need
 			int floatLength = length/sizeof(float);
+//			NSLog(@"Converting %d float values to Java", floatLength);
 			// Re-use the existing array if possible
 			if (floatBufferData == nil || (*env)->GetArrayLength(env,floatBufferData) < length) {
 				// Clean up the previously allocated global reference
@@ -130,24 +134,26 @@ JNIEXPORT void JNICALL Java_net_mc_1cubed_qtcubed_QTKitCaptureDecompressedAudioO
 				// Get the class reference for our object
 				jclass classRef = (*env)->GetObjectClass(env,objectRef);
 				// Get the pushFrame methodId
-				jmethodID methodId = (*env)->GetMethodID(env,classRef,"pushFrame","([FIIIII)V");
+				jmethodID methodId = (*env)->GetMethodID(env,classRef,"pushBuffer","(IIII[F)V");
 				// Call pushFrame with the byte array
-				(*env)->CallVoidMethod(env,objectRef,methodId,floatBufferData,floatLength,audioDescription->mFormatID,audioDescription->mSampleRate, audioDescription->mBitsPerChannel, audioDescription->mChannelsPerFrame);
+				(*env)->CallVoidMethod(env,objectRef,methodId,(jint)audioDescription.mFormatID,(jint)audioDescription.mSampleRate, (jint)audioDescription.mBitsPerChannel, (jint)audioDescription.mChannelsPerFrame,floatBufferData);
 			}
+			break;
 		}
 		default:
 		case kAudioFormatFlagIsSignedInteger:
 		{
 			// Determine whether the data is signed or not
 			jboolean isSigned;
-			if (kAudioFormatFlagIsSignedInteger & audioDescription->mFormatFlags) {
+						
+			if (audioDescription.mFormatFlags & kAudioFormatFlagIsSignedInteger == kAudioFormatFlagIsSignedInteger) {
 				isSigned = JNI_TRUE;
 			} else {
 				isSigned = JNI_FALSE;
 			}
 			
 			// We should test how many bits we have per sample
-			switch (audioDescription->mBitsPerChannel) {
+			switch (audioDescription.mBitsPerChannel) {
 				default:
 				case 8: // use bytes
 				{
@@ -167,9 +173,9 @@ JNIEXPORT void JNICALL Java_net_mc_1cubed_qtcubed_QTKitCaptureDecompressedAudioO
 						// Get the class reference for our object
 						jclass classRef = (*env)->GetObjectClass(env,objectRef);
 						// Get the pushFrame methodId
-						jmethodID methodId = (*env)->GetMethodID(env,classRef,"pushFrame","([BIIIIIZ)V");
+						jmethodID methodId = (*env)->GetMethodID(env,classRef,"pushBuffer","([BIIIIZ)V");
 						// Call pushFrame with the byte array
-						(*env)->CallVoidMethod(env,objectRef,methodId,byteBufferData,length,audioDescription->mFormatID,audioDescription->mSampleRate, audioDescription->mBitsPerChannel, audioDescription->mChannelsPerFrame,isSigned);
+						(*env)->CallVoidMethod(env,objectRef,methodId,byteBufferData,audioDescription.mFormatID,audioDescription.mSampleRate, audioDescription.mBitsPerChannel, audioDescription.mChannelsPerFrame,isSigned);
 					}
 					break;
 				}
@@ -192,9 +198,9 @@ JNIEXPORT void JNICALL Java_net_mc_1cubed_qtcubed_QTKitCaptureDecompressedAudioO
 						// Get the class reference for our object
 						jclass classRef = (*env)->GetObjectClass(env,objectRef);
 						// Get the pushFrame methodId
-						jmethodID methodId = (*env)->GetMethodID(env,classRef,"pushFrame","([SIIIIIZ)V");
+						jmethodID methodId = (*env)->GetMethodID(env,classRef,"pushBuffer","([SIIIIZ)V");
 						// Call pushFrame with the byte array
-						(*env)->CallVoidMethod(env,objectRef,methodId,shortBufferData,shortLength,audioDescription->mFormatID,audioDescription->mSampleRate, audioDescription->mBitsPerChannel, audioDescription->mChannelsPerFrame,isSigned);
+						(*env)->CallVoidMethod(env,objectRef,methodId,shortBufferData,audioDescription.mFormatID,audioDescription.mSampleRate, audioDescription.mBitsPerChannel, audioDescription.mChannelsPerFrame,isSigned);
 					}
 					break;
 				}
@@ -217,9 +223,9 @@ JNIEXPORT void JNICALL Java_net_mc_1cubed_qtcubed_QTKitCaptureDecompressedAudioO
 						// Get the class reference for our object
 						jclass classRef = (*env)->GetObjectClass(env,objectRef);
 						// Get the pushFrame methodId
-						jmethodID methodId = (*env)->GetMethodID(env,classRef,"pushFrame","([IIIIIIZ)V");
+						jmethodID methodId = (*env)->GetMethodID(env,classRef,"pushBuffer","([IIIIIZ)V");
 						// Call pushFrame with the byte array
-						(*env)->CallVoidMethod(env,objectRef,methodId,intBufferData,intLength,audioDescription->mFormatID,audioDescription->mSampleRate, audioDescription->mBitsPerChannel, audioDescription->mChannelsPerFrame,isSigned);
+						(*env)->CallVoidMethod(env,objectRef,methodId,intBufferData,audioDescription.mFormatID,audioDescription.mSampleRate, audioDescription.mBitsPerChannel, audioDescription.mChannelsPerFrame,isSigned);
 					}
 					break;
 				}

@@ -163,6 +163,18 @@ public class QTKitFormatUtils {
         }
     }
 
+	public static AudioFormat AudioFormatToJMF(QTKitCompressionFormat compressionFormat, int sampleRate, int bitsPerSample, int channels, boolean big_endian, boolean signed) {
+		AudioFormat retval = null;
+		switch (compressionFormat) {
+			case LinearPCM: {
+				retval = new AudioFormat(AudioFormat.LINEAR, (double)sampleRate, bitsPerSample,channels,(big_endian ? AudioFormat.BIG_ENDIAN : AudioFormat.LITTLE_ENDIAN), (signed ? AudioFormat.SIGNED : AudioFormat.UNSIGNED));
+				break;
+			}
+		}
+		
+		return retval;
+	}
+	
 	public static VideoFormat CompleteFormat(VideoFormat videoFormat,Dimension size, float frameRate) {
 		VideoFormat format;
 		int lineSize, dataSize,pixelStride;

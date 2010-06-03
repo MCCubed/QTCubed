@@ -54,16 +54,32 @@ abstract public class QTKitOutputBufferStream implements PushBufferStream,QTKitC
     
     public void read(Buffer buffer) throws IOException {
         if (sampleData != null) {
-            buffer.setData(sampleData.getRawData());
             if (sampleData.getDataClass() == Format.byteArray) {
                 buffer.setLength(((byte[])sampleData.getRawData()).length);
+				buffer.setData(sampleData.getRawData());
             } else if (sampleData.getDataClass() == Format.shortArray) {
                 buffer.setLength(((short[])sampleData.getRawData()).length);
+				buffer.setData(sampleData.getRawData());
             } else if (sampleData.getDataClass() == Format.intArray) {
                 buffer.setLength(((int[])sampleData.getRawData()).length);
-            }
+				buffer.setData(sampleData.getRawData());
+            } else if (sampleData.getDataClass() == new float[0].getClass()) {
+				float[] data = (float[])sampleData.getRawData();
+				buffer.setLength(data.length);
+				// Do fast float to signed integer conversion with a -1 to 1 range
+				int[] newData = new int[data.length];
+				for (int pos = 0; pos < data.length; pos++) {
+					newData[pos] = (int)(data[pos] * Integer.MAX_VALUE);
+				}				
+				buffer.setData(newData);
+			}
 
-            Format format = QTKitFormatUtils.PixelFormatToJMF(sampleData.getPixelFormat(), new Dimension(sampleData.getWidth(),sampleData.getHeight()), sampleData.getFrameRate());
+			Format format;
+			if (sampleData.getPixelFormat() != null) {
+				format = QTKitFormatUtils.PixelFormatToJMF(sampleData.getPixelFormat(), new Dimension(sampleData.getWidth(),sampleData.getHeight()), sampleData.getFrameRate());
+			} else {
+				format  = QTKitFormatUtils.AudioFormatToJMF(sampleData.getCompressionFormat(),sampleData.getSampleRate(),sampleData.getBitsPerSample(),sampleData.getChannels(),false,true);
+			}
             buffer.setFormat(format);
             sampleData = null;
         } else {

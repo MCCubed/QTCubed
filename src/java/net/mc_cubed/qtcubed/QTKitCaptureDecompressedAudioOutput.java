@@ -52,17 +52,24 @@ public class QTKitCaptureDecompressedAudioOutput extends QTKitCaptureOutput impl
         this.dataDelegate = dataDelegate;
     }
 	
-	void pushBuffer(byte[] buffer, int length, int formatNum, int sampleRate, int bitsPerSample, int channels, boolean isSigned) {	
+	void pushBuffer(byte[] buffer, int formatNum, int sampleRate, int bitsPerSample, int channels, boolean isSigned) {	
+		QTKitSampleBuffer sample = new QTKitSampleBuffer(QTKitCompressionFormat.forNative(formatNum),sampleRate,bitsPerSample,channels,isSigned,buffer);
+		dataDelegate.nextSample(sample);
 		
 	}
-	void pushBuffer(short[] buffer, int length, int formatNum, int sampleRate, int bitsPerSample, int channels, boolean isSigned) {
+	void pushBuffer(short[] buffer, int formatNum, int sampleRate, int bitsPerSample, int channels, boolean isSigned) {
+		QTKitSampleBuffer sample = new QTKitSampleBuffer(QTKitCompressionFormat.forNative(formatNum),sampleRate,bitsPerSample,channels,isSigned,buffer);
+		dataDelegate.nextSample(sample);
 		
 	}
-	void pushBuffer(int[] buffer, int length, int formatNum, int sampleRate, int bitsPerSample, int channels, boolean isSigned) {
+	void pushBuffer(int[] buffer, int formatNum, int sampleRate, int bitsPerSample, int channels, boolean isSigned) {
+		QTKitSampleBuffer sample = new QTKitSampleBuffer(QTKitCompressionFormat.forNative(formatNum),sampleRate,bitsPerSample,channels,isSigned,buffer);
+		dataDelegate.nextSample(sample);
 		
 	}
-	void pushBuffer(float[] buffer, int length, int formatNum, int sampleRate, int bitsPerSample, int channels) {
-		
+	void pushBuffer(int formatNum, int sampleRate, int bitsPerSample, int channels,float[] buffer) {
+		QTKitSampleBuffer sample = new QTKitSampleBuffer(QTKitCompressionFormat.forNative(formatNum),sampleRate,bitsPerSample,channels,buffer);
+		dataDelegate.nextSample(sample);
 	}
 
 	protected void finalize() {

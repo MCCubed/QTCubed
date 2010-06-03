@@ -34,40 +34,97 @@ package net.mc_cubed.qtcubed.media.protocol.quicktime;
 
 import javax.media.Format;
 import javax.media.protocol.ContentDescriptor;
+import javax.media.protocol.DataSource;
+import javax.media.Control;
+import javax.media.control.FormatControl;
+import javax.media.format.AudioFormat;
 import net.mc_cubed.qtcubed.QTKitCaptureDecompressedAudioOutput;
+import net.mc_cubed.qtcubed.QTKitSampleBuffer;
+import net.mc_cubed.qtcubed.QTKitFormatUtils;
 
 /**
  *
  * @author shadow
  */
 public class QTKitAudioCapture extends QTKitOutputBufferStream {
-
-    public QTKitAudioCapture(QTKitCaptureDecompressedAudioOutput output) {
+	DataSource source;
+	final Control[] controls;
+	AudioFormat lastFormat = new AudioFormat(AudioFormat.LINEAR);
+	
+    public QTKitAudioCapture(DataSource source,QTKitCaptureDecompressedAudioOutput output) {
         super(output);
+		this.source = source;
+		controls = new Control[]{ new QTKitAudioFormatControl() };
         // TODO: Do something with the output object
 
     }
 
     public Format getFormat() {
-        throw new UnsupportedOperationException("Not supported yet.");
+		return ((FormatControl)controls[0]).getFormat();
     }
 
     public ContentDescriptor getContentDescriptor() {
-        throw new UnsupportedOperationException("Not supported yet.");
+        return new ContentDescriptor(ContentDescriptor.RAW);
     }
 
     public boolean endOfStream() {
-        throw new UnsupportedOperationException("Not supported yet.");
+		return false;
     }
 
     public Object[] getControls() {
-        throw new UnsupportedOperationException("Not supported yet.");
+        return controls;
     }
 
     public Object getControl(String string) {
-        throw new UnsupportedOperationException("Not supported yet.");
+		Class clazz;
+		try {
+			clazz = Class.forName(string);
+		} catch (ClassNotFoundException cnfe) {
+			return null;
+		}
+		for (Control control : controls) {
+			if (clazz.isInstance(control)) {
+				return control;
+			}
+		}
+		return null;
     }
 
+	private class QTKitAudioFormatControl implements FormatControl {
+		
+		public void setEnabled(boolean enabled) {
+			// Does nothing
+		}
+		
+		public boolean isEnabled() {
+			return true;
+		}
+		
+		public Format setFormat(Format format) {
+			// Does nothing
+			return lastFormat;
+		}
+		
+		public Format getFormat() {
+			return lastFormat;
+		}
+		
+		public Format[] getSupportedFormats() {
+			return new Format[] {lastFormat};
+		}
+		
+		public java.awt.Component getControlComponent() {
+			// No component
+			return null;
+		}
+
+	}
+
+	@Override
+	public void nextSample(QTKitSampleBuffer sampleData) {
+		super.nextSample(sampleData);
+		lastFormat = QTKitFormatUtils.AudioFormatToJMF(sampleData.getCompressionFormat(),sampleData.getSampleRate(),sampleData.getBitsPerSample(),sampleData.getChannels(),false,true);
+	}
 
 
 }

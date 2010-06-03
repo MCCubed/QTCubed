@@ -252,7 +252,7 @@ public class QTCubed extends Frame implements ActionListener {
                     session.addInput(videoDeviceInput);
                     QTKitCaptureDecompressedVideoOutput videoOutput = new QTKitCaptureDecompressedVideoOutput();
                     videoOutput.setFrameRate(30.0f);
-                    videoOutput.setSize(new Dimension(160, 120));
+                    videoOutput.setSize(new Dimension(320, 240));
                     session.addOutput(videoOutput);
                     System.out.println("Video Format: " + videoOutput.getPixelFormat());
                     System.out.println("Video Size: " + videoOutput.getSize());

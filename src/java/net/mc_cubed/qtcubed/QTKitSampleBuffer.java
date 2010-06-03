@@ -32,18 +32,89 @@
 
 package net.mc_cubed.qtcubed;
 
-import javax.media.Format;
-
 /**
  *
  * @author shadow
  */
 public class QTKitSampleBuffer {
     private final Class dataClass;
-
+	private final QTKitCompressionFormat audioFormat;
+	private final Integer sampleRate;
+	private final Integer bitsPerSample;
+	private final Integer channels;
+	private final Boolean signed;
+	
+	public QTKitCompressionFormat getCompressionFormat() {
+		return audioFormat;
+	}
+	
+	public Integer getSampleRate() {
+		return sampleRate;
+	}
+	
+	public Integer getBitsPerSample() {
+		return bitsPerSample;
+	}
+	
+	public Integer getChannels() {
+		return channels;
+	}
+		
+	public Boolean isSigned() {
+		return signed;
+	}
+	
     public Class getDataClass() {
         return dataClass;
     }
+	public QTKitSampleBuffer(QTKitCompressionFormat audioFormat,Integer sampleRate, Integer bitsPerSample, Integer channels, Boolean isSigned, byte[] rawData) {
+        this.dataClass = rawData.getClass();
+		this.audioFormat = audioFormat;
+		this.sampleRate = sampleRate;
+		this.bitsPerSample = bitsPerSample;
+		this.channels = channels;
+		this.signed = isSigned;
+		pixelFormat = null;
+		width = -1;
+		height = -1;
+		this.rawData = rawData;
+	}
+	public QTKitSampleBuffer(QTKitCompressionFormat audioFormat,Integer sampleRate, Integer bitsPerSample, Integer channels, Boolean isSigned, short[] rawData) {
+        this.dataClass = rawData.getClass();
+		this.audioFormat = audioFormat;
+		this.sampleRate = sampleRate;
+		this.bitsPerSample = bitsPerSample;
+		this.channels = channels;
+		this.signed = isSigned;
+		pixelFormat = null;
+		width = -1;
+		height = -1;
+		this.rawData = rawData;
+	}
+	public QTKitSampleBuffer(QTKitCompressionFormat audioFormat,Integer sampleRate, Integer bitsPerSample, Integer channels, Boolean isSigned, int[] rawData) {
+        this.dataClass = rawData.getClass();
+		this.audioFormat = audioFormat;
+		this.sampleRate = sampleRate;
+		this.bitsPerSample = bitsPerSample;
+		this.channels = channels;
+		this.signed = isSigned;
+		pixelFormat = null;
+		width = -1;
+		height = -1;
+		this.rawData = rawData;
+	}
+	public QTKitSampleBuffer(QTKitCompressionFormat audioFormat,Integer sampleRate, Integer bitsPerSample, Integer channels, float[] rawData) {
+		dataClass = new float[0].getClass();
+		this.audioFormat = audioFormat;
+		this.sampleRate = sampleRate;
+		this.bitsPerSample = bitsPerSample;
+		this.channels = channels;
+		this.signed = true;
+		pixelFormat = null;
+		width = -1;
+		height = -1;
+		this.rawData = rawData;
+	}
 
     public QTKitSampleBuffer(QTKitPixelFormat pixelFormat, Integer width, Integer height, Float frameRate, byte[] rawData) {
         this.pixelFormat = pixelFormat;
@@ -51,7 +122,12 @@ public class QTKitSampleBuffer {
         this.height = height;
         this.frameRate = frameRate;
         this.rawData = rawData;
-        this.dataClass = Format.byteArray;
+        this.dataClass = rawData.getClass();
+		this.audioFormat = null;
+		this.sampleRate = null;
+		this.bitsPerSample = null;
+		this.channels = null;
+		this.signed = null;		
     }
 
     public QTKitSampleBuffer(QTKitPixelFormat pixelFormat, Integer width, Integer height, Float frameRate, short[] rawData) {
@@ -60,7 +136,12 @@ public class QTKitSampleBuffer {
         this.height = height;
         this.frameRate = frameRate;
         this.rawData = rawData;
-        this.dataClass = Format.shortArray;
+        this.dataClass = rawData.getClass();
+		this.audioFormat = null;
+		this.sampleRate = null;
+		this.bitsPerSample = null;
+		this.channels = null;
+		this.signed = null;
     }
 
     public QTKitSampleBuffer(QTKitPixelFormat pixelFormat, Integer width, Integer height, Float frameRate, int[] rawData) {
@@ -69,7 +150,12 @@ public class QTKitSampleBuffer {
         this.height = height;
         this.frameRate = frameRate;
         this.rawData = rawData;
-        this.dataClass = Format.intArray;
+        this.dataClass = rawData.getClass();
+		this.audioFormat = null;
+		this.sampleRate = null;
+		this.bitsPerSample = null;
+		this.channels = null;
+		this.signed = null;
     }
 
     final QTKitPixelFormat pixelFormat;
