@@ -1,5 +1,5 @@
 //
-//  QTKitCaptureInput.java
+//  QTCompressionOptions.java
 //  QTCubed
 //
 //  Created by Chappell Charles on 10/02/19.
@@ -36,15 +36,6 @@ package net.mc_cubed.qtcubed;
  *
  * @author shadow
  */
-abstract class QTKitCaptureInput implements QTCaptureInput {
-    protected final long captureInputRef;
-
-    protected QTKitCaptureInput(long captureInputRef) {
-        this.captureInputRef = captureInputRef;
-    }
-
-    long getCaptureInputRef() {
-        return this.captureInputRef;
-    }
+public class QTCompressionOptions {
 
 }

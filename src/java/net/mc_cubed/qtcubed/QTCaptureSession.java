@@ -1,8 +1,8 @@
 //
-//  QTKitCaptureInput.java
+//  QTCaptureSession.java
 //  QTCubed
 //
-//  Created by Chappell Charles on 10/02/19.
+//  Created by Chappell Charles on 10/07/29.
 //  Copyright (c) 2010 MC Cubed, Inc. All rights reserved.
 //
 //  This program is free software; you can redistribute it and/or modify
@@ -32,19 +32,28 @@
 
 package net.mc_cubed.qtcubed;
 
+import java.util.List;
+
 /**
  *
  * @author shadow
  */
-abstract class QTKitCaptureInput implements QTCaptureInput {
-    protected final long captureInputRef;
+public interface QTCaptureSession {
 
-    protected QTKitCaptureInput(long captureInputRef) {
-        this.captureInputRef = captureInputRef;
-    }
+    boolean addInput(QTCaptureInput input);
 
-    long getCaptureInputRef() {
-        return this.captureInputRef;
-    }
+    boolean addOutput(QTCaptureOutput output);
+
+    List<QTCaptureOutput> getOutputList();
+
+    boolean isRunning();
+
+    void removeInput(QTCaptureInput input);
+
+    void removeOutput(QTCaptureOutput output);
+
+    void startRunning();
+
+    void stopRunning();
 
 }

@@ -1,5 +1,5 @@
 //
-//  QTKitFormatUtils.java
+//  QTFormatUtils.java
 //  QTCubed
 //
 //  Created by Chappell Charles on 10/02/19.
@@ -50,33 +50,33 @@ import java.util.LinkedList;
  *
  * @author shadow
  */
-public class QTKitFormatUtils {
+public class QTFormatUtils {
 
-	public static final Map<QTKitPixelFormat,VideoFormat> pixelFormatMap;
+	public static final Map<QTPixelFormat,VideoFormat> pixelFormatMap;
 	
 	public static final RGBFormat rgb24;
 	public static final RGBFormat rgba32;
 	static {
-		pixelFormatMap = new HashMap<QTKitPixelFormat,VideoFormat>();
-		pixelFormatMap.put(QTKitPixelFormat.e16BE555,new RGBFormat(null, Format.NOT_SPECIFIED, Format.shortArray, -1.0f, 16, 0x7c00, 0x3e0, 0x1f, 2, Format.NOT_SPECIFIED, RGBFormat.FALSE, RGBFormat.BIG_ENDIAN));
-		pixelFormatMap.put(QTKitPixelFormat.e16LE555,new RGBFormat(null, Format.NOT_SPECIFIED, Format.shortArray, -1.0f, 16, 0x7c00, 0x3e0, 0x1f, 2, Format.NOT_SPECIFIED, RGBFormat.FALSE, RGBFormat.LITTLE_ENDIAN));
-		pixelFormatMap.put(QTKitPixelFormat.e16LE5551,new RGBFormat(null, Format.NOT_SPECIFIED, Format.shortArray, -1.0f, 16, 0xf800, 0x7c0, 0x3e, 2, Format.NOT_SPECIFIED, RGBFormat.FALSE, RGBFormat.LITTLE_ENDIAN));
-		pixelFormatMap.put(QTKitPixelFormat.e16BE565,new RGBFormat(null, Format.NOT_SPECIFIED, Format.shortArray, -1.0f, 16, 0xf800, 0x7e0, 0x1f, 2, Format.NOT_SPECIFIED, RGBFormat.FALSE, RGBFormat.BIG_ENDIAN));
-		pixelFormatMap.put(QTKitPixelFormat.e16LE565,new RGBFormat(null, Format.NOT_SPECIFIED, Format.shortArray, -1.0f, 16, 0xf800, 0x7e0, 0x1f, 2, Format.NOT_SPECIFIED, RGBFormat.FALSE, RGBFormat.LITTLE_ENDIAN));
+		pixelFormatMap = new HashMap<QTPixelFormat,VideoFormat>();
+		pixelFormatMap.put(QTPixelFormat.e16BE555,new RGBFormat(null, Format.NOT_SPECIFIED, Format.shortArray, -1.0f, 16, 0x7c00, 0x3e0, 0x1f, 2, Format.NOT_SPECIFIED, RGBFormat.FALSE, RGBFormat.BIG_ENDIAN));
+		pixelFormatMap.put(QTPixelFormat.e16LE555,new RGBFormat(null, Format.NOT_SPECIFIED, Format.shortArray, -1.0f, 16, 0x7c00, 0x3e0, 0x1f, 2, Format.NOT_SPECIFIED, RGBFormat.FALSE, RGBFormat.LITTLE_ENDIAN));
+		pixelFormatMap.put(QTPixelFormat.e16LE5551,new RGBFormat(null, Format.NOT_SPECIFIED, Format.shortArray, -1.0f, 16, 0xf800, 0x7c0, 0x3e, 2, Format.NOT_SPECIFIED, RGBFormat.FALSE, RGBFormat.LITTLE_ENDIAN));
+		pixelFormatMap.put(QTPixelFormat.e16BE565,new RGBFormat(null, Format.NOT_SPECIFIED, Format.shortArray, -1.0f, 16, 0xf800, 0x7e0, 0x1f, 2, Format.NOT_SPECIFIED, RGBFormat.FALSE, RGBFormat.BIG_ENDIAN));
+		pixelFormatMap.put(QTPixelFormat.e16LE565,new RGBFormat(null, Format.NOT_SPECIFIED, Format.shortArray, -1.0f, 16, 0xf800, 0x7e0, 0x1f, 2, Format.NOT_SPECIFIED, RGBFormat.FALSE, RGBFormat.LITTLE_ENDIAN));
 		rgb24 = new RGBFormat(null, Format.NOT_SPECIFIED, Format.byteArray, -1.0f, 24, 1, 2, 3, 3, Format.NOT_SPECIFIED, RGBFormat.FALSE, RGBFormat.BIG_ENDIAN);
-		pixelFormatMap.put(QTKitPixelFormat.e24RGB,rgb24);
-		pixelFormatMap.put(QTKitPixelFormat.e24BGR,new RGBFormat(null, Format.NOT_SPECIFIED, Format.byteArray, -1.0f, 24, 3, 2, 1, 3, Format.NOT_SPECIFIED, RGBFormat.FALSE, RGBFormat.BIG_ENDIAN));
-		pixelFormatMap.put(QTKitPixelFormat.e32ARGB,new RGBFormat(null, Format.NOT_SPECIFIED, Format.intArray, -1.0f, 32, 0xff00, 0xff0000, 0xff000000, 1, Format.NOT_SPECIFIED, RGBFormat.FALSE, RGBFormat.BIG_ENDIAN));
-		pixelFormatMap.put(QTKitPixelFormat.e32BGRA,new RGBFormat(null, Format.NOT_SPECIFIED, Format.intArray, -1.0f, 32, 0xff0000, 0xff00, 0xff, 1, Format.NOT_SPECIFIED, RGBFormat.FALSE, RGBFormat.BIG_ENDIAN));
-		pixelFormatMap.put(QTKitPixelFormat.e32ABGR,new RGBFormat(null, Format.NOT_SPECIFIED, Format.intArray, -1.0f, 32, 0xff, 0xff00, 0xff0000, 1, Format.NOT_SPECIFIED, RGBFormat.FALSE, RGBFormat.BIG_ENDIAN));
+		pixelFormatMap.put(QTPixelFormat.e24RGB,rgb24);
+		pixelFormatMap.put(QTPixelFormat.e24BGR,new RGBFormat(null, Format.NOT_SPECIFIED, Format.byteArray, -1.0f, 24, 3, 2, 1, 3, Format.NOT_SPECIFIED, RGBFormat.FALSE, RGBFormat.BIG_ENDIAN));
+		pixelFormatMap.put(QTPixelFormat.e32ARGB,new RGBFormat(null, Format.NOT_SPECIFIED, Format.intArray, -1.0f, 32, 0xff00, 0xff0000, 0xff000000, 1, Format.NOT_SPECIFIED, RGBFormat.FALSE, RGBFormat.BIG_ENDIAN));
+		pixelFormatMap.put(QTPixelFormat.e32BGRA,new RGBFormat(null, Format.NOT_SPECIFIED, Format.intArray, -1.0f, 32, 0xff0000, 0xff00, 0xff, 1, Format.NOT_SPECIFIED, RGBFormat.FALSE, RGBFormat.BIG_ENDIAN));
+		pixelFormatMap.put(QTPixelFormat.e32ABGR,new RGBFormat(null, Format.NOT_SPECIFIED, Format.intArray, -1.0f, 32, 0xff, 0xff00, 0xff0000, 1, Format.NOT_SPECIFIED, RGBFormat.FALSE, RGBFormat.BIG_ENDIAN));
 		rgba32 = new RGBFormat(null, Format.NOT_SPECIFIED, Format.intArray, -1.0f, 32, 0xff000000, 0xff0000, 0xff00, 1, Format.NOT_SPECIFIED, RGBFormat.FALSE, RGBFormat.BIG_ENDIAN);
-		pixelFormatMap.put(QTKitPixelFormat.e32RGBA,rgba32);
-		pixelFormatMap.put(QTKitPixelFormat.e422YpCbCr8,new YUVFormat(null, Format.NOT_SPECIFIED, Format.byteArray, -1.0f, YUVFormat.YUV_YUYV | YUVFormat.YUV_SIGNED, Format.NOT_SPECIFIED, 1, 0, 4, 6));
-		pixelFormatMap.put(QTKitPixelFormat.e420YpCbCr8Planar,new YUVFormat(null,Format.NOT_SPECIFIED,Format.byteArray, -1.0f,YUVFormat.YUV_420,Format.NOT_SPECIFIED, 8, 0, 4, 6));
-		pixelFormatMap.put(QTKitPixelFormat.e1Monochrome,new IndexedColorFormat(null,Format.NOT_SPECIFIED,Format.byteArray,-1.0f,Format.NOT_SPECIFIED,1,spacedByteValues(1),spacedByteValues(1),spacedByteValues(1)));
-		pixelFormatMap.put(QTKitPixelFormat.e2Indexed,new IndexedColorFormat(null,Format.NOT_SPECIFIED,Format.byteArray,-1.0f,Format.NOT_SPECIFIED,2,spacedByteValues(2),spacedByteValues(2),spacedByteValues(2)));
-		pixelFormatMap.put(QTKitPixelFormat.e4Indexed,new IndexedColorFormat(null,Format.NOT_SPECIFIED,Format.byteArray,-1.0f,Format.NOT_SPECIFIED,2,spacedByteValues(4),spacedByteValues(4),spacedByteValues(4)));
-		pixelFormatMap.put(QTKitPixelFormat.e8Indexed,new IndexedColorFormat(null,Format.NOT_SPECIFIED,Format.byteArray,-1.0f,Format.NOT_SPECIFIED,2,spacedByteValues(8),spacedByteValues(8),spacedByteValues(8)));
+		pixelFormatMap.put(QTPixelFormat.e32RGBA,rgba32);
+		pixelFormatMap.put(QTPixelFormat.e422YpCbCr8,new YUVFormat(null, Format.NOT_SPECIFIED, Format.byteArray, -1.0f, YUVFormat.YUV_YUYV | YUVFormat.YUV_SIGNED, Format.NOT_SPECIFIED, 1, 0, 4, 6));
+		pixelFormatMap.put(QTPixelFormat.e420YpCbCr8Planar,new YUVFormat(null,Format.NOT_SPECIFIED,Format.byteArray, -1.0f,YUVFormat.YUV_420,Format.NOT_SPECIFIED, 8, 0, 4, 6));
+		pixelFormatMap.put(QTPixelFormat.e1Monochrome,new IndexedColorFormat(null,Format.NOT_SPECIFIED,Format.byteArray,-1.0f,Format.NOT_SPECIFIED,1,spacedByteValues(1),spacedByteValues(1),spacedByteValues(1)));
+		pixelFormatMap.put(QTPixelFormat.e2Indexed,new IndexedColorFormat(null,Format.NOT_SPECIFIED,Format.byteArray,-1.0f,Format.NOT_SPECIFIED,2,spacedByteValues(2),spacedByteValues(2),spacedByteValues(2)));
+		pixelFormatMap.put(QTPixelFormat.e4Indexed,new IndexedColorFormat(null,Format.NOT_SPECIFIED,Format.byteArray,-1.0f,Format.NOT_SPECIFIED,2,spacedByteValues(4),spacedByteValues(4),spacedByteValues(4)));
+		pixelFormatMap.put(QTPixelFormat.e8Indexed,new IndexedColorFormat(null,Format.NOT_SPECIFIED,Format.byteArray,-1.0f,Format.NOT_SPECIFIED,2,spacedByteValues(8),spacedByteValues(8),spacedByteValues(8)));
 	}
 	
 	public static byte[] spacedByteValues(int bits) {
@@ -87,15 +87,15 @@ public class QTKitFormatUtils {
 		}
 		return retval;
 	}
-    public static Collection<Format> QTKitToJMF(Collection<QTKitFormatDescription> formatDescriptions) {
+    public static Collection<Format> QTKitToJMF(Collection<QTFormatDescription> formatDescriptions) {
         Collection<Format> retval = new LinkedList<Format>();
-        for (QTKitFormatDescription formatDescription : formatDescriptions) {
+        for (QTFormatDescription formatDescription : formatDescriptions) {
             retval.add(FormatDescriptionToFormat(formatDescription));
         }
         return retval;
     }
 
-    public static Format FormatDescriptionToFormat(QTKitFormatDescription formatDescription) {
+    public static Format FormatDescriptionToFormat(QTFormatDescription formatDescription) {
         float frameRate = 30;
         Dimension size = null;
         if (formatDescription.width != null && formatDescription.height != null) {
@@ -163,7 +163,7 @@ public class QTKitFormatUtils {
         }
     }
 
-	public static AudioFormat AudioFormatToJMF(QTKitCompressionFormat compressionFormat, int sampleRate, int bitsPerSample, int channels, boolean big_endian, boolean signed) {
+	public static AudioFormat AudioFormatToJMF(QTCompressionFormat compressionFormat, int sampleRate, int bitsPerSample, int channels, boolean big_endian, boolean signed) {
 		AudioFormat retval = null;
 		switch (compressionFormat) {
 			case LinearPCM: {
@@ -200,7 +200,7 @@ public class QTKitFormatUtils {
 		}
 		return format;
 	}
-    public static Format PixelFormatToJMF(QTKitPixelFormat pixelFormat, Dimension size, float frameRate) {
+    public static Format PixelFormatToJMF(QTPixelFormat pixelFormat, Dimension size, float frameRate) {
         Format format;
         if (pixelFormat == null) {
             return null;
@@ -336,9 +336,9 @@ public class QTKitFormatUtils {
         return format; */
     }
 
-    public static Collection<QTKitFormatDescription> JMFToQTKit(Collection<Format> formats) {
+    public static Collection<QTFormatDescription> JMFToQTKit(Collection<Format> formats) {
 		// Create a list to hold the result
-		Collection<QTKitFormatDescription> retval = new LinkedList<QTKitFormatDescription>();
+		Collection<QTFormatDescription> retval = new LinkedList<QTFormatDescription>();
 
 		// Do format conversions one by one
 		for (Format format : formats) {
@@ -349,13 +349,13 @@ public class QTKitFormatUtils {
 		return retval;
     }
 	
-	public static QTKitFormatDescription JMFToQTKit(Format format) {
+	public static QTFormatDescription JMFToQTKit(Format format) {
 		throw new java.lang.UnsupportedOperationException("Not implemented");
 	}
 	
-	public static Collection<QTKitPixelFormat> JMFToPixelFormat(Collection<Format> formats) {
+	public static Collection<QTPixelFormat> JMFToPixelFormat(Collection<Format> formats) {
 		// Create a list to hold the result
-		Collection<QTKitPixelFormat> retval = new LinkedList<QTKitPixelFormat>();
+		Collection<QTPixelFormat> retval = new LinkedList<QTPixelFormat>();
 		
 		// Do format conversions one by one
 		for (Format format : formats) {
@@ -367,8 +367,8 @@ public class QTKitFormatUtils {
 		
 	}
 
-	public static QTKitPixelFormat JMFToPixelFormat(Format format) {
-		for (Entry<QTKitPixelFormat,VideoFormat> entry : pixelFormatMap.entrySet()) {
+	public static QTPixelFormat JMFToPixelFormat(Format format) {
+		for (Entry<QTPixelFormat,VideoFormat> entry : pixelFormatMap.entrySet()) {
 			VideoFormat videoFormat = entry.getValue();
 			if (videoFormat.isSameEncoding(format) && format.relax().matches(videoFormat.relax())) {
 				// TODO: Do some other checks

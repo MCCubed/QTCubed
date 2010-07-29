@@ -1,5 +1,5 @@
 //
-//  QTKitSampleBuffer.java
+//  QTSampleBuffer.java
 //  QTCubed
 //
 //  Created by Chappell Charles on 10/02/19.
@@ -36,15 +36,15 @@ package net.mc_cubed.qtcubed;
  *
  * @author shadow
  */
-public class QTKitSampleBuffer {
+public class QTSampleBuffer {
     private final Class dataClass;
-	private final QTKitCompressionFormat audioFormat;
+	private final QTCompressionFormat audioFormat;
 	private final Integer sampleRate;
 	private final Integer bitsPerSample;
 	private final Integer channels;
 	private final Boolean signed;
 	
-	public QTKitCompressionFormat getCompressionFormat() {
+	public QTCompressionFormat getCompressionFormat() {
 		return audioFormat;
 	}
 	
@@ -67,7 +67,7 @@ public class QTKitSampleBuffer {
     public Class getDataClass() {
         return dataClass;
     }
-	public QTKitSampleBuffer(QTKitCompressionFormat audioFormat,Integer sampleRate, Integer bitsPerSample, Integer channels, Boolean isSigned, byte[] rawData) {
+	public QTSampleBuffer(QTCompressionFormat audioFormat,Integer sampleRate, Integer bitsPerSample, Integer channels, Boolean isSigned, byte[] rawData) {
         this.dataClass = rawData.getClass();
 		this.audioFormat = audioFormat;
 		this.sampleRate = sampleRate;
@@ -79,7 +79,7 @@ public class QTKitSampleBuffer {
 		height = -1;
 		this.rawData = rawData;
 	}
-	public QTKitSampleBuffer(QTKitCompressionFormat audioFormat,Integer sampleRate, Integer bitsPerSample, Integer channels, Boolean isSigned, short[] rawData) {
+	public QTSampleBuffer(QTCompressionFormat audioFormat,Integer sampleRate, Integer bitsPerSample, Integer channels, Boolean isSigned, short[] rawData) {
         this.dataClass = rawData.getClass();
 		this.audioFormat = audioFormat;
 		this.sampleRate = sampleRate;
@@ -91,7 +91,7 @@ public class QTKitSampleBuffer {
 		height = -1;
 		this.rawData = rawData;
 	}
-	public QTKitSampleBuffer(QTKitCompressionFormat audioFormat,Integer sampleRate, Integer bitsPerSample, Integer channels, Boolean isSigned, int[] rawData) {
+	public QTSampleBuffer(QTCompressionFormat audioFormat,Integer sampleRate, Integer bitsPerSample, Integer channels, Boolean isSigned, int[] rawData) {
         this.dataClass = rawData.getClass();
 		this.audioFormat = audioFormat;
 		this.sampleRate = sampleRate;
@@ -103,7 +103,7 @@ public class QTKitSampleBuffer {
 		height = -1;
 		this.rawData = rawData;
 	}
-	public QTKitSampleBuffer(QTKitCompressionFormat audioFormat,Integer sampleRate, Integer bitsPerSample, Integer channels, float[] rawData) {
+	public QTSampleBuffer(QTCompressionFormat audioFormat,Integer sampleRate, Integer bitsPerSample, Integer channels, float[] rawData) {
 		dataClass = new float[0].getClass();
 		this.audioFormat = audioFormat;
 		this.sampleRate = sampleRate;
@@ -116,7 +116,7 @@ public class QTKitSampleBuffer {
 		this.rawData = rawData;
 	}
 
-    public QTKitSampleBuffer(QTKitPixelFormat pixelFormat, Integer width, Integer height, Float frameRate, byte[] rawData) {
+    public QTSampleBuffer(QTPixelFormat pixelFormat, Integer width, Integer height, Float frameRate, byte[] rawData) {
         this.pixelFormat = pixelFormat;
         this.width = width;
         this.height = height;
@@ -130,7 +130,7 @@ public class QTKitSampleBuffer {
 		this.signed = null;		
     }
 
-    public QTKitSampleBuffer(QTKitPixelFormat pixelFormat, Integer width, Integer height, Float frameRate, short[] rawData) {
+    public QTSampleBuffer(QTPixelFormat pixelFormat, Integer width, Integer height, Float frameRate, short[] rawData) {
         this.pixelFormat = pixelFormat;
         this.width = width;
         this.height = height;
@@ -144,7 +144,7 @@ public class QTKitSampleBuffer {
 		this.signed = null;
     }
 
-    public QTKitSampleBuffer(QTKitPixelFormat pixelFormat, Integer width, Integer height, Float frameRate, int[] rawData) {
+    public QTSampleBuffer(QTPixelFormat pixelFormat, Integer width, Integer height, Float frameRate, int[] rawData) {
         this.pixelFormat = pixelFormat;
         this.width = width;
         this.height = height;
@@ -158,7 +158,7 @@ public class QTKitSampleBuffer {
 		this.signed = null;
     }
 
-    final QTKitPixelFormat pixelFormat;
+    final QTPixelFormat pixelFormat;
 
     final Integer width;
 
@@ -191,7 +191,7 @@ public class QTKitSampleBuffer {
     }
 
 
-    public QTKitPixelFormat getPixelFormat() {
+    public QTPixelFormat getPixelFormat() {
         return pixelFormat;
     }
 

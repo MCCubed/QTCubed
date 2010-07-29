@@ -35,8 +35,8 @@
 long setPixelFormat(QTCaptureDecompressedVideoOutput * videoOutput, long nativeFormatNumber);
 
 jobject pixelFormatToJava(JNIEnv * env, int format) {
-	jclass pixelFormatEnumClass  = (*env)->FindClass(env,"net/mc_cubed/qtcubed/QTKitPixelFormat");
-	jmethodID valuesMethod       = (*env)->GetStaticMethodID(env,pixelFormatEnumClass,"values","()[Lnet/mc_cubed/qtcubed/QTKitPixelFormat;");
+	jclass pixelFormatEnumClass  = (*env)->FindClass(env,"net/mc_cubed/qtcubed/QTPixelFormat");
+	jmethodID valuesMethod       = (*env)->GetStaticMethodID(env,pixelFormatEnumClass,"values","()[Lnet/mc_cubed/qtcubed/QTPixelFormat;");
 	jmethodID nativeValueMethod  = (*env)->GetMethodID(env,pixelFormatEnumClass,"getNativeValue","()I");
 	jobjectArray enumValuesArray = (*env)->CallStaticObjectMethod(env,pixelFormatEnumClass,valuesMethod);
 	
@@ -53,7 +53,7 @@ jobject pixelFormatToJava(JNIEnv * env, int format) {
 }
 
 int javaToPixelFormat(JNIEnv * env, jobject pixelFormat) {
-	jclass pixelFormatEnumClass  = (*env)->FindClass(env,"net/mc_cubed/qtcubed/QTKitPixelFormat");
+	jclass pixelFormatEnumClass  = (*env)->FindClass(env,"net/mc_cubed/qtcubed/QTPixelFormat");
 	jmethodID nativeValueMethod  = (*env)->GetMethodID(env,pixelFormatEnumClass,"getNativeValue","()I");
 	jint nativeValue = (*env)->CallIntMethod(env,pixelFormat,nativeValueMethod);
 	return nativeValue;
@@ -228,7 +228,7 @@ JNIEXPORT jint JNICALL Java_net_mc_1cubed_qtcubed_QTKitCaptureDecompressedVideoO
 /*
  * Class:     net_mc_cubed_qtcubed_QTKitCaptureDecompressedVideoOutput
  * Method:    _getPixelFormat
- * Signature: (J)Lnet/mc_cubed/qtcubed/QTKitPixelFormat;
+ * Signature: (J)Lnet/mc_cubed/qtcubed/QTPixelFormat;
  */
 JNIEXPORT jobject JNICALL Java_net_mc_1cubed_qtcubed_QTKitCaptureDecompressedVideoOutput__1getPixelFormat
 (JNIEnv *env, jobject objectRef, jlong videoOutputRef) {
@@ -277,7 +277,7 @@ long setPixelFormat(QTCaptureDecompressedVideoOutput * videoOutput, long nativeF
 /*
  * Class:     net_mc_cubed_qtcubed_QTKitCaptureDecompressedVideoOutput
  * Method:    _setPixelFormat
- * Signature: (JJ)Lnet/mc_cubed/qtcubed/QTKitPixelFormat;
+ * Signature: (JJ)Lnet/mc_cubed/qtcubed/QTPixelFormat;
  */
 JNIEXPORT jobject JNICALL Java_net_mc_1cubed_qtcubed_QTKitCaptureDecompressedVideoOutput__1setPixelFormat
 (JNIEnv *env, jobject objectRef, jlong videoOutputRef, jlong nativeFormatNumber) {

@@ -1,5 +1,5 @@
 //
-//  QTKitPixelFormat.java
+//  QTPixelFormat.java
 //  QTCubed
 //
 //  Created by Chappell Charles on 10/02/19.
@@ -32,7 +32,7 @@
 
 package net.mc_cubed.qtcubed;
 
-public enum QTKitPixelFormat {
+public enum QTPixelFormat {
 	e1Monochrome(0x00000001), /* 1 bit indexed */
 	e2Indexed(0x00000002), /* 2 bit indexed */
 	e4Indexed(0x00000004), /* 4 bit indexed */
@@ -68,7 +68,7 @@ public enum QTKitPixelFormat {
 
 	final int nativeValue;
 
-	QTKitPixelFormat(int nativeValue) {
+	QTPixelFormat(int nativeValue) {
 		this.nativeValue = nativeValue;
 	}
 
@@ -76,8 +76,8 @@ public enum QTKitPixelFormat {
 		return nativeValue;
 	}
 
-        static public QTKitPixelFormat forNative(int nativeValue) {
-            for (QTKitPixelFormat format : QTKitPixelFormat.values()) {
+        static public QTPixelFormat forNative(int nativeValue) {
+            for (QTPixelFormat format : QTPixelFormat.values()) {
                 if (nativeValue == format.getNativeValue()) {
                     return format;
                 }

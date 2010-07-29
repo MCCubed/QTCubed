@@ -1,8 +1,8 @@
 //
-//  QTKitCaptureInput.java
+//  QTCaptureDevice.java
 //  QTCubed
 //
-//  Created by Chappell Charles on 10/02/19.
+//  Created by Chappell Charles on 10/07/29.
 //  Copyright (c) 2010 MC Cubed, Inc. All rights reserved.
 //
 //  This program is free software; you can redistribute it and/or modify
@@ -29,22 +29,28 @@
 //
 //  Email: info@mc-cubed.net
 //  Website: http://www.mc-cubed.net/
-
 package net.mc_cubed.qtcubed;
 
-/**
- *
- * @author shadow
- */
-abstract class QTKitCaptureInput implements QTCaptureInput {
-    protected final long captureInputRef;
+import java.util.Collection;
+import java.util.Properties;
 
-    protected QTKitCaptureInput(long captureInputRef) {
-        this.captureInputRef = captureInputRef;
-    }
+public interface QTCaptureDevice {
 
-    long getCaptureInputRef() {
-        return this.captureInputRef;
-    }
+    public void open();
 
+    public boolean isOpen();
+
+    public void close();
+
+    public String localizedDisplayName();
+
+    public Collection<QTFormatDescription> getFormatDescriptions();
+
+    public String uniqueId();
+
+    public String modelUniqueId();
+
+    public boolean hasMediaType(QTMediaType type);
+
+    public Properties deviceAttributes();
 }

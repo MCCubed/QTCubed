@@ -41,7 +41,7 @@ import net.mc_cubed.QTCubed;
  *
  * @author shadow
  */
-public class QTKitCaptureView extends CocoaComponent {
+public class QTKitCaptureView extends CocoaComponent implements QTCaptureView {
     protected static final int SET_CAPTURE_SESSION = 1;
 
 	protected Dimension preferredSize = new Dimension(320,240);
@@ -59,9 +59,13 @@ public class QTKitCaptureView extends CocoaComponent {
         return (int)createNSViewLong();
     }
 
-    public void setCaptureSession(QTKitCaptureSession session) {
-        this.captureSession = session;
-        sendMessage(SET_CAPTURE_SESSION, session.getCaptureSessionRef());
+    public void setCaptureSession(QTCaptureSession session) {
+        if (session instanceof QTKitCaptureSession) {
+            this.captureSession = (QTKitCaptureSession)session;
+            sendMessage(SET_CAPTURE_SESSION, ((QTKitCaptureSession)session).getCaptureSessionRef());
+        } else {
+            throw new java.lang.IllegalArgumentException("Expected Capture Session of type QTKitCaptureSession, but got " + session.getClass().getName());
+        }
     }
 
     public Component getComponent() {

@@ -25,6 +25,12 @@
     <condition property="dst" value="${env.BUILT_PRODUCTS_DIR}">
         <isset property="env.BUILT_PRODUCTS_DIR"/>
     </condition>
+	
+    <condition property="env.LARGE_MOVIE_PATH" value="/Users/shadow/Movies/ONIT G4-1.m4v">
+        <not>
+            <isset property="env.LARGE_MOVIE_PATH"/>
+        </not>
+    </condition>
 
 
     <!-- building from the command line -->
@@ -52,7 +58,6 @@
         </not>
     </condition>
 
-
     <!-- Targets -->
     <target name="init" description="Create build directories">
         <mkdir dir="${obj}/${product}"/>
@@ -62,6 +67,7 @@
     <target name="compile" depends="init" description="Compile">
         <javac destdir="${obj}/${product}" deprecation="on" source="1.5" target="1.5" fork="true" debug="true" debuglevel="lines,source">
             <src path="${src}/java"/>
+            <src path="${src}/test"/>
             <classpath>
                 <path refid="libs"/>
             </classpath>
@@ -92,4 +98,27 @@
         <!-- sent by Xcode -->
         <echo>"Nothing to do for install-headers phase"</echo>
     </target>
+	
+    <target name="run" depends="jar" description="Run the QTCubed UI">
+        <java jar="${dst}/${product}.jar"  fork='true'/>
+    </target>
+	
+    <target name="test" depends="jar" description="Run JUnit Tests">
+        <junit printsummary="yes" haltonfailure="yes">
+            <classpath>
+                <file file="${dst}/${product}.jar"/>
+                <path refid="libs"/>
+            </classpath>
+            <formatter type="plain" usefile="false" />
+            <batchtest fork="yes">
+                <fileset dir="${obj}/${product}">
+                    <include name="**/*Test.class" />
+                    <include name="**/Test*.class" />
+                </fileset>
+            </batchtest>
+        </junit>
+    </target>
+	
+    <target name="all" depends="test" description="By default, build and run junit tests"/>
+	
 </project>

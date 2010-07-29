@@ -1,8 +1,8 @@
 //
-//  QTKitCaptureInput.java
+//  QTCaptureDecompressedVideoOutput.java
 //  QTCubed
 //
-//  Created by Chappell Charles on 10/02/19.
+//  Created by Chappell Charles on 10/07/29.
 //  Copyright (c) 2010 MC Cubed, Inc. All rights reserved.
 //
 //  This program is free software; you can redistribute it and/or modify
@@ -32,19 +32,33 @@
 
 package net.mc_cubed.qtcubed;
 
+import java.awt.Dimension;
+import net.mc_cubed.qtcubed.media.protocol.quicktime.QTCubedDelegator;
+
 /**
  *
  * @author shadow
  */
-abstract class QTKitCaptureInput implements QTCaptureInput {
-    protected final long captureInputRef;
+public interface QTCaptureDecompressedVideoOutput extends QTCubedDelegator,QTCaptureOutput {
 
-    protected QTKitCaptureInput(long captureInputRef) {
-        this.captureInputRef = captureInputRef;
-    }
+    float getFrameRate();
 
-    long getCaptureInputRef() {
-        return this.captureInputRef;
-    }
+    int getHeight();
+
+    QTPixelFormat getPixelFormat();
+
+    Dimension getSize();
+
+    int getWidth();
+
+    void setDataDelegate(QTKitCaptureDataDelegate dataDelegate);
+
+    void setFrameRate(float newFrameRate);
+
+    void setPixelFormat(QTPixelFormat format);
+
+    void setSize(int width, int height);
+
+    void setSize(Dimension size);
 
 }

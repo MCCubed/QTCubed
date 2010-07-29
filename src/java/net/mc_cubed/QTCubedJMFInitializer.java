@@ -32,7 +32,6 @@
 
 package net.mc_cubed;
 
-import com.sun.media.renderer.video.AWTRenderer;
 import java.util.Vector;
 import java.util.logging.Logger;
 import java.util.Collection;
@@ -41,8 +40,9 @@ import javax.media.CaptureDeviceManager;
 import javax.media.Format;
 import javax.media.MediaLocator;
 import javax.media.PackageManager;
-import net.mc_cubed.qtcubed.QTKitCaptureDevice;
-import net.mc_cubed.qtcubed.QTKitFormatUtils;
+import net.mc_cubed.qtcubed.QTCaptureDevice;
+import net.mc_cubed.qtcubed.QTFormatUtils;
+import net.mc_cubed.qtcubed.QTCubedFactory;
 
 /**
  *
@@ -68,10 +68,10 @@ public class QTCubedJMFInitializer {
             // Save the changes to the package prefix list.
         }
 
-        for (QTKitCaptureDevice captureDevice : QTKitCaptureDevice.inputDevices()) {
+        for (QTCaptureDevice captureDevice : QTCubedFactory.captureDevices()) {
             String name = captureDevice.localizedDisplayName();
             MediaLocator ml = new MediaLocator("quicktime://" + captureDevice.uniqueId());
-            Collection<Format> formats = QTKitFormatUtils.QTKitToJMF(captureDevice.getFormatDescriptions());
+            Collection<Format> formats = QTFormatUtils.QTKitToJMF(captureDevice.getFormatDescriptions());
             Format[] formatsArray = formats.toArray(new Format[0]);
             CaptureDeviceInfo info = new CaptureDeviceInfo(name,ml,formatsArray);
             CaptureDeviceManager.addDevice(info);

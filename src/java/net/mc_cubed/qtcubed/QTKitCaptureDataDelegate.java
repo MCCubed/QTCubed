@@ -38,5 +38,5 @@ package net.mc_cubed.qtcubed;
  */
 public interface QTKitCaptureDataDelegate {
 
-    public void nextSample(QTKitSampleBuffer sample);
+    public void nextSample(QTSampleBuffer sample);
 }

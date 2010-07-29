@@ -38,7 +38,7 @@ import net.mc_cubed.qtcubed.media.protocol.quicktime.QTCubedDelegator;
  *
  * @author shadow
  */
-public class QTKitCaptureDecompressedAudioOutput extends QTKitCaptureOutput implements QTCubedDelegator {
+class QTKitCaptureDecompressedAudioOutput extends QTKitCaptureOutput implements QTCaptureDecompressedAudioOutput {
 
     protected QTKitCaptureDataDelegate dataDelegate;
 
@@ -53,22 +53,22 @@ public class QTKitCaptureDecompressedAudioOutput extends QTKitCaptureOutput impl
     }
 	
 	void pushBuffer(byte[] buffer, int formatNum, int sampleRate, int bitsPerSample, int channels, boolean isSigned) {	
-		QTKitSampleBuffer sample = new QTKitSampleBuffer(QTKitCompressionFormat.forNative(formatNum),sampleRate,bitsPerSample,channels,isSigned,buffer);
+		QTSampleBuffer sample = new QTSampleBuffer(QTCompressionFormat.forNative(formatNum),sampleRate,bitsPerSample,channels,isSigned,buffer);
 		dataDelegate.nextSample(sample);
 		
 	}
 	void pushBuffer(short[] buffer, int formatNum, int sampleRate, int bitsPerSample, int channels, boolean isSigned) {
-		QTKitSampleBuffer sample = new QTKitSampleBuffer(QTKitCompressionFormat.forNative(formatNum),sampleRate,bitsPerSample,channels,isSigned,buffer);
+		QTSampleBuffer sample = new QTSampleBuffer(QTCompressionFormat.forNative(formatNum),sampleRate,bitsPerSample,channels,isSigned,buffer);
 		dataDelegate.nextSample(sample);
 		
 	}
 	void pushBuffer(int[] buffer, int formatNum, int sampleRate, int bitsPerSample, int channels, boolean isSigned) {
-		QTKitSampleBuffer sample = new QTKitSampleBuffer(QTKitCompressionFormat.forNative(formatNum),sampleRate,bitsPerSample,channels,isSigned,buffer);
+		QTSampleBuffer sample = new QTSampleBuffer(QTCompressionFormat.forNative(formatNum),sampleRate,bitsPerSample,channels,isSigned,buffer);
 		dataDelegate.nextSample(sample);
 		
 	}
 	void pushBuffer(int formatNum, int sampleRate, int bitsPerSample, int channels,float[] buffer) {
-		QTKitSampleBuffer sample = new QTKitSampleBuffer(QTKitCompressionFormat.forNative(formatNum),sampleRate,bitsPerSample,channels,buffer);
+		QTSampleBuffer sample = new QTSampleBuffer(QTCompressionFormat.forNative(formatNum),sampleRate,bitsPerSample,channels,buffer);
 		dataDelegate.nextSample(sample);
 	}
 

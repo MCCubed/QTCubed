@@ -1,5 +1,5 @@
 //
-//  QTKitCompressionFormat.java
+//  QTCompressionFormat.java
 //  QTCubed
 //
 //  Created by Chappell Charles on 10/02/19.
@@ -38,7 +38,7 @@ import java.util.logging.Logger;
  *
  * @author shadow
  */
-public enum QTKitCompressionFormat {
+public enum QTCompressionFormat {
     Raw(0x72617720),
     Cinepak(0x63766964),
     Graphics(0x736d6320),
@@ -128,7 +128,7 @@ public enum QTKitCompressionFormat {
 
 	final int nativeValue;
 
-    QTKitCompressionFormat(int nativeValue) {
+    QTCompressionFormat(int nativeValue) {
         this.nativeValue = nativeValue;
     }
 
@@ -136,9 +136,9 @@ public enum QTKitCompressionFormat {
         return nativeValue;
     }
 
-    static public QTKitCompressionFormat forNative(int nativeValue) {
+    static public QTCompressionFormat forNative(int nativeValue) {
 //        Logger.getAnonymousLogger().info("Looking for: "+ Integer.toHexString(nativeValue));
-        for (QTKitCompressionFormat format : values()) {
+        for (QTCompressionFormat format : values()) {
             if (nativeValue == format.getNativeValue()) {
 //                Logger.getAnonymousLogger().info("Translated " + Integer.toHexString(nativeValue) + " to " + format);
                 return format;

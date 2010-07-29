@@ -32,8 +32,8 @@
 
 package net.mc_cubed.qtcubed.media.protocol.quicktime;
 
-import net.mc_cubed.qtcubed.QTKitCaptureDecompressedVideoOutput;
-import net.mc_cubed.qtcubed.QTKitPixelFormat;
+import net.mc_cubed.qtcubed.QTCaptureDecompressedVideoOutput;
+import net.mc_cubed.qtcubed.QTPixelFormat;
 import javax.media.protocol.ContentDescriptor;
 import javax.media.control.FormatControl;
 import javax.media.control.FrameRateControl;
@@ -50,8 +50,8 @@ import java.awt.Dimension;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeEvent;
 import java.util.logging.Logger;
-import net.mc_cubed.qtcubed.QTKitFormatDescription;
-import net.mc_cubed.qtcubed.QTKitFormatUtils;
+import net.mc_cubed.qtcubed.QTFormatDescription;
+import net.mc_cubed.qtcubed.QTFormatUtils;
 import java.util.List;
 import java.util.LinkedList;
 import java.awt.Dimension;
@@ -62,12 +62,12 @@ import java.awt.Dimension;
  */
 public class QTKitVideoCapture extends QTKitOutputBufferStream {
 
-    QTKitCaptureDecompressedVideoOutput delegator;
+    QTCaptureDecompressedVideoOutput delegator;
     final DataSource dataSource;
     ContentDescriptor myContentDescriptor = new ContentDescriptor(ContentDescriptor.RAW);
     final Control[] controls;
 
-    public QTKitVideoCapture(DataSource dataSource, QTKitCaptureDecompressedVideoOutput delegator) {
+    public QTKitVideoCapture(DataSource dataSource, QTCaptureDecompressedVideoOutput delegator) {
         super(delegator);
         this.delegator = delegator;
         this.dataSource = dataSource;
@@ -134,12 +134,12 @@ public class QTKitVideoCapture extends QTKitOutputBufferStream {
 			List<VideoFormat> formatList = new LinkedList<VideoFormat>();
 
 			// Get the dimension of the video from the capture device
-			QTKitFormatDescription desc = dataSource.selectedDevice.getFormatDescriptions().iterator().next();
+			QTFormatDescription desc = dataSource.selectedDevice.getFormatDescriptions().iterator().next();
 			Dimension size = new Dimension(desc.getWidth(),desc.getHeight());
 
 			// Loop through the formats we can assign and fill in the dimension and data size values
-			for (VideoFormat format : QTKitFormatUtils.pixelFormatMap.values().toArray(new VideoFormat[0])) {
-				formatList.add(QTKitFormatUtils.CompleteFormat(format,size,-1.0f));
+			for (VideoFormat format : QTFormatUtils.pixelFormatMap.values().toArray(new VideoFormat[0])) {
+				formatList.add(QTFormatUtils.CompleteFormat(format,size,-1.0f));
 			}
 
 			// This is our supported format list
@@ -148,7 +148,7 @@ public class QTKitVideoCapture extends QTKitOutputBufferStream {
 			try {
 				// If we don't have a format set yet, pick the simplest, most likely to succeed format
 				if (getFormat() == null) {
-					setFormat(QTKitFormatUtils.CompleteFormat(QTKitFormatUtils.rgb24,size,-1.0f));
+					setFormat(QTFormatUtils.CompleteFormat(QTFormatUtils.rgb24,size,-1.0f));
 				}
 				
 			} catch (Exception ex) {
@@ -174,7 +174,7 @@ public class QTKitVideoCapture extends QTKitOutputBufferStream {
         public Format getFormat() {
             Dimension size = delegator.getSize();
 			if (size == null) {
-				QTKitFormatDescription desc = dataSource.selectedDevice.getFormatDescriptions().iterator().next();
+				QTFormatDescription desc = dataSource.selectedDevice.getFormatDescriptions().iterator().next();
 				size = new Dimension(desc.getWidth(),desc.getHeight());
 			}
 /*            if (size.height == 0 || size.width == 0) {
@@ -183,12 +183,12 @@ public class QTKitVideoCapture extends QTKitOutputBufferStream {
 */
             float frameRate = delegator.getFrameRate();
 
-            QTKitPixelFormat pixelFormat = delegator.getPixelFormat();
+            QTPixelFormat pixelFormat = delegator.getPixelFormat();
 
             if (pixelFormat == null) {
 				return null;
             } else {
-				return QTKitFormatUtils.PixelFormatToJMF(pixelFormat, size, frameRate);
+				return QTFormatUtils.PixelFormatToJMF(pixelFormat, size, frameRate);
 			}
         }
 
@@ -220,7 +220,7 @@ public class QTKitVideoCapture extends QTKitOutputBufferStream {
 			Logger.getAnonymousLogger().info("Setting format: " + format);
 			
 			// Get the pixel format information
-			QTKitPixelFormat pixelFormat = QTKitFormatUtils.JMFToPixelFormat(format);
+			QTPixelFormat pixelFormat = QTFormatUtils.JMFToPixelFormat(format);
 			Dimension size = ((VideoFormat)format).getSize();
 			float frameRate = ((VideoFormat)format).getFrameRate();
 
@@ -236,7 +236,7 @@ public class QTKitVideoCapture extends QTKitOutputBufferStream {
 			}
 			
 			// Return a pixel format made up of the parameters we just used to set up the output
-			return QTKitFormatUtils.PixelFormatToJMF(pixelFormat, size, frameRate);
+			return QTFormatUtils.PixelFormatToJMF(pixelFormat, size, frameRate);
         }
     }
 

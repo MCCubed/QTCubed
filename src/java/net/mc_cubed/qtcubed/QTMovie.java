@@ -1,5 +1,5 @@
 //
-//  QTKitMovie.java
+//  QTMovie.java
 //  QTCubed
 //
 //  Created by Chappell Charles on 10/02/19.

@@ -39,7 +39,7 @@ import java.util.List;
  *
  * @author shadow
  */
-public class QTKitCaptureSession {
+class QTKitCaptureSession implements QTCaptureSession {
 
     protected final long captureSessionRef;
     protected List<QTKitCaptureInput> inputList = new LinkedList<QTKitCaptureInput>();
@@ -51,8 +51,8 @@ public class QTKitCaptureSession {
 
     native static protected long _allocInit();
 
-	public List<QTKitCaptureOutput> getOutputList() {
-		List<QTKitCaptureOutput> retval = new LinkedList<QTKitCaptureOutput>();
+	public List<QTCaptureOutput> getOutputList() {
+		List<QTCaptureOutput> retval = new LinkedList<QTCaptureOutput>();
 		retval.addAll(outputList);
 		return retval;
 	}
@@ -71,25 +71,25 @@ public class QTKitCaptureSession {
         _release(captureSessionRef);
     }
 
-    public boolean addInput(QTKitCaptureInput input) {
-        inputList.add(input);
-        return _addInput(captureSessionRef, input.getCaptureInputRef());
+    public boolean addInput(QTCaptureInput input) {
+        inputList.add((QTKitCaptureInput)input);
+        return _addInput(captureSessionRef, ((QTKitCaptureInput)input).getCaptureInputRef());
     }
 
-    public boolean addOutput(QTKitCaptureOutput output) {
-        outputList.add(output);
-        return _addOutput(captureSessionRef, output.getCaptureOutputRef());
+    public boolean addOutput(QTCaptureOutput output) {
+        outputList.add((QTKitCaptureOutput)output);
+        return _addOutput(captureSessionRef, ((QTKitCaptureOutput)output).getCaptureOutputRef());
 
     }
 
-    public void removeInput(QTKitCaptureInput input) {
-        inputList.remove(input);
-        _removeInput(captureSessionRef,input.getCaptureInputRef());
+    public void removeInput(QTCaptureInput input) {
+        inputList.remove((QTKitCaptureInput)input);
+        _removeInput(captureSessionRef,((QTKitCaptureInput)input).getCaptureInputRef());
     }
 
-    public void removeOutput(QTKitCaptureOutput output) {
-        outputList.remove(output);
-        _removeOutput(captureSessionRef,output.getCaptureOutputRef());
+    public void removeOutput(QTCaptureOutput output) {
+        outputList.remove((QTKitCaptureOutput)output);
+        _removeOutput(captureSessionRef,((QTKitCaptureOutput)output).getCaptureOutputRef());
     }
 
     native protected boolean _addInput(long captureSessionRef, long captureInputRef);

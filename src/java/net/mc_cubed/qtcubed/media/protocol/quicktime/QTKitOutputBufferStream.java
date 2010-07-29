@@ -39,8 +39,8 @@ import javax.media.Format;
 import javax.media.protocol.BufferTransferHandler;
 import javax.media.protocol.PushBufferStream;
 import net.mc_cubed.qtcubed.QTKitCaptureDataDelegate;
-import net.mc_cubed.qtcubed.QTKitFormatUtils;
-import net.mc_cubed.qtcubed.QTKitSampleBuffer;
+import net.mc_cubed.qtcubed.QTFormatUtils;
+import net.mc_cubed.qtcubed.QTSampleBuffer;
 
 /**
  *
@@ -48,37 +48,41 @@ import net.mc_cubed.qtcubed.QTKitSampleBuffer;
  */
 abstract public class QTKitOutputBufferStream implements PushBufferStream,QTKitCaptureDataDelegate {
 
-    QTKitSampleBuffer sampleData;
+    QTSampleBuffer sampleData;
 
     BufferTransferHandler bth;
     
     public void read(Buffer buffer) throws IOException {
         if (sampleData != null) {
+			int bps = 8;
             if (sampleData.getDataClass() == Format.byteArray) {
                 buffer.setLength(((byte[])sampleData.getRawData()).length);
 				buffer.setData(sampleData.getRawData());
             } else if (sampleData.getDataClass() == Format.shortArray) {
-                buffer.setLength(((short[])sampleData.getRawData()).length);
+                buffer.setLength(((short[])sampleData.getRawData()).length);				
 				buffer.setData(sampleData.getRawData());
+				bps = 16;
             } else if (sampleData.getDataClass() == Format.intArray) {
                 buffer.setLength(((int[])sampleData.getRawData()).length);
 				buffer.setData(sampleData.getRawData());
+				bps = 32;
             } else if (sampleData.getDataClass() == new float[0].getClass()) {
 				float[] data = (float[])sampleData.getRawData();
 				buffer.setLength(data.length);
-				// Do fast float to signed integer conversion with a -1 to 1 range
-				int[] newData = new int[data.length];
+				// Do fast float to signed short conversion with a -1 to 1 range
+				byte[] newData = new byte[data.length];
 				for (int pos = 0; pos < data.length; pos++) {
-					newData[pos] = (int)(data[pos] * Integer.MAX_VALUE);
+					newData[pos] = (byte)(data[pos] * Byte.MAX_VALUE);
 				}				
 				buffer.setData(newData);
+				bps = 8;
 			}
 
 			Format format;
 			if (sampleData.getPixelFormat() != null) {
-				format = QTKitFormatUtils.PixelFormatToJMF(sampleData.getPixelFormat(), new Dimension(sampleData.getWidth(),sampleData.getHeight()), sampleData.getFrameRate());
+				format = QTFormatUtils.PixelFormatToJMF(sampleData.getPixelFormat(), new Dimension(sampleData.getWidth(),sampleData.getHeight()), sampleData.getFrameRate());
 			} else {
-				format  = QTKitFormatUtils.AudioFormatToJMF(sampleData.getCompressionFormat(),sampleData.getSampleRate(),sampleData.getBitsPerSample(),sampleData.getChannels(),false,true);
+				format  = QTFormatUtils.AudioFormatToJMF(sampleData.getCompressionFormat(),sampleData.getSampleRate(),bps,sampleData.getChannels(),false,true);
 			}
             buffer.setFormat(format);
             sampleData = null;
@@ -103,7 +107,7 @@ abstract public class QTKitOutputBufferStream implements PushBufferStream,QTKitC
             }
     }
 
-    public void nextSample(QTKitSampleBuffer buffer) {
+    public void nextSample(QTSampleBuffer buffer) {
         this.sampleData = buffer;
 
         if (bth != null) {

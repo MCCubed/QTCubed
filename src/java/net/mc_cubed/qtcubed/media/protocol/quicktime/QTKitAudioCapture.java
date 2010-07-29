@@ -38,9 +38,9 @@ import javax.media.protocol.DataSource;
 import javax.media.Control;
 import javax.media.control.FormatControl;
 import javax.media.format.AudioFormat;
-import net.mc_cubed.qtcubed.QTKitCaptureDecompressedAudioOutput;
-import net.mc_cubed.qtcubed.QTKitSampleBuffer;
-import net.mc_cubed.qtcubed.QTKitFormatUtils;
+import net.mc_cubed.qtcubed.QTCaptureDecompressedAudioOutput;
+import net.mc_cubed.qtcubed.QTSampleBuffer;
+import net.mc_cubed.qtcubed.QTFormatUtils;
 
 /**
  *
@@ -49,9 +49,9 @@ import net.mc_cubed.qtcubed.QTKitFormatUtils;
 public class QTKitAudioCapture extends QTKitOutputBufferStream {
 	DataSource source;
 	final Control[] controls;
-	AudioFormat lastFormat = new AudioFormat(AudioFormat.LINEAR);
+	AudioFormat lastFormat = new AudioFormat(AudioFormat.LINEAR,44100.0d,8,2,AudioFormat.LITTLE_ENDIAN,AudioFormat.SIGNED);
 	
-    public QTKitAudioCapture(DataSource source,QTKitCaptureDecompressedAudioOutput output) {
+    public QTKitAudioCapture(DataSource source,QTCaptureDecompressedAudioOutput output) {
         super(output);
 		this.source = source;
 		controls = new Control[]{ new QTKitAudioFormatControl() };
@@ -121,9 +121,9 @@ public class QTKitAudioCapture extends QTKitOutputBufferStream {
 	}
 
 	@Override
-	public void nextSample(QTKitSampleBuffer sampleData) {
+	public void nextSample(QTSampleBuffer sampleData) {
 		super.nextSample(sampleData);
-		lastFormat = QTKitFormatUtils.AudioFormatToJMF(sampleData.getCompressionFormat(),sampleData.getSampleRate(),sampleData.getBitsPerSample(),sampleData.getChannels(),false,true);
+		lastFormat = QTFormatUtils.AudioFormatToJMF(sampleData.getCompressionFormat(),sampleData.getSampleRate(),sampleData.getBitsPerSample(),sampleData.getChannels(),false,true);
 	}
 
 

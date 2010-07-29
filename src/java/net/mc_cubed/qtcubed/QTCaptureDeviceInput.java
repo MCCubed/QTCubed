@@ -1,8 +1,8 @@
 //
-//  QTKitCaptureInput.java
+//  QTCaptureDeviceInput.java
 //  QTCubed
 //
-//  Created by Chappell Charles on 10/02/19.
+//  Created by Chappell Charles on 10/07/29.
 //  Copyright (c) 2010 MC Cubed, Inc. All rights reserved.
 //
 //  This program is free software; you can redistribute it and/or modify
@@ -32,19 +32,6 @@
 
 package net.mc_cubed.qtcubed;
 
-/**
- *
- * @author shadow
- */
-abstract class QTKitCaptureInput implements QTCaptureInput {
-    protected final long captureInputRef;
-
-    protected QTKitCaptureInput(long captureInputRef) {
-        this.captureInputRef = captureInputRef;
-    }
-
-    long getCaptureInputRef() {
-        return this.captureInputRef;
-    }
+public interface QTCaptureDeviceInput extends QTCaptureInput{
 
 }

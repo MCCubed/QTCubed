@@ -1,5 +1,5 @@
 //
-//  QTKitFormatDescription.java
+//  QTFormatDescription.java
 //  QTCubed
 //
 //  Created by Chappell Charles on 10/02/19.
@@ -38,7 +38,7 @@ import java.util.Properties;
  *
  * @author shadow
  */
-public class QTKitFormatDescription {
+public class QTFormatDescription {
 
     private Properties formatDescriptionAttributes = new Properties();
 
@@ -46,14 +46,14 @@ public class QTKitFormatDescription {
         return formatDescriptionAttributes;
     }
 
-    protected QTKitMediaType mediaType;
+    protected QTMediaType mediaType;
 
     /**
      * Get the value of mediaType
      *
      * @return the value of mediaType
      */
-    public QTKitMediaType getMediaType() {
+    public QTMediaType getMediaType() {
         return mediaType;
     }
 
@@ -62,18 +62,18 @@ public class QTKitFormatDescription {
      *
      * @param mediaType new value of mediaType
      */
-    public void setMediaType(QTKitMediaType mediaType) {
+    public void setMediaType(QTMediaType mediaType) {
         this.mediaType = mediaType;
     }
 
-    protected QTKitCompressionFormat formatType;
+    protected QTCompressionFormat formatType;
 
     /**
      * Get the value of formatType
      *
      * @return the value of formatType
      */
-    public QTKitCompressionFormat getFormatType() {
+    public QTCompressionFormat getFormatType() {
         return formatType;
     }
 
@@ -82,7 +82,7 @@ public class QTKitFormatDescription {
      *
      * @param formatType new value of formatType
      */
-    public void setFormatType(QTKitCompressionFormat formatType) {
+    public void setFormatType(QTCompressionFormat formatType) {
         this.formatType = formatType;
     }
 
@@ -141,7 +141,7 @@ public class QTKitFormatDescription {
         if (getClass() != obj.getClass()) {
             return false;
         }
-        final QTKitFormatDescription other = (QTKitFormatDescription) obj;
+        final QTFormatDescription other = (QTFormatDescription) obj;
         if (this.formatDescriptionAttributes != other.formatDescriptionAttributes && (this.formatDescriptionAttributes == null || !this.formatDescriptionAttributes.equals(other.formatDescriptionAttributes))) {
             return false;
         }

@@ -1,8 +1,8 @@
 //
-//  QTKitCaptureInput.java
+//  QTCaptureView.java
 //  QTCubed
 //
-//  Created by Chappell Charles on 10/02/19.
+//  Created by Chappell Charles on 10/07/29.
 //  Copyright (c) 2010 MC Cubed, Inc. All rights reserved.
 //
 //  This program is free software; you can redistribute it and/or modify
@@ -32,19 +32,23 @@
 
 package net.mc_cubed.qtcubed;
 
+import java.awt.Component;
+import java.awt.Dimension;
+
 /**
  *
  * @author shadow
  */
-abstract class QTKitCaptureInput implements QTCaptureInput {
-    protected final long captureInputRef;
+public interface QTCaptureView {
 
-    protected QTKitCaptureInput(long captureInputRef) {
-        this.captureInputRef = captureInputRef;
-    }
+    Component getComponent();
 
-    long getCaptureInputRef() {
-        return this.captureInputRef;
-    }
+    Dimension getMaximumSize();
+
+    Dimension getMinimumSize();
+
+    Dimension getPreferredSize();
+
+    void setCaptureSession(QTCaptureSession session);
 
 }

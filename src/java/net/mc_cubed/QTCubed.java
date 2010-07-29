@@ -52,14 +52,14 @@ import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JPanel;
-import net.mc_cubed.qtcubed.QTKitCaptureDecompressedVideoOutput;
-import net.mc_cubed.qtcubed.QTKitCaptureDevice;
-import net.mc_cubed.qtcubed.QTKitCaptureDeviceInput;
-import net.mc_cubed.qtcubed.QTKitCaptureSession;
-import net.mc_cubed.qtcubed.QTKitCaptureView;
-import net.mc_cubed.qtcubed.QTKitFormatDescription;
-import net.mc_cubed.qtcubed.QTKitMediaType;
-import net.mc_cubed.qtcubed.QTKitPixelFormat;
+import net.mc_cubed.qtcubed.QTCaptureDecompressedVideoOutput;
+import net.mc_cubed.qtcubed.QTCaptureDevice;
+import net.mc_cubed.qtcubed.QTCaptureDeviceInput;
+import net.mc_cubed.qtcubed.QTCaptureSession;
+import net.mc_cubed.qtcubed.QTCaptureView;
+import net.mc_cubed.qtcubed.QTFormatDescription;
+import net.mc_cubed.qtcubed.QTMediaType;
+import net.mc_cubed.qtcubed.QTPixelFormat;
 
 /**
  * Starting point for the application. General initialization should be done inside
@@ -72,7 +72,7 @@ public class QTCubed extends Frame implements ActionListener {
 
     static final boolean hasQTKit;
     static final long taskRef;
-    QTKitCaptureSession session;
+    QTCaptureSession session;
 
     static {
         boolean qtKitLoaded = false;
@@ -129,8 +129,8 @@ public class QTCubed extends Frame implements ActionListener {
         hasQTKit = qtKitLoaded;
         taskRef = localTaskRef;
 
-        QTKitPixelFormat pf;
-        QTKitPixelFormat.values();
+        QTPixelFormat pf;
+        QTPixelFormat.values();
 
         // Reflexively call QTCubedJMFInitializer.init() to avoid classpath deps in case JMF is not present
         try {
@@ -148,7 +148,7 @@ public class QTCubed extends Frame implements ActionListener {
         return hasQTKit;
     }
     QTMovieView qtmv;
-    QTKitCaptureView qtcv;
+    QTCaptureView qtcv;
 
     public static void main(final String[] args) {
         SwingUtilities.invokeLater(new Runnable() {
@@ -179,7 +179,7 @@ public class QTCubed extends Frame implements ActionListener {
             qtmv = QTCubedFactory.initQTMovieView();
             add(buttonPanel, BorderLayout.SOUTH);
             add(qtmv.getComponent(), BorderLayout.CENTER);
-            qtcv = new QTKitCaptureView();
+            qtcv = QTCubedFactory.initQTCaptureView();
 //            add(qtcv.getComponent(), BorderLayout.WEST);
             pack();
         } catch (InstantiationException ex) {
@@ -187,9 +187,9 @@ public class QTCubed extends Frame implements ActionListener {
         }
 
         Logger.getAnonymousLogger().info("************** Attached capture device info follows **************");
-        for (QTKitCaptureDevice device : QTKitCaptureDevice.inputDevices()) {
+        for (QTCaptureDevice device : QTCubedFactory.captureDevices()) {
             Logger.getAnonymousLogger().info(" ----- " + device.uniqueId() + " (" + device.localizedDisplayName() + ") ----- ");
-            for (QTKitFormatDescription format : device.getFormatDescriptions()) {
+            for (QTFormatDescription format : device.getFormatDescriptions()) {
                 Logger.getAnonymousLogger().info("Format Type: " + format.getMediaType() + ": " + format.getFormatType());
                 Set<Entry<Object, Object>> props = format.getFormatDescriptionAttributes().entrySet();
                 for (Entry<Object, Object> prop : props) {
@@ -243,14 +243,14 @@ public class QTCubed extends Frame implements ActionListener {
                         session.stopRunning();
                     }
                 }
-                session = new QTKitCaptureSession();
+                session = QTCubedFactory.initQTCaptureSession();
 
-                QTKitCaptureDevice videoDevice = QTKitCaptureDevice.defaultInputDevice(QTKitMediaType.VIDEO);
+                QTCaptureDevice videoDevice = QTCubedFactory.defaultCaptureDevice(QTMediaType.VIDEO);
                 try {
                     videoDevice.open();
-                    QTKitCaptureDeviceInput videoDeviceInput = new QTKitCaptureDeviceInput(videoDevice);
+                    QTCaptureDeviceInput videoDeviceInput = QTCubedFactory.initQTCaptureDeviceInput(videoDevice);
                     session.addInput(videoDeviceInput);
-                    QTKitCaptureDecompressedVideoOutput videoOutput = new QTKitCaptureDecompressedVideoOutput();
+                    QTCaptureDecompressedVideoOutput videoOutput = QTCubedFactory.initQTCaptureDecompressedVideoOutput();
                     videoOutput.setFrameRate(30.0f);
                     videoOutput.setSize(new Dimension(320, 240));
                     session.addOutput(videoOutput);

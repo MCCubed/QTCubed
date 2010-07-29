@@ -39,7 +39,7 @@ import net.mc_cubed.qtcubed.media.protocol.quicktime.QTCubedDelegator;
  *
  * @author shadow
  */
-public class QTKitCaptureDecompressedVideoOutput extends QTKitCaptureOutput implements QTCubedDelegator {
+class QTKitCaptureDecompressedVideoOutput extends QTKitCaptureOutput implements QTCaptureDecompressedVideoOutput {
 
     QTKitCaptureDataDelegate dataDelegate;
 
@@ -51,7 +51,7 @@ public class QTKitCaptureDecompressedVideoOutput extends QTKitCaptureOutput impl
 
     protected void pushFrame(byte[] frameData, int formatInt, int width, int height, float frameRate) {
         if (dataDelegate != null) {
-            QTKitSampleBuffer buffer = new QTKitSampleBuffer(QTKitPixelFormat.forNative(formatInt), width, height, frameRate, frameData);
+            QTSampleBuffer buffer = new QTSampleBuffer(QTPixelFormat.forNative(formatInt), width, height, frameRate, frameData);
             dataDelegate.nextSample(buffer);
         } else {
             Logger.getAnonymousLogger().info("Got " + frameData.length + " bytes of data");
@@ -61,7 +61,7 @@ public class QTKitCaptureDecompressedVideoOutput extends QTKitCaptureOutput impl
 
     protected void pushFrame(short[] frameData, int formatInt, int width, int height, float frameRate) {
         if (dataDelegate != null) {
-            QTKitSampleBuffer buffer = new QTKitSampleBuffer(QTKitPixelFormat.forNative(formatInt), width, height, frameRate, frameData);
+            QTSampleBuffer buffer = new QTSampleBuffer(QTPixelFormat.forNative(formatInt), width, height, frameRate, frameData);
             dataDelegate.nextSample(buffer);
         } else {
             Logger.getAnonymousLogger().info("Got " + frameData.length + " bytes of data");
@@ -71,7 +71,7 @@ public class QTKitCaptureDecompressedVideoOutput extends QTKitCaptureOutput impl
 
     protected void pushFrame(int[] frameData, int formatInt, int width, int height, float frameRate) {
         if (dataDelegate != null) {
-            QTKitSampleBuffer buffer = new QTKitSampleBuffer(QTKitPixelFormat.forNative(formatInt), width, height, frameRate, frameData);
+            QTSampleBuffer buffer = new QTSampleBuffer(QTPixelFormat.forNative(formatInt), width, height, frameRate, frameData);
             dataDelegate.nextSample(buffer);
         } else {
             Logger.getAnonymousLogger().info("Got " + frameData.length + " bytes of data");
@@ -121,13 +121,13 @@ public class QTKitCaptureDecompressedVideoOutput extends QTKitCaptureOutput impl
 
     protected native int _getHeight(long captureOutputRef);
 
-    public QTKitPixelFormat getPixelFormat() {
+    public QTPixelFormat getPixelFormat() {
         return _getPixelFormat(captureOutputRef);
     }
 
-    protected native QTKitPixelFormat _getPixelFormat(long captureOutputRef);
+    protected native QTPixelFormat _getPixelFormat(long captureOutputRef);
 
-    public void setPixelFormat(QTKitPixelFormat format) {
+    public void setPixelFormat(QTPixelFormat format) {
         if (format != null) {
             _setPixelFormat(captureOutputRef, format.getNativeValue());
         } else {
@@ -135,7 +135,7 @@ public class QTKitCaptureDecompressedVideoOutput extends QTKitCaptureOutput impl
         }
     }
 
-    protected native QTKitPixelFormat _setPixelFormat(long captureOutputRef, long nativePixelFormat);
+    protected native QTPixelFormat _setPixelFormat(long captureOutputRef, long nativePixelFormat);
 
     @Override
     protected void finalize() {

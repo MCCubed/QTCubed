@@ -36,7 +36,7 @@ package net.mc_cubed.qtcubed;
  *
  * @author shadow
  */
-abstract public class QTKitCaptureOutput {
+abstract class QTKitCaptureOutput implements QTCaptureOutput{
 
     protected long captureOutputRef;
 

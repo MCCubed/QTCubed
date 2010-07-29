@@ -38,9 +38,9 @@ import java.util.List;
 import java.util.Properties;
 import java.security.AllPermission;
 
-public class QTKitCaptureDevice {
+class QTKitCaptureDevice implements QTCaptureDevice {
 
-    public static QTKitCaptureDevice defaultInputDevice(QTKitMediaType qtKitMediaType) {
+	static QTKitCaptureDevice defaultInputDevice(QTMediaType qtKitMediaType) {
         long deviceRef = _defaultInputDevice(qtKitMediaType.ordinal());
         return new QTKitCaptureDevice(deviceRef);
     }
@@ -63,7 +63,7 @@ public class QTKitCaptureDevice {
 
     protected native void _release(long deviceRef);
 
-    static public Collection<QTKitCaptureDevice> inputDevices() {
+    static Collection<QTKitCaptureDevice> inputDevices() {
         Collection<QTKitCaptureDevice> retval = new LinkedList<QTKitCaptureDevice>();
 
         for (long captureDeviceRef : _inputDevices()) {
@@ -104,16 +104,16 @@ public class QTKitCaptureDevice {
         return localizedDisplayName();
     }
 
-    public Collection<QTKitFormatDescription> getFormatDescriptions() {
-        List<QTKitFormatDescription> retval = new LinkedList<QTKitFormatDescription>();
-        for (QTKitFormatDescription description : _getFormatDescriptions(deviceRef)) {
+    public Collection<QTFormatDescription> getFormatDescriptions() {
+        List<QTFormatDescription> retval = new LinkedList<QTFormatDescription>();
+        for (QTFormatDescription description : _getFormatDescriptions(deviceRef)) {
             retval.add(description);
         }
 
         return retval;
     }
 
-    private native QTKitFormatDescription[] _getFormatDescriptions(long captureDeviceRef);
+    private native QTFormatDescription[] _getFormatDescriptions(long captureDeviceRef);
 
     public String uniqueId() {
         return _uniqueId(deviceRef);
@@ -127,7 +127,7 @@ public class QTKitCaptureDevice {
 
     private native String _modelUniqueId(long captureDeviceRef);
 
-    public boolean hasMediaType(QTKitMediaType type) {
+    public boolean hasMediaType(QTMediaType type) {
         return _hasMediaType(deviceRef,type.ordinal());
     }
 
@@ -139,11 +139,11 @@ public class QTKitCaptureDevice {
 
     private native Properties _deviceAttributes(long captureDeviceRef);
 
-    public static Collection<QTKitCaptureDevice> inputDevicesWithMediaType(QTKitMediaType type) {
+    static Collection<QTKitCaptureDevice> inputDevicesWithMediaType(QTMediaType type) {
         throw new java.lang.UnsupportedOperationException("Not implemented yet");
     }
 
-    public static QTKitCaptureDevice deviceWithUniqueId(String id) {
+    static QTKitCaptureDevice deviceWithUniqueId(String id) {
         long deviceId = _deviceWithUniqueId(id);
         if (deviceId == 0) {
             return null;

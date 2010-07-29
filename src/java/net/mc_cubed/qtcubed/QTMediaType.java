@@ -1,5 +1,5 @@
 //
-//  QTKitCaptureInput.java
+//  QTMediaType.java
 //  QTCubed
 //
 //  Created by Chappell Charles on 10/02/19.
@@ -36,15 +36,25 @@ package net.mc_cubed.qtcubed;
  *
  * @author shadow
  */
-abstract class QTKitCaptureInput implements QTCaptureInput {
-    protected final long captureInputRef;
-
-    protected QTKitCaptureInput(long captureInputRef) {
-        this.captureInputRef = captureInputRef;
-    }
-
-    long getCaptureInputRef() {
-        return this.captureInputRef;
-    }
-
+public enum QTMediaType {
+    VIDEO,
+    SOUND,
+    TEXT,
+    BASE,
+    MPEG,
+    MUSIC,
+    TIME_CODE,
+    SPRITE,
+    FLASH,
+    MOVIE,
+    TWEEN,
+    TYPE_3D,
+    SKIN,
+    QTVR,
+    HINT,
+    STREAM,
+    MUXED,
+    QUARTZ_COMPOSER,
+    SUBTITLE,
+    CLOSED_CAPTION;
 }

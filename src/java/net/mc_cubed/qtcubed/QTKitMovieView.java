@@ -39,7 +39,7 @@ import com.apple.eawt.CocoaComponent;
 import java.awt.Component;
 import javax.swing.SwingUtilities;
 
-public class QTKitMovieView extends CocoaComponent implements QTMovieView {
+class QTKitMovieView extends CocoaComponent implements QTMovieView {
 		
 	// Initialize the QTCubed Library
 	static boolean usingQTKit = QTCubed.usesQTKit();

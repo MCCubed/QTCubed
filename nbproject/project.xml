@@ -3,6 +3,9 @@
     <type>org.netbeans.modules.ant.freeform</type>
     <configuration>
         <general-data xmlns="http://www.netbeans.org/ns/freeform-project/1">
+            <name>QTCubed</name>
+        </general-data>
+        <general-data xmlns="http://www.netbeans.org/ns/freeform-project/2">
             <!-- Do not use Project Properties customizer when editing this file manually. -->
             <name>QTCubed</name>
             <properties>
@@ -13,6 +16,24 @@
                     <label>src\java</label>
                     <type>java</type>
                     <location>src/java</location>
+                    <encoding>MacRoman</encoding>
+                </source-folder>
+                <source-folder>
+                    <label>src/test</label>
+                    <type>java</type>
+                    <location>src/test</location>
+                    <encoding>MacRoman</encoding>
+                </source-folder>
+                <source-folder>
+                    <label>src/native</label>
+                    <type>java</type>
+                    <location>src/native</location>
+                    <encoding>MacRoman</encoding>
+                </source-folder>
+                <source-folder>
+                    <label>QTCubed</label>
+                    <location>.</location>
+                    <encoding>MacRoman</encoding>
                 </source-folder>
             </folders>
             <ide-actions>
@@ -42,6 +63,27 @@
                         </arity>
                     </context>
                 </action>
+                <action name="run">
+                    <script>${ant.script}</script>
+                    <target>run</target>
+                </action>
+                <action name="test">
+                    <script>${ant.script}</script>
+                    <target>test</target>
+                </action>
+                <action name="run.single">
+                    <script>nbproject/ide-file-targets.xml</script>
+                    <target>run-selected-file-in-test</target>
+                    <context>
+                        <property>run.class</property>
+                        <folder>src/test</folder>
+                        <pattern>\.java$</pattern>
+                        <format>java-name</format>
+                        <arity>
+                            <one-file-only/>
+                        </arity>
+                    </context>
+                </action>
             </ide-actions>
             <export>
                 <type>jar</type>
@@ -55,6 +97,14 @@
                         <label>src\java</label>
                         <location>src/java</location>
                     </source-folder>
+                    <source-folder style="packages">
+                        <label>src/test</label>
+                        <location>src/test</location>
+                    </source-folder>
+                    <source-folder style="packages">
+                        <label>src/native</label>
+                        <location>src/native</location>
+                    </source-folder>
                     <source-file>
                         <location>${ant.script}</location>
                     </source-file>
@@ -63,15 +113,27 @@
                     <ide-action name="build"/>
                     <ide-action name="rebuild"/>
                     <ide-action name="clean"/>
+                    <ide-action name="run"/>
+                    <ide-action name="test"/>
                 </context-menu>
             </view>
             <subprojects/>
         </general-data>
-        <java-data xmlns="http://www.netbeans.org/ns/freeform-project-java/1">
+        <java-data xmlns="http://www.netbeans.org/ns/freeform-project-java/2">
             <compilation-unit>
                 <package-root>src/java</package-root>
-                <classpath mode="compile">C:\Program Files (x86)\QuickTime\QTSystem\QTJava.zip;C:\Program Files (x86)\JMF2.1.1e\lib\jmf.jar;C:\Program Files (x86)\JMF2.1.1e\lib\multiplayer.jar;E:\System\Library\Frameworks\JavaVM.framework\Versions\1.6.0\Classes\ui.jar</classpath>
+                <classpath mode="compile">C:/Program Files (x86)/QuickTime/QTSystem/QTJava.zip:C:/Program Files (x86)/JMF2.1.1e/lib/jmf.jar:C:/Program Files (x86)/JMF2.1.1e/lib/multiplayer.jar:E:/System/Library/Frameworks/JavaVM.framework/Versions/1.6.0/Classes/ui.jar</classpath>
                 <built-to>build/QTCubed.jar</built-to>
+                <source-level>1.5</source-level>
+            </compilation-unit>
+            <compilation-unit>
+                <package-root>src/test</package-root>
+                <unit-tests/>
+                <classpath mode="compile">lib/jmf.jar:lib/junit.jar:lib/mediaplayer.jar</classpath>
+                <source-level>1.5</source-level>
+            </compilation-unit>
+            <compilation-unit>
+                <package-root>src/native</package-root>
                 <source-level>1.5</source-level>
             </compilation-unit>
         </java-data>

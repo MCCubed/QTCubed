@@ -32,7 +32,7 @@
 
 package net.mc_cubed;
 
-import net.mc_cubed.qtcubed.QTKitFormatUtils;
+import net.mc_cubed.qtcubed.QTFormatUtils;
 import javax.swing.SwingUtilities;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -165,7 +165,7 @@ public class QTCubedJMF extends Frame implements ActionListener {
 					if (formatControl != null) {
 						System.out.println("Video Format: " + formatControl.getFormat());
 						System.out.println("Video Size: " + ((VideoFormat) formatControl.getFormat()).getSize());
-//						formatControl.setFormat(QTKitFormatUtils.CompleteFormat(QTKitFormatUtils.rgb24,((VideoFormat) formatControl.getFormat()).getSize(),30.0f));
+//						formatControl.setFormat(QTFormatUtils.CompleteFormat(QTFormatUtils.rgb24,((VideoFormat) formatControl.getFormat()).getSize(),30.0f));
 					}
 
 //					mp.setDataSource(videoSource);

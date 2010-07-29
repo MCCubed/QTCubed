@@ -58,8 +58,8 @@ NSString * deviceTypeToMediaType(jint deviceType) {
 }
 
 jobject compressionFormatToJava(JNIEnv * env, int format) {
-	jclass pixelFormatEnumClass  = (*env)->FindClass(env,"net/mc_cubed/qtcubed/QTKitCompressionFormat");
-	jmethodID nativeValueMethod  = (*env)->GetStaticMethodID(env,pixelFormatEnumClass,"forNative","(I)Lnet/mc_cubed/qtcubed/QTKitCompressionFormat;");
+	jclass pixelFormatEnumClass  = (*env)->FindClass(env,"net/mc_cubed/qtcubed/QTCompressionFormat");
+	jmethodID nativeValueMethod  = (*env)->GetStaticMethodID(env,pixelFormatEnumClass,"forNative","(I)Lnet/mc_cubed/qtcubed/QTCompressionFormat;");
 	
 	return (*env)->CallObjectMethod(env,pixelFormatEnumClass,nativeValueMethod,format);
 	
@@ -67,7 +67,7 @@ jobject compressionFormatToJava(JNIEnv * env, int format) {
 }
 
 int javaToCompressionFormat(JNIEnv * env, jobject pixelFormat) {
-	jclass pixelFormatEnumClass  = (*env)->FindClass(env,"net/mc_cubed/qtcubed/QTKitCompressionFormat");
+	jclass pixelFormatEnumClass  = (*env)->FindClass(env,"net/mc_cubed/qtcubed/QTCompressionFormat");
 	jmethodID nativeValueMethod  = (*env)->GetMethodID(env,pixelFormatEnumClass,"getNativeValue","()I");
 	jint nativeValue = (*env)->CallIntMethod(env,pixelFormat,nativeValueMethod);
 	return nativeValue;
@@ -261,7 +261,7 @@ JNIEXPORT jstring JNICALL Java_net_mc_1cubed_qtcubed_QTKitCaptureDevice__1locali
 /*
  * Class:     net_mc_cubed_qtcubed_QTKitCaptureDevice
  * Method:    _getFormatDescriptions
- * Signature: (J)[Lnet/mc_cubed/qtcubed/QTKitFormatDescription;
+ * Signature: (J)[Lnet/mc_cubed/qtcubed/QTFormatDescription;
  */
 JNIEXPORT jobjectArray JNICALL Java_net_mc_1cubed_qtcubed_QTKitCaptureDevice__1getFormatDescriptions
 (JNIEnv *env, jobject objectRef, jlong captureDeviceRef) {
@@ -276,7 +276,7 @@ JNIEXPORT jobjectArray JNICALL Java_net_mc_1cubed_qtcubed_QTKitCaptureDevice__1g
 	NSUInteger objCount = [formatDescriptions count];
 
 	// Get the format description class
-	jclass qtKitfdclass = (*env)->FindClass(env,"net/mc_cubed/qtcubed/QTKitFormatDescription");
+	jclass qtKitfdclass = (*env)->FindClass(env,"net/mc_cubed/qtcubed/QTFormatDescription");
 
 	// Find the default constructor
 	jmethodID fdConstructor = (*env)->GetMethodID(env,qtKitfdclass,"<init>","()V");
@@ -288,17 +288,17 @@ JNIEXPORT jobjectArray JNICALL Java_net_mc_1cubed_qtcubed_QTKitCaptureDevice__1g
 	retval = (*env)->NewObjectArray(env,objCount,qtKitfdclass,blankfdobject);
 	
 	// Get the enum objects we need
-	jclass mediaTypeEnumClass = (*env)->FindClass(env,"net/mc_cubed/qtcubed/QTKitMediaType");
-	jfieldID videoFieldId = (*env)->GetStaticFieldID(env,mediaTypeEnumClass,"VIDEO","Lnet/mc_cubed/qtcubed/QTKitMediaType;");
-	jfieldID soundFieldId = (*env)->GetStaticFieldID(env,mediaTypeEnumClass,"SOUND","Lnet/mc_cubed/qtcubed/QTKitMediaType;");
-	jfieldID muxedFieldId = (*env)->GetStaticFieldID(env,mediaTypeEnumClass,"MUXED","Lnet/mc_cubed/qtcubed/QTKitMediaType;");
+	jclass mediaTypeEnumClass = (*env)->FindClass(env,"net/mc_cubed/qtcubed/QTMediaType");
+	jfieldID videoFieldId = (*env)->GetStaticFieldID(env,mediaTypeEnumClass,"VIDEO","Lnet/mc_cubed/qtcubed/QTMediaType;");
+	jfieldID soundFieldId = (*env)->GetStaticFieldID(env,mediaTypeEnumClass,"SOUND","Lnet/mc_cubed/qtcubed/QTMediaType;");
+	jfieldID muxedFieldId = (*env)->GetStaticFieldID(env,mediaTypeEnumClass,"MUXED","Lnet/mc_cubed/qtcubed/QTMediaType;");
 	jobject videoMediaType = (*env)->GetStaticObjectField(env,mediaTypeEnumClass,videoFieldId);
 	jobject soundMediaType = (*env)->GetStaticObjectField(env,mediaTypeEnumClass,soundFieldId);
 	jobject muxedMediaType = (*env)->GetStaticObjectField(env,mediaTypeEnumClass,muxedFieldId);		
 	
 	// Get the method signatures for setters we will use
-	jmethodID setMediaTypeMethodId = (*env)->GetMethodID(env,qtKitfdclass,"setMediaType","(Lnet/mc_cubed/qtcubed/QTKitMediaType;)V");
-	jmethodID setFormatTypeMethodId = (*env)->GetMethodID(env,qtKitfdclass,"setFormatType","(Lnet/mc_cubed/qtcubed/QTKitCompressionFormat;)V");
+	jmethodID setMediaTypeMethodId = (*env)->GetMethodID(env,qtKitfdclass,"setMediaType","(Lnet/mc_cubed/qtcubed/QTMediaType;)V");
+	jmethodID setFormatTypeMethodId = (*env)->GetMethodID(env,qtKitfdclass,"setFormatType","(Lnet/mc_cubed/qtcubed/QTCompressionFormat;)V");
 	jmethodID setWidthMethodId = (*env)->GetMethodID(env,qtKitfdclass,"setWidth","(I)V");
 	jmethodID setHeightMethodId = (*env)->GetMethodID(env,qtKitfdclass,"setHeight","(I)V");
 														  

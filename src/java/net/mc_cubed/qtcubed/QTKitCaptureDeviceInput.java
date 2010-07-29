@@ -36,7 +36,7 @@ package net.mc_cubed.qtcubed;
  *
  * @author shadow
  */
-public class QTKitCaptureDeviceInput extends QTKitCaptureInput {
+class QTKitCaptureDeviceInput extends QTKitCaptureInput implements QTCaptureDeviceInput {
     long captureDeviceInputRef;
 
     public QTKitCaptureDeviceInput(QTKitCaptureDevice videoDevice) {

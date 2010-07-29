@@ -36,6 +36,8 @@ import net.mc_cubed.QTCubed;
 import java.net.URL;
 import java.io.File;
 import java.util.Properties;
+import java.util.Collection;
+import java.util.LinkedList;
 import java.io.IOException;
 
 public class QTCubedFactory {
@@ -95,10 +97,74 @@ public class QTCubedFactory {
 			return new QTJavaMovie(name);
 		}
 	}
+
+    public static QTCaptureView initQTCaptureView() {
+        if (QTCubed.usesQTKit()) {
+            return new QTKitCaptureView();
+        } else {
+            // TODO: return new QTJavaCaptureView();
+            return null;
+        }
+    }
+
+    public static QTCaptureSession initQTCaptureSession() {
+        if (QTCubed.usesQTKit()) {
+            return new QTKitCaptureSession();
+        } else {
+            // TODO: return new QTJavaCaptureSession();
+            return null;
+        }
+    }
 	
 	
 	public QTCubedFactory() {
 		super();
 	}
+	
+	public static Collection<QTCaptureDevice> captureDevices() {
+		if (QTCubed.usesQTKit()) {
+			Collection<QTCaptureDevice> retval = new LinkedList<QTCaptureDevice>();
+			retval.addAll(QTKitCaptureDevice.inputDevices());
+			return retval;
+		} else {
+//			return QTJavaCaptureDevice.inputDevices();
+			return null;
+		}
+	}
+	
+	public static QTCaptureDevice defaultCaptureDevice(QTMediaType mediaType) {
+		if (QTCubed.usesQTKit()) {
+			return QTKitCaptureDevice.defaultInputDevice(mediaType);
+		} else {
+			// return QTJavaCaptureDevice.defaultInputDevice(mediaType);
+			return null;
+		}
+	}
+	
+	public static QTCaptureDeviceInput initQTCaptureDeviceInput(QTCaptureDevice captureDevice) {
+		if (captureDevice instanceof QTKitCaptureDevice) {
+			return new QTKitCaptureDeviceInput((QTKitCaptureDevice)captureDevice);
+		} else {
+			// TODO: return new QTJavaCaptureDeviceInput((QTJavaCaptureDevice)captureDevice));
+			return null;
+		}
+	}
 
+        public static QTCaptureDecompressedAudioOutput initQTCaptureDecompressedAudioOutput() {
+            if (QTCubed.usesQTKit()) {
+                return new QTKitCaptureDecompressedAudioOutput();
+            } else {
+                // TODO: return new QTJavaCaptureDecompressedAudioOutput();
+                return null;
+            }
+        }
+
+        public static QTCaptureDecompressedVideoOutput initQTCaptureDecompressedVideoOutput() {
+            if (QTCubed.usesQTKit()) {
+                return new QTKitCaptureDecompressedVideoOutput();
+            } else {
+                // TODO: return new QTJavaCaptureDecompressedVideoOutput();
+                return null;
+            }
+        }
 }

@@ -45,13 +45,7 @@ import javax.media.Time;
 import javax.media.protocol.ContentDescriptor;
 import javax.media.protocol.PushBufferStream;
 import javax.swing.JLabel;
-import net.mc_cubed.qtcubed.QTKitCaptureDecompressedAudioOutput;
-import net.mc_cubed.qtcubed.QTKitCaptureDecompressedVideoOutput;
-import net.mc_cubed.qtcubed.QTKitCaptureDevice;
-import net.mc_cubed.qtcubed.QTKitCaptureDeviceInput;
-import net.mc_cubed.qtcubed.QTKitCaptureSession;
-import net.mc_cubed.qtcubed.QTKitFormatDescription;
-import net.mc_cubed.qtcubed.QTKitCaptureOutput;
+import net.mc_cubed.qtcubed.*;
 
 /**
  *
@@ -59,8 +53,8 @@ import net.mc_cubed.qtcubed.QTKitCaptureOutput;
  */
 public class DataSource extends BasicPushBufferDataSource {
 
-    QTKitCaptureDevice selectedDevice;
-    QTKitCaptureSession session;
+    QTCaptureDevice selectedDevice;
+    QTCaptureSession session;
     QTKitOutputBufferStream[] streams;
     private String captureDeviceName;
     private String captureParameters;
@@ -112,8 +106,8 @@ public class DataSource extends BasicPushBufferDataSource {
         parseLocator();
 
         selectedDevice = null;
-        Collection<QTKitCaptureDevice> cds = QTKitCaptureDevice.inputDevices();
-        for (QTKitCaptureDevice device : cds) {
+        Collection<QTCaptureDevice> cds = QTCubedFactory.captureDevices();
+        for (QTCaptureDevice device : cds) {
             if (device.localizedDisplayName().equalsIgnoreCase(captureDeviceName) || device.uniqueId().equalsIgnoreCase(captureDeviceName)) {
                 selectedDevice = device;
                 break;
@@ -126,7 +120,7 @@ public class DataSource extends BasicPushBufferDataSource {
 
         // Determine roughly the capabilities of the input source
         boolean hasAudio = false, hasVideo = false;
-        for (QTKitFormatDescription desc : selectedDevice.getFormatDescriptions()) {
+        for (QTFormatDescription desc : selectedDevice.getFormatDescriptions()) {
             switch (desc.getMediaType()) {
                 case SOUND:
                     hasAudio = true;
@@ -151,22 +145,23 @@ public class DataSource extends BasicPushBufferDataSource {
         // Open the device
         selectedDevice.open();
         // Get the input
-        QTKitCaptureDeviceInput devInput = new QTKitCaptureDeviceInput(selectedDevice);
+        QTCaptureDeviceInput devInput = QTCubedFactory.initQTCaptureDeviceInput(selectedDevice);
+        //QTKitCaptureDeviceInput devInput = new QTKitCaptureDeviceInput(selectedDevice);
 
         // Connect the input to a session
-        session = new QTKitCaptureSession();
+        session = QTCubedFactory.initQTCaptureSession();
         session.addInput(devInput);
 
         // Start creating output streams
         List<QTKitOutputBufferStream> outStreams = new ArrayList<QTKitOutputBufferStream>();
         if (hasAudio) {
-            QTKitCaptureDecompressedAudioOutput audioOut = new QTKitCaptureDecompressedAudioOutput();
+            QTCaptureDecompressedAudioOutput audioOut = QTCubedFactory.initQTCaptureDecompressedAudioOutput();
             session.addOutput(audioOut);
             QTKitAudioCapture audioCaptureStream = new QTKitAudioCapture(this, audioOut);
             outStreams.add(audioCaptureStream);
         }
         if (hasVideo) {
-            QTKitCaptureDecompressedVideoOutput videoOut = new QTKitCaptureDecompressedVideoOutput();
+            QTCaptureDecompressedVideoOutput videoOut = QTCubedFactory.initQTCaptureDecompressedVideoOutput();
             session.addOutput(videoOut);
             QTKitVideoCapture videoCaptureStream = new QTKitVideoCapture(this, videoOut);
             outStreams.add(videoCaptureStream);
@@ -189,7 +184,7 @@ public class DataSource extends BasicPushBufferDataSource {
         }
 		
 		// Remove all the outputs from the stream
-		for (QTKitCaptureOutput output : session.getOutputList()) {
+		for (QTCaptureOutput output : session.getOutputList()) {
 			session.removeOutput(output);
 		}
 		
