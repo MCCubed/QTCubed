@@ -127,8 +127,9 @@ public class QTCubedFactory {
 			retval.addAll(QTKitCaptureDevice.inputDevices());
 			return retval;
 		} else {
-//			return QTJavaCaptureDevice.inputDevices();
-			return null;
+			Collection<QTCaptureDevice> retval = new LinkedList<QTCaptureDevice>();
+		//	retval.addAll(QTJavaCaptureDevice.inputDevices());
+			return retval;
 		}
 	}
 	

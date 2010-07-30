@@ -39,7 +39,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.Dimension;
 import java.awt.FileDialog;
-import java.awt.Frame;
+import javax.swing.JFrame;
 import java.awt.BorderLayout;
 import java.awt.Button;
 import java.awt.GridLayout;
@@ -68,7 +68,7 @@ import net.mc_cubed.qtcubed.QTPixelFormat;
  * 
  * @author shadow
  */
-public class QTCubed extends Frame implements ActionListener {
+public class QTCubed extends JFrame implements ActionListener {
 
     static final boolean hasQTKit;
     static final long taskRef;
@@ -175,6 +175,8 @@ public class QTCubed extends Frame implements ActionListener {
         b.setActionCommand("CAPTURE");
         b.addActionListener(this);
         buttonPanel.add(b);
+        setDefaultCloseOperation(EXIT_ON_CLOSE);
+
         try {
             qtmv = QTCubedFactory.initQTMovieView();
             add(buttonPanel, BorderLayout.SOUTH);

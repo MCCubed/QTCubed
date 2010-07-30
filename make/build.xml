@@ -65,7 +65,7 @@
     </target>
 
     <target name="compile" depends="init" description="Compile">
-        <javac destdir="${obj}/${product}" deprecation="on" source="1.5" target="1.5" fork="true" debug="true" debuglevel="lines,source">
+        <javac destdir="${obj}/${product}" deprecation="on" source="1.5" target="1.5" fork="true" debug="true" debuglevel="lines,source" includeantruntime="false">
             <src path="${src}/java"/>
             <src path="${src}/test"/>
             <classpath>
@@ -105,8 +105,10 @@
 	
     <target name="test" depends="jar" description="Run JUnit Tests">
         <junit printsummary="yes" haltonfailure="yes">
+            <sysproperty key="java.security.policy" value="make/test.policy"/>
             <classpath>
                 <file file="${dst}/${product}.jar"/>
+                <file file="C:\Program Files (x86)\Quicktime\QTSystem\QTJava.zip"/>
                 <path refid="libs"/>
             </classpath>
             <formatter type="plain" usefile="false" />

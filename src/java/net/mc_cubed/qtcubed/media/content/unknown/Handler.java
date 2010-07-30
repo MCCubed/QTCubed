@@ -59,7 +59,7 @@ public class Handler extends BasicPlayer {
         try {
             newView = QTCubedFactory.initQTMovieView();
         } catch (InstantiationException ex) {
-            Logger.getLogger(Handler.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(getClass().getName()).log(Level.SEVERE, null, ex);
         }
 
         view = newView;
@@ -72,9 +72,10 @@ public class Handler extends BasicPlayer {
 
     @Override
     public void setSource(DataSource source) throws IOException, IncompatibleSourceException {
-        super.setSource(source);
+//        super.setSource(source);
         try {
             URL url = source.getLocator().getURL();
+            Logger.getLogger(getClass().getName()).log(Level.INFO, "Got URL: {0}", url);
             if (url.getProtocol().equalsIgnoreCase("file")) {
                 final File file = new File(url.getFile());
                 view.setMovie(QTCubedFactory.initQTMovie(file));

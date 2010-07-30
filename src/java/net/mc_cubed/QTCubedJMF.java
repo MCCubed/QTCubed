@@ -32,12 +32,11 @@
 
 package net.mc_cubed;
 
-import net.mc_cubed.qtcubed.QTFormatUtils;
 import javax.swing.SwingUtilities;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.FileDialog;
-import java.awt.Frame;
+import javax.swing.JFrame;
 import java.awt.BorderLayout;
 import java.awt.Button;
 import java.awt.GridLayout;
@@ -62,7 +61,7 @@ import javax.media.protocol.DataSource;
  * 
  * @author shadow
  */
-public class QTCubedJMF extends Frame implements ActionListener {
+public class QTCubedJMF extends JFrame implements ActionListener {
 
     static final boolean hasQTKit;
 
@@ -104,6 +103,8 @@ public class QTCubedJMF extends Frame implements ActionListener {
         add(buttonPanel, BorderLayout.SOUTH);
         add(mp, BorderLayout.CENTER);
         pack();
+
+        setDefaultCloseOperation(EXIT_ON_CLOSE);
 
         Logger.getAnonymousLogger().info("************** Attached capture device info follows **************");
         Vector<CaptureDeviceInfo> captureDevices = CaptureDeviceManager.getDeviceList(null);
@@ -167,7 +168,7 @@ public class QTCubedJMF extends Frame implements ActionListener {
 						System.out.println("Video Size: " + ((VideoFormat) formatControl.getFormat()).getSize());
 //						formatControl.setFormat(QTFormatUtils.CompleteFormat(QTFormatUtils.rgb24,((VideoFormat) formatControl.getFormat()).getSize(),30.0f));
 					}
-
+                   videoSource.disconnect();
 //					mp.setDataSource(videoSource);
 //					javax.media.Manager.createPlayer(videoSource);
 //					*/
