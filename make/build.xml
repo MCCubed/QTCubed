@@ -26,7 +26,7 @@
         <isset property="env.BUILT_PRODUCTS_DIR"/>
     </condition>
 	
-    <condition property="env.LARGE_MOVIE_PATH" value="/Users/shadow/Movies/ONIT G4-1.m4v">
+    <condition property="env.LARGE_MOVIE_PATH" value="/Users/shadow/Movies/Out for a walk.m4v">
         <not>
             <isset property="env.LARGE_MOVIE_PATH"/>
         </not>
