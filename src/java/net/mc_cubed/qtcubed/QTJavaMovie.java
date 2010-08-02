@@ -51,6 +51,8 @@ class QTJavaMovie implements QTMovie {
     protected Movie movie;
 
     public QTJavaMovie() {
+        super();
+
         try {
             movie = new Movie();
         } catch (QTException ex) {
@@ -59,44 +61,26 @@ class QTJavaMovie implements QTMovie {
     }
 
     public QTJavaMovie(URL url) throws InstantiationException {
-        try {
-            DataRef ref = new DataRef(url.toString());
-            movie = Movie.fromDataRef(ref, StdQTConstants.newMovieActive);
-        } catch (QTException ex) {
-            Logger.getLogger(QTJavaMovie.class.getName()).log(Level.SEVERE, null, ex);
-            throw new RuntimeException(ex);
-        }
-
+        super();
+        init(url);
     }
 
     public QTJavaMovie(File file) throws InstantiationException, IOException {
-        QTFile qtFile = new QTFile(file);
-        try {
-            movie = Movie.fromFile(OpenMovieFile.asRead(qtFile));
-        } catch (QTException ex) {
-            Logger.getLogger(QTJavaMovie.class.getName()).log(Level.SEVERE, null, ex);
-            throw new IOException(ex);
-        }
+        super();
+        init(file);
     }
 
-    public QTJavaMovie(byte[] bytes) {
-        try {
-            quicktime.app.players.QTPlayer player =
-                    (quicktime.app.players.QTPlayer) quicktime.app.QTFactory.makeDrawable(new ByteArrayInputStream(bytes), StdQTConstants.kDataRefFileExtensionTag, ".mov");
-
-            MovieController mc = player.getMovieController();
-            movie = mc.getMovie();
-        } catch (Throwable ex) {
-            throw new RuntimeException(ex);
-        }
+    public QTJavaMovie(byte[] bytes) throws InstantiationException {
+        super();
+        init(bytes);
     }
 
-    public QTJavaMovie(Properties attributes) throws InstantiationException {
-        throw new java.lang.UnsupportedOperationException("Not Implemented");
+    public QTJavaMovie(Properties attributes) throws InstantiationException, QTException {
+        movie = new quicktime.std.movies.Movie();
     }
 
-    public QTJavaMovie(String name) throws InstantiationException {
-        throw new java.lang.UnsupportedOperationException("Not Implemented");
+    public QTJavaMovie(String name) throws InstantiationException, QTException {
+        movie = new quicktime.std.movies.Movie();
     }
 
     /**
@@ -113,7 +97,15 @@ class QTJavaMovie implements QTMovie {
      * @result			true if a QTMovie object can be initialized from the specified file, false otherwise.
      */
     public boolean canInit(File file) throws InstantiationException, IOException {
-        throw new java.lang.UnsupportedOperationException("Not Implemented");
+        try {
+            if (quicktime.std.movies.Movie.fromFile(OpenMovieFile.asRead(new QTFile(file))) != null) {
+                return true;
+            } else {
+                return false;
+            }
+        } catch (QTException ex) {
+            throw new IOException(ex);
+        }
     }
 
     /*!
@@ -124,7 +116,16 @@ class QTJavaMovie implements QTMovie {
     @result			YES if a QTMovie object can be initialized from the specified URL, NO otherwise.
      */
     public boolean canInit(URL url) {
-        throw new java.lang.UnsupportedOperationException("Not Implemented");
+        try {
+            DataRef urlRef = new DataRef(url.toExternalForm());
+            if (Movie.fromDataRef(urlRef, 0) != null) {
+                return true;
+            }
+        } catch (QTException ex) {
+            Logger.getLogger(QTJavaMovie.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return false;
+
     }
 
     /**
@@ -169,7 +170,11 @@ class QTJavaMovie implements QTMovie {
     @result			A QTMovie object.
      */
     public void init(File file) throws InstantiationException, IOException {
-        throw new java.lang.UnsupportedOperationException("Not Implemented");
+        try {
+            movie = Movie.fromFile(OpenMovieFile.asRead(new QTFile(file)));
+        } catch (QTException ex) {
+            Logger.getLogger(QTJavaMovie.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     /**
@@ -182,7 +187,12 @@ class QTJavaMovie implements QTMovie {
     @result			A QTMovie object.
      */
     public void init(URL url) throws InstantiationException {
-        throw new java.lang.UnsupportedOperationException("Not Implemented");
+        try {
+            DataRef urlRef = new DataRef(url.toExternalForm());
+            movie = Movie.fromDataRef(urlRef, 0);
+        } catch (QTException ex) {
+            Logger.getLogger(QTJavaMovie.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     /**
@@ -216,7 +226,15 @@ class QTJavaMovie implements QTMovie {
     @result			A QTMovie object.
      */
     public void init(byte[] bytes) throws InstantiationException {
-        throw new java.lang.UnsupportedOperationException("Not Implemented");
+        try {
+            quicktime.app.players.QTPlayer player =
+                    (quicktime.app.players.QTPlayer) quicktime.app.QTFactory.makeDrawable(new ByteArrayInputStream(bytes), StdQTConstants.kDataRefFileExtensionTag, ".mov");
+
+            MovieController mc = player.getMovieController();
+            movie = mc.getMovie();
+        } catch (Throwable ex) {
+            throw new RuntimeException(ex);
+        }
     }
 
     /**
@@ -232,6 +250,9 @@ class QTJavaMovie implements QTMovie {
      */
     public void init(QTMovie movie, QTTimeRange range) {
         throw new java.lang.UnsupportedOperationException("Not Implemented");
+
+
+
     }
     /**
     @method			initWithQuickTimeMovie:disposeWhenDone:error:

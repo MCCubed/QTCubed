@@ -29,9 +29,10 @@
 //
 //  Email: info@mc-cubed.net
 //  Website: http://www.mc-cubed.net/
-
 package net.mc_cubed.qtcubed;
 
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import net.mc_cubed.QTCubed;
 import java.net.URL;
 import java.io.File;
@@ -39,64 +40,75 @@ import java.util.Properties;
 import java.util.Collection;
 import java.util.LinkedList;
 import java.io.IOException;
+import quicktime.QTException;
 
 public class QTCubedFactory {
 
-	public static QTMovieView initQTMovieView() throws InstantiationException {
-		if (QTCubed.usesQTKit()) {
-			return new QTKitMovieView();
-		} else {
-			return new QTJavaMovieView();
-		}
-	}
-	
-	public static QTMovie initQTMovie() throws InstantiationException {
-		if (QTCubed.usesQTKit()) {
-			return new QTKitMovieImpl();
-		} else {
-			return new QTJavaMovie();
-		}
-	}
-	
-	public static QTMovie initQTMovie(URL url) throws InstantiationException {
-		if (QTCubed.usesQTKit()) {
-			return new QTKitMovieImpl(url);
-		} else {
-			return new QTJavaMovie(url);
-		}
-	}
-	
-	public static QTMovie initQTMovie(File file) throws InstantiationException,IOException {
-		if (QTCubed.usesQTKit()) {
-			return new QTKitMovieImpl(file);
-		} else {
-			return new QTJavaMovie(file);
-		}
-	}
-	
-	public static QTMovie initQTMovie(byte[] bytes) throws InstantiationException {
-		if (QTCubed.usesQTKit()) {
-			return new QTKitMovieImpl(bytes);
-		} else {
-			return new QTJavaMovie(bytes);
-		}
-	}
-	
-	public static QTMovie initQTMovie(Properties attributes) throws InstantiationException {
-		if (QTCubed.usesQTKit()) {
-			return new QTKitMovieImpl(attributes);
-		} else {
-			return new QTJavaMovie(attributes);
-		}
-	}
-	
-	public static QTMovie initQTMovie(String name) throws InstantiationException {
-		if (QTCubed.usesQTKit()) {
-			return new QTKitMovieImpl(name);
-		} else {
-			return new QTJavaMovie(name);
-		}
-	}
+    public static QTMovieView initQTMovieView() throws InstantiationException {
+        if (QTCubed.usesQTKit()) {
+            return new QTKitMovieView();
+        } else {
+            return new QTJavaMovieView();
+        }
+    }
+
+    public static QTMovie initQTMovie() throws InstantiationException {
+        if (QTCubed.usesQTKit()) {
+            return new QTKitMovieImpl();
+        } else {
+            return new QTJavaMovie();
+        }
+    }
+
+    public static QTMovie initQTMovie(URL url) throws InstantiationException {
+        if (QTCubed.usesQTKit()) {
+            return new QTKitMovieImpl(url);
+        } else {
+            return new QTJavaMovie(url);
+        }
+    }
+
+    public static QTMovie initQTMovie(File file) throws InstantiationException, IOException {
+        if (QTCubed.usesQTKit()) {
+            return new QTKitMovieImpl(file);
+        } else {
+            return new QTJavaMovie(file);
+        }
+    }
+
+    public static QTMovie initQTMovie(byte[] bytes) throws InstantiationException {
+        if (QTCubed.usesQTKit()) {
+            return new QTKitMovieImpl(bytes);
+        } else {
+            return new QTJavaMovie(bytes);
+        }
+    }
+
+    public static QTMovie initQTMovie(Properties attributes) throws InstantiationException {
+        if (QTCubed.usesQTKit()) {
+            return new QTKitMovieImpl(attributes);
+        } else {
+            try {
+                return new QTJavaMovie(attributes);
+            } catch (QTException ex) {
+                Logger.getLogger(QTCubedFactory.class.getName()).log(Level.SEVERE, null, ex);
+                throw new InstantiationException("Couldn't init movie");
+            }
+        }
+    }
+
+    public static QTMovie initQTMovie(String name) throws InstantiationException {
+        if (QTCubed.usesQTKit()) {
+            return new QTKitMovieImpl(name);
+        } else {
+            try {
+                return new QTJavaMovie(name);
+            } catch (QTException ex) {
+                Logger.getLogger(QTCubedFactory.class.getName()).log(Level.SEVERE, null, ex);
+                throw new InstantiationException("Couldn't init movie");
+            }
+        }
+    }
 
     public static QTCaptureView initQTCaptureView() {
         if (QTCubed.usesQTKit()) {
@@ -115,57 +127,56 @@ public class QTCubedFactory {
             return null;
         }
     }
-	
-	
-	public QTCubedFactory() {
-		super();
-	}
-	
-	public static Collection<QTCaptureDevice> captureDevices() {
-		if (QTCubed.usesQTKit()) {
-			Collection<QTCaptureDevice> retval = new LinkedList<QTCaptureDevice>();
-			retval.addAll(QTKitCaptureDevice.inputDevices());
-			return retval;
-		} else {
-			Collection<QTCaptureDevice> retval = new LinkedList<QTCaptureDevice>();
-		//	retval.addAll(QTJavaCaptureDevice.inputDevices());
-			return retval;
-		}
-	}
-	
-	public static QTCaptureDevice defaultCaptureDevice(QTMediaType mediaType) {
-		if (QTCubed.usesQTKit()) {
-			return QTKitCaptureDevice.defaultInputDevice(mediaType);
-		} else {
-			// return QTJavaCaptureDevice.defaultInputDevice(mediaType);
-			return null;
-		}
-	}
-	
-	public static QTCaptureDeviceInput initQTCaptureDeviceInput(QTCaptureDevice captureDevice) {
-		if (captureDevice instanceof QTKitCaptureDevice) {
-			return new QTKitCaptureDeviceInput((QTKitCaptureDevice)captureDevice);
-		} else {
-			// TODO: return new QTJavaCaptureDeviceInput((QTJavaCaptureDevice)captureDevice));
-			return null;
-		}
-	}
 
-        public static QTCaptureDecompressedAudioOutput initQTCaptureDecompressedAudioOutput() {
-            if (QTCubed.usesQTKit()) {
-                return new QTKitCaptureDecompressedAudioOutput();
-            } else {
-                // TODO: return new QTJavaCaptureDecompressedAudioOutput();
-                return null;
-            }
-        }
+    public QTCubedFactory() {
+        super();
+    }
 
-        public static QTCaptureDecompressedVideoOutput initQTCaptureDecompressedVideoOutput() {
-            if (QTCubed.usesQTKit()) {
-                return new QTKitCaptureDecompressedVideoOutput();
-            } else {
-                // TODO: return new QTJavaCaptureDecompressedVideoOutput();
-                return null;
-            }
+    public static Collection<QTCaptureDevice> captureDevices() {
+        if (QTCubed.usesQTKit()) {
+            Collection<QTCaptureDevice> retval = new LinkedList<QTCaptureDevice>();
+            retval.addAll(QTKitCaptureDevice.inputDevices());
+            return retval;
+        } else {
+            Collection<QTCaptureDevice> retval = new LinkedList<QTCaptureDevice>();
+            //	retval.addAll(QTJavaCaptureDevice.inputDevices());
+            return retval;
         }
+    }
+
+    public static QTCaptureDevice defaultCaptureDevice(QTMediaType mediaType) {
+        if (QTCubed.usesQTKit()) {
+            return QTKitCaptureDevice.defaultInputDevice(mediaType);
+        } else {
+            // return QTJavaCaptureDevice.defaultInputDevice(mediaType);
+            return null;
+        }
+    }
+
+    public static QTCaptureDeviceInput initQTCaptureDeviceInput(QTCaptureDevice captureDevice) {
+        if (captureDevice instanceof QTKitCaptureDevice) {
+            return new QTKitCaptureDeviceInput((QTKitCaptureDevice) captureDevice);
+        } else {
+            // TODO: return new QTJavaCaptureDeviceInput((QTJavaCaptureDevice)captureDevice));
+            return null;
+        }
+    }
+
+    public static QTCaptureDecompressedAudioOutput initQTCaptureDecompressedAudioOutput() {
+        if (QTCubed.usesQTKit()) {
+            return new QTKitCaptureDecompressedAudioOutput();
+        } else {
+            // TODO: return new QTJavaCaptureDecompressedAudioOutput();
+            return null;
+        }
+    }
+
+    public static QTCaptureDecompressedVideoOutput initQTCaptureDecompressedVideoOutput() {
+        if (QTCubed.usesQTKit()) {
+            return new QTKitCaptureDecompressedVideoOutput();
+        } else {
+            // TODO: return new QTJavaCaptureDecompressedVideoOutput();
+            return null;
+        }
+    }
 }

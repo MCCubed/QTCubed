@@ -40,9 +40,9 @@ import quicktime.app.view.QTJComponent;
 import quicktime.std.StdQTException;
 import quicktime.std.movies.Movie;
 import java.awt.Component;
-import java.io.DataInputStream;
 import java.security.PrivilegedAction;
 import java.util.logging.Logger;
+import quicktime.qd.QDColor;
 import quicktime.std.StdQTConstants;
 import quicktime.std.movies.MovieController;
 
@@ -100,6 +100,7 @@ class QTJavaMovieView implements QTMovieView {
     public void play() {
         try {
             player.setRate(1);
+            player.getMovie().start();
         } catch (StdQTException qte) {
             qte.printStackTrace();
         }
@@ -108,6 +109,7 @@ class QTJavaMovieView implements QTMovieView {
     public void pause() {
         try {
             player.setRate(0);
+            player.getMovie().stop();
         } catch (StdQTException qte) {
             qte.printStackTrace();
         }
@@ -131,19 +133,36 @@ class QTJavaMovieView implements QTMovieView {
     }
 
     public java.awt.Color getFillColor() {
-        throw new java.lang.UnsupportedOperationException("Not supported yet");
+        try {
+            return new java.awt.Color(player.getGWorld().getBackColor().getARGB());
+        } catch (StdQTException ex) {
+            Logger.getLogger(QTJavaMovieView.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
     }
 
     public void setFillColor(java.awt.Color fillColor) {
-        throw new java.lang.UnsupportedOperationException("Not supported yet");
+        try {
+            player.getGWorld().setBackColor(QDColor.fromARGBColor(fillColor.getRGB()));
+        } catch (StdQTException ex) {
+            Logger.getLogger(QTJavaMovieView.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     public void gotoBeginning() {
-        throw new java.lang.UnsupportedOperationException("Not supported yet");
+        try {
+            player.getMovie().goToBeginning();
+        } catch (StdQTException ex) {
+            Logger.getLogger(QTJavaMovieView.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     public void gotoEnd() {
-        throw new java.lang.UnsupportedOperationException("Not supported yet");
+        try {
+            player.getMovie().goToEnd();
+        } catch (StdQTException ex) {
+            Logger.getLogger(QTJavaMovieView.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     public void gotoNextSelectionPoint() {
@@ -155,7 +174,12 @@ class QTJavaMovieView implements QTMovieView {
     }
 
     public void gotoPosterFrame() {
-        throw new java.lang.UnsupportedOperationException("Not supported yet");
+        try {
+            int posterTime = player.getMovie().getPosterTime();
+            player.getMovie().setTimeValue(posterTime);
+        } catch (StdQTException ex) {
+            Logger.getLogger(QTJavaMovieView.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     public void stepForward() {
