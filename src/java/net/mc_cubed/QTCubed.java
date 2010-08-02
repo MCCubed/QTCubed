@@ -97,7 +97,6 @@ public class QTCubed extends JFrame implements ActionListener {
             Logger.getAnonymousLogger().log(Level.INFO, "Successfully Loaded QTCubed Library!");
             qtKitLoaded = true;
         } catch (Throwable t1) {
-            t1.printStackTrace();
             Logger.getAnonymousLogger().log(Level.INFO, "Cannot load QTCubed Library!");
             // Couldn't load the library, try QTJava instead
             try {
@@ -109,19 +108,40 @@ public class QTCubed extends JFrame implements ActionListener {
                         // privileged code goes here
                         //				quicktime.QTSession.open();
                         try {
+                            // This is the same as:
+                            //QTSession.open();
+                            // but links at runtime to avoid classpath dependencies.
                             Class clazz = Class.forName("quicktime.QTSession");
                             Method m = clazz.getMethod("open");
                             m.invoke(null);
+
+                            // create shutdown handler to cleanup Quicktime automatically
+                            Thread shutdownHook = new Thread() {
+
+                                @Override
+                                public void run() {
+                                    try {
+                                        // This is the same as:
+                                        //QTSession.close();
+                                        // but links at runtime to avoid classpath dependencies.
+                                        Class clazz = Class.forName("quicktime.QTSession");
+                                        Method m = clazz.getMethod("close");
+                                        m.invoke(null);
+                                    } catch (Exception ex) {
+                                        Logger.getLogger(QTCubed.class.getName()).log(Level.SEVERE, null, ex);
+                                    }
+                                }
+                            };
+                            Runtime.getRuntime().addShutdownHook(shutdownHook);
                         } catch (Exception ex) {
-                            ex.printStackTrace();
+                            Logger.getLogger(QTCubed.class.getName()).log(Level.SEVERE, null, ex);
                         }
                         return null; // nothing to return
                     }
                 });
-                Logger.getAnonymousLogger().log(Level.INFO, "Successfully loaded QTJava Library!");
+                Logger.getLogger(QTCubed.class.getName()).log(Level.INFO, "Successfully loaded QTJava Library!");
             } catch (Throwable t2) {
-                t2.printStackTrace();
-                Logger.getAnonymousLogger().log(Level.SEVERE, "Cannot load either QTCubed or QTJava libraries!  Quicktime Services will not be available!");
+                Logger.getLogger(QTCubed.class.getName()).log(Level.SEVERE, "Cannot load either QTCubed or QTJava libraries!  Quicktime Services will not be available!",t2);
             }
 
         }
@@ -139,8 +159,7 @@ public class QTCubed extends JFrame implements ActionListener {
             initMethod.invoke(null);
         } catch (Throwable ex) {
             // Do nothing if we fail
-            ex.printStackTrace();
-            Logger.getAnonymousLogger().info("Could not initialize JMF features of the QTCubed Library");
+            Logger.getLogger(QTCubed.class.getName()).log(Level.INFO,"Could not initialize JMF features of the QTCubed Library",ex);
         }
     }
 
@@ -162,6 +181,7 @@ public class QTCubed extends JFrame implements ActionListener {
     }
 
     // No argument main constructor
+    @SuppressWarnings("LeakingThisInConstructor")
     public QTCubed() {
         setLayout(new BorderLayout());
         JPanel buttonPanel = new JPanel();
@@ -185,17 +205,17 @@ public class QTCubed extends JFrame implements ActionListener {
 //            add(qtcv.getComponent(), BorderLayout.WEST);
             pack();
         } catch (InstantiationException ex) {
-            ex.printStackTrace();
+            Logger.getLogger(QTCubed.class.getName()).log(Level.SEVERE,"Unable to initialize movie view!",ex);
         }
 
         Logger.getAnonymousLogger().info("************** Attached capture device info follows **************");
         for (QTCaptureDevice device : QTCubedFactory.captureDevices()) {
-            Logger.getAnonymousLogger().info(" ----- " + device.uniqueId() + " (" + device.localizedDisplayName() + ") ----- ");
+            Logger.getLogger(QTCubed.class.getName()).log(Level.INFO, " ----- {0} ({1}) ----- ", new Object[]{device.uniqueId(), device.localizedDisplayName()});
             for (QTFormatDescription format : device.getFormatDescriptions()) {
-                Logger.getAnonymousLogger().info("Format Type: " + format.getMediaType() + ": " + format.getFormatType());
+                Logger.getLogger(QTCubed.class.getName()).log(Level.INFO, "Format Type: {0}: {1}", new Object[]{format.getMediaType(), format.getFormatType()});
                 Set<Entry<Object, Object>> props = format.getFormatDescriptionAttributes().entrySet();
                 for (Entry<Object, Object> prop : props) {
-                    Logger.getAnonymousLogger().info("    " + prop.getKey() + ": " + prop.getValue());
+                    Logger.getLogger(QTCubed.class.getName()).log(Level.INFO, "    {0}: {1}", new Object[]{prop.getKey(), prop.getValue()});
                 }
             }
         }
@@ -277,12 +297,12 @@ public class QTCubed extends JFrame implements ActionListener {
                     pack();
 
                 } catch (Exception ex) {
-                    ex.printStackTrace();
+                    Logger.getLogger(QTCubed.class.getName()).log(Level.SEVERE,"Unable to open the default video capture device",ex);
                 }
             }
         } catch (Exception ex) {
             // TODO- maybe a dialog
-            ex.printStackTrace();
+            Logger.getLogger(QTCubed.class.getName()).log(Level.SEVERE,"Unable to perform action",ex);
         }
     }
 
@@ -290,7 +310,10 @@ public class QTCubed extends JFrame implements ActionListener {
 
     native static private void _shutdown(long taskRef);
 
-    protected void finalize() {
+    @Override
+    @SuppressWarnings("FinalizeDeclaration")
+    protected void finalize() throws Throwable {
+        super.finalize();
         _shutdown(taskRef);
     }
 }

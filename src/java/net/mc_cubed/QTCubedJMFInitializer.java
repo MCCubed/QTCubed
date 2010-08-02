@@ -52,7 +52,7 @@ public class QTCubedJMFInitializer {
 
     static {
         Vector packagePrefix = PackageManager.getContentPrefixList();
-        String myPackagePrefix = new String("net.mc_cubed.qtcubed");
+        String myPackagePrefix = "net.mc_cubed.qtcubed";
         if (!packagePrefix.contains(myPackagePrefix)) {
             // Add new package prefix to end of the package prefix list.
             packagePrefix.addElement(myPackagePrefix);

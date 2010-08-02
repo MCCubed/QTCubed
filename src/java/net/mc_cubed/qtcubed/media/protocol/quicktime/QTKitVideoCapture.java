@@ -29,9 +29,9 @@
 //
 //  Email: info@mc-cubed.net
 //  Website: http://www.mc-cubed.net/
-
 package net.mc_cubed.qtcubed.media.protocol.quicktime;
 
+import java.util.logging.Level;
 import net.mc_cubed.qtcubed.QTCaptureDecompressedVideoOutput;
 import net.mc_cubed.qtcubed.QTPixelFormat;
 import javax.media.protocol.ContentDescriptor;
@@ -40,13 +40,10 @@ import javax.media.control.FrameRateControl;
 import javax.media.Control;
 import javax.media.Format;
 import javax.media.format.VideoFormat;
-import javax.media.format.RGBFormat;
-import javax.media.format.YUVFormat;
 import javax.swing.JComponent;
 import javax.swing.JSpinner;
 import javax.swing.SpinnerListModel;
 import java.awt.Component;
-import java.awt.Dimension;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeEvent;
 import java.util.logging.Logger;
@@ -71,7 +68,7 @@ public class QTKitVideoCapture extends QTKitOutputBufferStream {
         super(delegator);
         this.delegator = delegator;
         this.dataSource = dataSource;
-		controls = new Control[]{new QTKitVideoFormatControl(), new QTKitVideoFrameRateControl()};
+        controls = new Control[]{new QTKitVideoFormatControl(), new QTKitVideoFrameRateControl()};
     }
 
     public Format getFormat() {
@@ -130,30 +127,30 @@ public class QTKitVideoCapture extends QTKitOutputBufferStream {
                 }
             });
 
-			// Completed list of formats
-			List<VideoFormat> formatList = new LinkedList<VideoFormat>();
+            // Completed list of formats
+            List<VideoFormat> formatList = new LinkedList<VideoFormat>();
 
-			// Get the dimension of the video from the capture device
-			QTFormatDescription desc = dataSource.selectedDevice.getFormatDescriptions().iterator().next();
-			Dimension size = new Dimension(desc.getWidth(),desc.getHeight());
+            // Get the dimension of the video from the capture device
+            QTFormatDescription desc = dataSource.selectedDevice.getFormatDescriptions().iterator().next();
+            Dimension size = new Dimension(desc.getWidth(), desc.getHeight());
 
-			// Loop through the formats we can assign and fill in the dimension and data size values
-			for (VideoFormat format : QTFormatUtils.pixelFormatMap.values().toArray(new VideoFormat[0])) {
-				formatList.add(QTFormatUtils.CompleteFormat(format,size,-1.0f));
-			}
+            // Loop through the formats we can assign and fill in the dimension and data size values
+            for (VideoFormat format : QTFormatUtils.pixelFormatMap.values().toArray(new VideoFormat[0])) {
+                formatList.add(QTFormatUtils.CompleteFormat(format, size, -1.0f));
+            }
 
-			// This is our supported format list
+            // This is our supported format list
             supportedFormats = formatList.toArray(new Format[0]);
-			
-			try {
-				// If we don't have a format set yet, pick the simplest, most likely to succeed format
-				if (getFormat() == null) {
-					setFormat(QTFormatUtils.CompleteFormat(QTFormatUtils.rgb24,size,-1.0f));
-				}
-				
-			} catch (Exception ex) {
-				ex.printStackTrace();
-			}
+
+            try {
+                // If we don't have a format set yet, pick the simplest, most likely to succeed format
+                if (getFormat() == null) {
+                    setFormat(QTFormatUtils.CompleteFormat(QTFormatUtils.rgb24, size, -1.0f));
+                }
+
+            } catch (Exception ex) {
+                Logger.getLogger(getClass().getName()).log(Level.SEVERE,"Error setting format: {0}",ex);
+            }
         }
 
         /**
@@ -173,23 +170,23 @@ public class QTKitVideoCapture extends QTKitOutputBufferStream {
          */
         public Format getFormat() {
             Dimension size = delegator.getSize();
-			if (size == null) {
-				QTFormatDescription desc = dataSource.selectedDevice.getFormatDescriptions().iterator().next();
-				size = new Dimension(desc.getWidth(),desc.getHeight());
-			}
-/*            if (size.height == 0 || size.width == 0) {
-                size = new Dimension(640, 480);
+            if (size == null) {
+                QTFormatDescription desc = dataSource.selectedDevice.getFormatDescriptions().iterator().next();
+                size = new Dimension(desc.getWidth(), desc.getHeight());
             }
-*/
+            /*            if (size.height == 0 || size.width == 0) {
+            size = new Dimension(640, 480);
+            }
+             */
             float frameRate = delegator.getFrameRate();
 
             QTPixelFormat pixelFormat = delegator.getPixelFormat();
 
             if (pixelFormat == null) {
-				return null;
+                return null;
             } else {
-				return QTFormatUtils.PixelFormatToJMF(pixelFormat, size, frameRate);
-			}
+                return QTFormatUtils.PixelFormatToJMF(pixelFormat, size, frameRate);
+            }
         }
 
         /**
@@ -216,27 +213,27 @@ public class QTKitVideoCapture extends QTKitOutputBufferStream {
         /**
          *		Sets the data format.
          */
-        public Format setFormat(Format format) {			
-			Logger.getAnonymousLogger().info("Setting format: " + format);
-			
-			// Get the pixel format information
-			QTPixelFormat pixelFormat = QTFormatUtils.JMFToPixelFormat(format);
-			Dimension size = ((VideoFormat)format).getSize();
-			float frameRate = ((VideoFormat)format).getFrameRate();
+        public Format setFormat(Format format) {
+            Logger.getLogger(getClass().getName()).log(Level.INFO, "Setting format: {0}", format);
 
-			// Change the parameters that need changing
-			if (delegator.getPixelFormat() != pixelFormat) {
-				delegator.setPixelFormat(pixelFormat);
-			}
-			if (size != null && !delegator.getSize().equals(size)) {
-				delegator.setSize(size);
-			}
-			if (frameRate > 0 && delegator.getFrameRate() != frameRate) {
-				delegator.setFrameRate(frameRate);
-			}
-			
-			// Return a pixel format made up of the parameters we just used to set up the output
-			return QTFormatUtils.PixelFormatToJMF(pixelFormat, size, frameRate);
+            // Get the pixel format information
+            QTPixelFormat pixelFormat = QTFormatUtils.JMFToPixelFormat(format);
+            Dimension size = ((VideoFormat) format).getSize();
+            float frameRate = ((VideoFormat) format).getFrameRate();
+
+            // Change the parameters that need changing
+            if (delegator.getPixelFormat() != pixelFormat) {
+                delegator.setPixelFormat(pixelFormat);
+            }
+            if (size != null && !delegator.getSize().equals(size)) {
+                delegator.setSize(size);
+            }
+            if (frameRate > 0 && delegator.getFrameRate() != frameRate) {
+                delegator.setFrameRate(frameRate);
+            }
+
+            // Return a pixel format made up of the parameters we just used to set up the output
+            return QTFormatUtils.PixelFormatToJMF(pixelFormat, size, frameRate);
         }
     }
 
