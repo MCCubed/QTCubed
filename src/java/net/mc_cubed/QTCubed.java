@@ -199,6 +199,7 @@ public class QTCubed extends JFrame implements ActionListener {
 
         try {
             qtmv = QTCubedFactory.initQTMovieView();
+            qtmv.setControllerVisisble(true);
             add(buttonPanel, BorderLayout.SOUTH);
             add(qtmv.getComponent(), BorderLayout.CENTER);
             qtcv = QTCubedFactory.initQTCaptureView();
@@ -245,11 +246,13 @@ public class QTCubed extends JFrame implements ActionListener {
                 QTMovie movie = QTCubedFactory.initQTMovie(f);
                 System.out.println("Created movie");
                 remove(qtmv.getComponent());
-                remove(qtcv.getComponent());
+                if (qtcv != null)
+                    remove(qtcv.getComponent());
 
                 add(qtmv.getComponent(), BorderLayout.CENTER);
                 // set movie on the view
                 qtmv.setMovie(movie);
+                qtmv.setControllerVisisble(true);
                 System.out.println("Set movie on view");
 
                 validateTree();

@@ -92,6 +92,7 @@ class QTJavaMovieView implements QTMovieView {
         try {
             MoviePlayer mp = new MoviePlayer(javaMovie.movie);
             component.setMoviePlayer(mp);
+            player = mp;
         } catch (QTException ex) {
             throw new RuntimeException(ex);
         }
@@ -101,8 +102,9 @@ class QTJavaMovieView implements QTMovieView {
         try {
             player.setRate(1);
             player.getMovie().start();
+            player.getMovie().setRate(1);
         } catch (StdQTException qte) {
-            qte.printStackTrace();
+            Logger.getLogger(getClass().getName()).log(Level.SEVERE,"Couldn't play media: {0}",qte);
         }
     }
 
@@ -110,8 +112,9 @@ class QTJavaMovieView implements QTMovieView {
         try {
             player.setRate(0);
             player.getMovie().stop();
+            player.getMovie().setRate(0);
         } catch (StdQTException qte) {
-            qte.printStackTrace();
+            Logger.getLogger(getClass().getName()).log(Level.SEVERE,"Couldn't stop media: {0}",qte);
         }
     }
 
