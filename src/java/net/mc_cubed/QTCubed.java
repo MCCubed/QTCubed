@@ -152,7 +152,7 @@ public class QTCubed extends JFrame implements ActionListener {
         QTPixelFormat pf;
         QTPixelFormat.values();
 
-        // Reflexively call QTCubedJMFInitializer.init() to avoid classpath deps in case JMF is not present
+        // Reflectively call QTCubedJMFInitializer.init() to avoid classpath deps in case JMF is not present
         try {
             Class clazz = Class.forName("net.mc_cubed.QTCubedJMFInitializer");
             Method initMethod = clazz.getMethod("init");

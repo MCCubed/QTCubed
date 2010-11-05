@@ -33,6 +33,11 @@
 package net.mc_cubed.qtcubed.media.protocol.quicktime;
 
 import com.sun.media.protocol.BasicPushBufferDataSource;
+import javax.media.MediaLocator;
+import javax.media.control.FormatControl;
+import javax.media.format.VideoFormat;
+import javax.media.protocol.CaptureDevice;
+import javax.media.CaptureDeviceInfo;
 import java.awt.Component;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -42,6 +47,8 @@ import java.util.logging.Logger;
 import javax.media.CachingControl;
 import javax.media.control.FormatControl;
 import javax.media.Time;
+import javax.media.Format;
+import java.util.Collection;
 import javax.media.protocol.ContentDescriptor;
 import javax.media.protocol.PushBufferStream;
 import javax.swing.JLabel;
@@ -51,13 +58,14 @@ import net.mc_cubed.qtcubed.*;
  *
  * @author shadow
  */
-public class DataSource extends BasicPushBufferDataSource {
+public class DataSource extends BasicPushBufferDataSource implements CaptureDevice {
 
     QTCaptureDevice selectedDevice;
     QTCaptureSession session;
     QTKitOutputBufferStream[] streams;
     private String captureDeviceName;
     private String captureParameters;
+	private CaptureDeviceInfo myCdi;
 	
 	public DataSource() {
 		this.controls = new Object[] { new QTCubedDSCachingControl(), new QTCubedDSFormatControl() };
@@ -95,6 +103,24 @@ public class DataSource extends BasicPushBufferDataSource {
         return super.getDuration();
     }
 
+	/**
+	 * Return the CaptureDeviceInfo object that describes this device.
+	 * Returns:
+	 * The CaptureDeviceInfo object that describes this device.	 
+	 */
+	public CaptureDeviceInfo getCaptureDeviceInfo() {
+		return myCdi;
+	}
+	
+	/**
+	 * Returns an array of FormatControl objects. Each of them can be used to set and get the format of each capture stream. This method can be used before connect to set and get the capture formats.
+	 * Returns:
+	 * an array for FormatControls.
+	 */
+	public FormatControl[] getFormatControls() {
+		return new FormatControl[] { (FormatControl)controls[1] };
+	}
+	
     @Override
     public void connect() throws IOException {
         initCheck();
@@ -116,7 +142,14 @@ public class DataSource extends BasicPushBufferDataSource {
 
         if (selectedDevice == null) {
             throw new IOException("Cannot find capture device named " + captureDeviceName);
-        }
+        } else {
+			// Do Capture Device Info generation
+			String name = selectedDevice.localizedDisplayName();
+            MediaLocator ml = new MediaLocator("quicktime://" + selectedDevice.uniqueId());
+            Collection<Format> formats = QTFormatUtils.QTKitToJMF(selectedDevice.getFormatDescriptions());
+            Format[] formatsArray = formats.toArray(new Format[0]);
+            myCdi = new CaptureDeviceInfo(name,ml,formatsArray);
+		}
 
         // Determine roughly the capabilities of the input source
         boolean hasAudio = false, hasVideo = false;
