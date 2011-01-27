@@ -45,6 +45,7 @@
 #else
 	// Create an IPC proxy to the 32 bit process
 	id proxy;
+	NSTask * task;
 #endif
 	
 }

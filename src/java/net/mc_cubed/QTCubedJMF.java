@@ -53,6 +53,7 @@ import javax.media.MediaLocator;
 import javax.media.control.FormatControl;
 import javax.media.format.VideoFormat;
 import javax.media.protocol.DataSource;
+import net.mc_cubed.qtcubed.media.codec.QTCodec;
 
 /**
  * Starting point for the application. General initialization should be done inside
@@ -114,6 +115,8 @@ public class QTCubedJMF extends JFrame implements ActionListener {
                 Logger.getAnonymousLogger().info("Format Type: " + format);
             }
         }
+		
+		QTCodec codec = new QTCodec();
     }
 
     public void actionPerformed(ActionEvent e) {
@@ -130,7 +133,7 @@ public class QTCubedJMF extends JFrame implements ActionListener {
                 }
                 File f = new File(fd.getDirectory(), fd.getFile());
 
-                MediaLocator l = new MediaLocator(f.toURL());
+                MediaLocator l = new MediaLocator(f.toURI().toURL());
                 mp.setMediaLocator(l);
                 mp.start();
             }

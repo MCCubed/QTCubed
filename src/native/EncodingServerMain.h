@@ -37,6 +37,7 @@
 
 	@private
 	NSConnection * encodeConnection, * decodeConnection;
+	NSString * ipcName;
 }
 
 - (int) run;

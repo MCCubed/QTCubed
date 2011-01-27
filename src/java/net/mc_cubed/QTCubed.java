@@ -71,28 +71,24 @@ import net.mc_cubed.qtcubed.QTPixelFormat;
 public class QTCubed extends JFrame implements ActionListener {
 
     static final boolean hasQTKit;
-    static final long taskRef;
     QTCaptureSession session;
 
     static {
         boolean qtKitLoaded = false;
-        long localTaskRef = 0;
         try {
             // Disable Cocoa Compatibility Mode
             System.setProperty("com.apple.eawt.CocoaComponent.CompatibilityMode", "false");
 
             Logger.getAnonymousLogger().log(Level.INFO, "Loading QTCubed Library");
             // Ensure native JNI library is loaded
-            Long innerTaskRef = (Long) AccessController.doPrivileged(new PrivilegedAction() {
+            AccessController.doPrivileged(new PrivilegedAction() {
 
                 public Object run() {
                     // privileged code goes here
                     System.loadLibrary("QTCubed");
-                    return startEncodingServer();
+                    return null;
                 }
             });
-
-            localTaskRef = innerTaskRef.longValue();
 
             Logger.getAnonymousLogger().log(Level.INFO, "Successfully Loaded QTCubed Library!");
             qtKitLoaded = true;
@@ -147,7 +143,6 @@ public class QTCubed extends JFrame implements ActionListener {
         }
 
         hasQTKit = qtKitLoaded;
-        taskRef = localTaskRef;
 
         QTPixelFormat pf;
         QTPixelFormat.values();
@@ -309,14 +304,9 @@ public class QTCubed extends JFrame implements ActionListener {
         }
     }
 
-    native static private long startEncodingServer();
-
-    native static private void _shutdown(long taskRef);
-
     @Override
     @SuppressWarnings("FinalizeDeclaration")
     protected void finalize() throws Throwable {
         super.finalize();
-        _shutdown(taskRef);
     }
 }

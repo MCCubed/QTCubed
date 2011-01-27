@@ -35,13 +35,16 @@
 
 int main( int argc, const char* argv[] ) {
 	NSLog(@"Starting Encoding Server");
+
 	// Be responsible about memory management
 	NSAutoreleasePool * pool = [[NSAutoreleasePool alloc] init];
 
 	// Allocate our server object
 	EncodingServerMain * serverMain = [[[EncodingServerMain alloc] init] autorelease];
+
 	// Run it and collect a return value
 	int retval = [serverMain run];
+	
 	// Drain the top level auto-release pool (including our server!)
 	[pool drain];
 
@@ -59,18 +62,42 @@ int main( int argc, const char* argv[] ) {
 
 - (id) init {
 	[super init];
+	
+	// Generate a 16 character HEX string to use as part of a handle name (17th char is the null)
+	char * pHash = calloc(17, 1);
+	for (int i = 0 ; i < 16; i++) {
+		char c = rand() % 16;
+		if (c < 10) {
+			c = c + '0';
+		} else {
+			c = c + 'A' - 10;
+		}
+		pHash[i] = c;
+	}
 
+	// Make this into an NSString for easier processing with OBJ-C code
+	NSString * processHash = [[NSString alloc] initWithCString:pHash encoding:NSASCIIStringEncoding];
+	
+	// Create an IPC Name that identifies us distinctly.
+	ipcName = [NSString stringWithFormat:@"QTCubedEncodingServer[%@]",processHash];
+
+	// Create and register a connection to this IPC name
+	NSLog(@"Creating a new IPC tunnel named: %@",ipcName);
 	encodeConnection = [[NSConnection alloc] init];
 	[encodeConnection setRootObject:[[QTCodec alloc] init]];
-	[encodeConnection registerName:@"net.mc_cubed.qtcubed.QTCubedEncodingServer"];
+	[encodeConnection registerName:ipcName];
 
 	return self;
 }
 
 - (int) run {
 	
-	printf("Starting main runloop");
+	// Write the ipcName to standard output
+	NSFileHandle *stdout = [NSFileHandle fileHandleWithStandardOutput];
+	NSData *strData = [ipcName dataUsingEncoding: NSASCIIStringEncoding];
+	[stdout writeData: strData];
 
+	// Start the runloop;
 	CFRunLoopRun();	
 	return 0;
 }

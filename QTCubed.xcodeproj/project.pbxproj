@@ -58,7 +58,6 @@
 		BF44E8101185936C00F308F1 /* QTCodec.m in Sources */ = {isa = PBXBuildFile; fileRef = BF57FD121176F21F003E7A8E /* QTCodec.m */; };
 		BF44E81A118593D000F308F1 /* QTCodecBridge.m in Sources */ = {isa = PBXBuildFile; fileRef = BF44E819118593D000F308F1 /* QTCodecBridge.m */; };
 		BF44E8461185962A00F308F1 /* net_mc_cubed_QTCubed.h in Headers */ = {isa = PBXBuildFile; fileRef = BF44E8451185962A00F308F1 /* net_mc_cubed_QTCubed.h */; };
-		BF44E8481185966A00F308F1 /* QTCubed.m in Sources */ = {isa = PBXBuildFile; fileRef = BF44E8471185966A00F308F1 /* QTCubed.m */; };
 		BF44E86811859AA800F308F1 /* EncodingServer in Copy Java Resources */ = {isa = PBXBuildFile; fileRef = BF44E7BD1185880A00F308F1 /* EncodingServer */; };
 		BF57FBEB1176BD19003E7A8E /* mediaplayer.jar in Frameworks */ = {isa = PBXBuildFile; fileRef = BF57FBEA1176BD19003E7A8E /* mediaplayer.jar */; };
 		BF57FBEC1176BD1C003E7A8E /* mediaplayer.jar in Copy Java Resources */ = {isa = PBXBuildFile; fileRef = BF57FBEA1176BD19003E7A8E /* mediaplayer.jar */; };
@@ -218,7 +217,6 @@
 		BF44E80E1185932C00F308F1 /* QTCodecProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = QTCodecProtocol.h; sourceTree = "<group>"; };
 		BF44E819118593D000F308F1 /* QTCodecBridge.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = QTCodecBridge.m; sourceTree = "<group>"; };
 		BF44E8451185962A00F308F1 /* net_mc_cubed_QTCubed.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = net_mc_cubed_QTCubed.h; path = "build/QTCubed.build/Debug/Compile Native.build/DerivedSources/net_mc_cubed_QTCubed.h"; sourceTree = "<group>"; };
-		BF44E8471185966A00F308F1 /* QTCubed.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = QTCubed.m; sourceTree = "<group>"; };
 		BF57FBEA1176BD19003E7A8E /* mediaplayer.jar */ = {isa = PBXFileReference; lastKnownFileType = archive.jar; name = mediaplayer.jar; path = lib/mediaplayer.jar; sourceTree = SOURCE_ROOT; };
 		BF57FD0F1176F1F4003E7A8E /* net_mc_cubed_qtcubed_media_codec_QTCodec.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = net_mc_cubed_qtcubed_media_codec_QTCodec.h; path = "build/QTCubed.build/Debug/Compile Native.build/DerivedSources/net_mc_cubed_qtcubed_media_codec_QTCodec.h"; sourceTree = "<group>"; };
 		BF57FD111176F21F003E7A8E /* QTCodec.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = QTCodec.h; sourceTree = "<group>"; };
@@ -416,7 +414,6 @@
 				BF57FD121176F21F003E7A8E /* QTCodec.m */,
 				BF44E819118593D000F308F1 /* QTCodecBridge.m */,
 				BF44E80E1185932C00F308F1 /* QTCodecProtocol.h */,
-				BF44E8471185966A00F308F1 /* QTCubed.m */,
 				BFA7033E112EABF100D5157A /* QTMovieBridge.m */,
 				BFC77A601130250900F2D7A3 /* QTMovieViewBridge.h */,
 				BFC7799E113000D200F2D7A3 /* QTMovieViewBridge.m */,
@@ -573,7 +570,14 @@
 			};
 			buildConfigurationList = C01FCF4E08A954540054247B /* Build configuration list for PBXProject "QTCubed" */;
 			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
 			hasScannedForEncodings = 1;
+			knownRegions = (
+				English,
+				Japanese,
+				French,
+				German,
+			);
 			mainGroup = 29B97314FDCFA39411CA2CEA /* QTCubed */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -634,7 +638,6 @@
 				BF57FD141176F21F003E7A8E /* QTCodec.m in Sources */,
 				BF332940118134C200A39409 /* QTKitCaptureAudioDataOutput.m in Sources */,
 				BF44E81A118593D000F308F1 /* QTCodecBridge.m in Sources */,
-				BF44E8481185966A00F308F1 /* QTCubed.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

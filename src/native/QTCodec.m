@@ -208,18 +208,59 @@ static OSStatus _DecompressionFrameOutputCallback(void *qtCodecRefCon, OSStatus 
 {
 	CFRunLoopStop(CFRunLoopGetMain());
 }
+
 #else
 /*************************
  * Begin Proxy Only code *
  *************************/
+
+/**
+ * Construct the other end of the proxy and link to it
+ */
 - (id) init {
 	[super init];
 	
-	proxy = [[NSConnection
-				 rootProxyForConnectionWithRegisteredName:@"net.mc_cubed.qtcubed.QTCubedEncodingServer"
-				 host:nil] retain];
-	[proxy setProtocolForProxy:@protocol(QTCodecProtocol)];
+	// Startup the 32-bit daemon process
+	task = [[NSTask alloc] init];
+
+    // TODO: This path needs to be determined in a portable way, probably with some assistance from Java to help find the executable.
+	[task setLaunchPath:@"EncodingServer"];
 	
+	// Construct a pipe to use when interacting with the task
+	NSPipe *readPipe = [NSPipe pipe];
+    NSFileHandle *readHandle = [readPipe fileHandleForReading];
+	
+	// Set the standard output so we can read it
+    [task setStandardOutput: readPipe];
+	
+	@try {
+		// Launch the task
+		[task launch];
+		
+		// Wait for it to spit out some output.  Hopefully, this is the IPC Registered Name
+		NSData * ipcRegData = [readHandle availableData];		
+		NSString * ipcRegName = [[[NSString alloc] initWithData:ipcRegData encoding:NSASCIIStringEncoding] autorelease];
+		
+		// Create a proxy to the process
+		proxy = [[NSConnection
+				  rootProxyForConnectionWithRegisteredName:ipcRegName
+				  host:nil] retain];
+		[proxy setProtocolForProxy:@protocol(QTCodecProtocol)];
+		
+		// Test the link or codec linkage if linked locally (32-bit)
+		NSString * response = [proxy isAlive];
+		NSLog(@"Got response: %@",response);
+		
+		if (response == nil) {
+			[[NSException exceptionWithName:@"Proxy Exception" reason:@"The proxy did not respond" userInfo:nil] raise];
+		}
+	}
+	
+	@catch (NSException * ex) {
+		NSLog(@"Unable to launch helper, path is: %@, error is: %@",[task launchPath],[ex reason]);
+		[ex raise];
+	}
+		
 	return self;
 }
 
@@ -228,6 +269,12 @@ static OSStatus _DecompressionFrameOutputCallback(void *qtCodecRefCon, OSStatus 
 }
 
 - (void) dealloc {
+	if (task != nil && [task isRunning] == YES) {
+		[task terminate];
+		[task release];
+		task = nil;
+	}
+	
 	[proxy release];
 	proxy = nil;
 	[super dealloc];

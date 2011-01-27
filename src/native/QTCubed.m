@@ -46,7 +46,7 @@ JNIEXPORT jlong JNICALL Java_net_mc_1cubed_QTCubed_startEncodingServer
 	
 	/* Set up autorelease and exception handling */
 	JNF_COCOA_ENTER(env);
-			
+	
 	// Startup the 32-bit daemon process
 	task = [[NSTask alloc] init];
     [task setLaunchPath:@"EncodingServer"];
@@ -55,15 +55,16 @@ JNIEXPORT jlong JNICALL Java_net_mc_1cubed_QTCubed_startEncodingServer
     NSFileHandle *readHandle = [readPipe fileHandleForReading];
 		
     [task setStandardOutput: readPipe];
-	
 
 	@try {
-		[task launch];	
-		
-		[readHandle availableData]; // Block until a message is emitted (Library initialization complete)
+		[task launch];
 
+		NSData * ipcRegData = [readHandle availableData]; // Block until a message is emitted (Library initialization complete)
+		
+		NSString * ipcRegName = [[[NSString alloc] initWithData:ipcRegData encoding:NSASCIIStringEncoding] autorelease];
+		
 		// Test the link or codec linkage if linked locally (32-bit)
-		QTCodec * codec = [[[QTCodec alloc] init] autorelease];	
+		QTCodec * codec = [[[QTCodec alloc] initWithName:ipcRegName] autorelease];
 		NSLog(@"Got response from QTCodec: %@",[codec isAlive]);
 	}
 	

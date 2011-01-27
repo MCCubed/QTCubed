@@ -43,28 +43,32 @@ import javax.media.format.VideoFormat;
  * @author shadow
  */
 public class QTCodec extends BasicCodec {
-
+	private long peer;
+	
     public QTCodec() {
         this.inputFormats = new Format[] { new VideoFormat("unknown") };
         this.outputFormats = new Format[] { new RGBFormat() };
+		peer = _allocInit();
     }
 
-    protected native Format[] _getSupportedFormats();
+	protected native long _allocInit();
+	
+    protected native Format[] _getSupportedFormats(long peer);
 
     @Override
     public Format setInputFormat(Format format) {
         Format retval = super.setInputFormat(format);
-        _setInputFormat(format);
+        _setInputFormat(peer,format);
         return retval;
     }
 
-    protected native void _setInputFormat(Format format);
+    protected native void _setInputFormat(long peer,Format format);
 
     @Override
     public Format setOutputFormat(Format format) {
         if (format instanceof RGBFormat) {
             
-            _setOutputFormat(format);
+            _setOutputFormat(peer,format);
             Format retval = super.setOutputFormat(format);
             return retval;
         }
@@ -72,11 +76,11 @@ public class QTCodec extends BasicCodec {
 
     }
 
-    protected native void _setOutputFormat(Format format);
+    protected native void _setOutputFormat(long peer,Format format);
 
     @Override
     public int process(Buffer buffer, Buffer buffer1) {
-        byte[] frameData = _processIntoFrames((byte[])buffer.getHeader(),(byte[])buffer.getData(),buffer.getOffset(),buffer.getLength());
+        byte[] frameData = _processIntoFrames(peer,(byte[])buffer.getHeader(),(byte[])buffer.getData(),buffer.getOffset(),buffer.getLength());
         buffer1.setData(frameData);
         buffer1.setOffset(0);
         buffer1.setLength(frameData.length);
@@ -94,6 +98,13 @@ public class QTCodec extends BasicCodec {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
-    private native byte[] _processIntoFrames(byte[] header, byte[] buffer, int offset, int length);
+    private native byte[] _processIntoFrames(long peer,byte[] header, byte[] buffer, int offset, int length);
+	
+	private native void _finalize(long peer);
+	
+	@Override
+	protected void finalize() {
+		_finalize(peer);
+	}
 
 }
