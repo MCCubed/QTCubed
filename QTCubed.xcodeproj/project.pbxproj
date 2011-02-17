@@ -190,6 +190,10 @@
 		1058C7A1FEA54F0111CA2CBB /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = /System/Library/Frameworks/Cocoa.framework; sourceTree = "<absolute>"; };
 		29B97324FDCFA39411CA2CEA /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = /System/Library/Frameworks/AppKit.framework; sourceTree = "<absolute>"; };
 		29B97325FDCFA39411CA2CEA /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = /System/Library/Frameworks/Foundation.framework; sourceTree = "<absolute>"; };
+		5623EC5512FBD9AB00EAAE7F /* QTEncodingSession.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = QTEncodingSession.h; sourceTree = "<group>"; };
+		5623EC5612FBD9AB00EAAE7F /* QTEncodingSession.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = QTEncodingSession.m; sourceTree = "<group>"; };
+		5623EC5712FBD9B800EAAE7F /* QTDecodingSession.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = QTDecodingSession.h; sourceTree = "<group>"; };
+		5623EC5812FBD9B800EAAE7F /* QTDecodingSession.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = QTDecodingSession.m; sourceTree = "<group>"; };
 		89C3F2910F5250A300B0048E /* English */ = {isa = PBXFileReference; lastKnownFileType = text.rtf; name = English; path = English.lproj/Credits.rtf; sourceTree = "<group>"; };
 		89D0F0220F392F20007831A7 /* English */ = {isa = PBXFileReference; fileEncoding = 10; lastKnownFileType = text.plist.strings; name = English; path = English.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		89D0F0230F392F20007831A7 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -431,6 +435,10 @@
 				BFFC1356116EF34900BEEA82 /* QTKitCaptureDeviceInput.m */,
 				BFFC1177116ECD8E00BEEA82 /* QTKitCaptureSession.h */,
 				BFFC1178116ECD8E00BEEA82 /* QTKitCaptureSession.m */,
+				5623EC5512FBD9AB00EAAE7F /* QTEncodingSession.h */,
+				5623EC5612FBD9AB00EAAE7F /* QTEncodingSession.m */,
+				5623EC5712FBD9B800EAAE7F /* QTDecodingSession.h */,
+				5623EC5812FBD9B800EAAE7F /* QTDecodingSession.m */,
 			);
 			path = native;
 			sourceTree = "<group>";
