@@ -40,7 +40,7 @@
  * Signature: ([B[BII)[B
  */
 JNIEXPORT jbyteArray JNICALL Java_net_mc_1cubed_qtcubed_media_codec_QTCodec__1processIntoFrames
-(JNIEnv *env, jobject objectRef, jbyteArray headerBytes, jbyteArray javaDataBytes, jint dataOffset, jint dataLength) {
+(JNIEnv *env, jobject objectRef, jlong javaObRef, jbyteArray headerBytes, jbyteArray javaDataBytes, jint dataOffset, jint dataLength) {
 	jbyteArray retval = nil;
 	
 	/* Set up autorelease and exception handling */

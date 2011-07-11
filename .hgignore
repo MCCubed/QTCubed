@@ -1,0 +1,5 @@
+.DS_Store
+build/
+QTCubed.xcodeproj/.*\.mode1v3
+QTCubed.xcodeproj/.*\.pbxuser
+

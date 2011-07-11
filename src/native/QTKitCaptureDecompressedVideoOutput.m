@@ -346,7 +346,7 @@ JNIEXPORT void JNICALL Java_net_mc_1cubed_qtcubed_QTKitCaptureDecompressedVideoO
 	NSSize size = [pixelSize sizeValue];
 	jint width = size.width;
 	jint height = size.height;
-	NSLog(@"Outputting frame sized %d x %d of length %d with format: %#x",width,height,length,format);
+	//NSLog(@"Outputting frame sized %d x %d of length %d with format: %#x",width,height,length,format);
 	
 	switch (format) {
 			// 8 bit codecs

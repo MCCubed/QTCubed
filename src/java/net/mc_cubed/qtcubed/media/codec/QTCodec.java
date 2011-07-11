@@ -33,6 +33,10 @@
 package net.mc_cubed.qtcubed.media.codec;
 
 import com.sun.media.BasicCodec;
+import java.io.File;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.io.FileOutputStream;
 import javax.media.Buffer;
 import javax.media.Format;
 import javax.media.format.RGBFormat;
@@ -44,6 +48,7 @@ import javax.media.format.VideoFormat;
  */
 public class QTCodec extends BasicCodec {
 	private long peer;
+	private static final String encodingServerLocation;
 	
     public QTCodec() {
         this.inputFormats = new Format[] { new VideoFormat("unknown") };
@@ -55,6 +60,55 @@ public class QTCodec extends BasicCodec {
 	
     protected native Format[] _getSupportedFormats(long peer);
 
+	static {
+		// Write out the encoding server executable and store the location for native code
+		String fullName = "EncodingServer";
+		String libExtension = "";
+		String resourceName = "/" + fullName + libExtension;
+		// privileged code goes here
+		InputStream inputStream = QTCodec.class.getResourceAsStream(resourceName);
+		if (inputStream == null)
+		{
+			throw new NullPointerException("No resource found with name '"+resourceName+"'");
+		}
+		OutputStream outputStream = null;
+		String encodingServerLoc = null;
+		try
+		{
+			File tempFile = File.createTempFile(fullName, libExtension);
+			tempFile.deleteOnExit();
+			outputStream = new FileOutputStream(tempFile);
+			byte[] buffer = new byte[8192];
+			while (true)
+			{
+				int read = inputStream.read(buffer);
+				if (read < 0)
+				{
+					break;
+				}
+				outputStream.write(buffer, 0, read);	
+			}
+			outputStream.flush();
+			outputStream.close();
+			outputStream = null;
+			encodingServerLoc = tempFile.toString();
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		}
+		finally 
+		{
+			if (outputStream != null)
+			{
+				try {
+					outputStream.close();
+				} catch (Exception ex) {
+					ex.printStackTrace();
+				}
+			}
+		}		
+		
+		encodingServerLocation = encodingServerLoc;
+	}
     @Override
     public Format setInputFormat(Format format) {
         Format retval = super.setInputFormat(format);

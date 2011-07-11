@@ -76,6 +76,7 @@ public class QTCubedJMFInitializer {
             CaptureDeviceInfo info = new CaptureDeviceInfo(name,ml,formatsArray);
             CaptureDeviceManager.addDevice(info);
             System.out.println("Added capture device: " + info);
+			System.out.println("Original Formats: " + captureDevice.getFormatDescriptions());
         }
 		
         // These are likely to generate exceptions, so do this last

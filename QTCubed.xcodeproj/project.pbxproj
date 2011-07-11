@@ -24,15 +24,12 @@
 /* End PBXAggregateTarget section */
 
 /* Begin PBXBuildFile section */
-		56E9FCDC113270D100570103 /* libQTCubed.jnilib in CopyFiles */ = {isa = PBXBuildFile; fileRef = BFA701EE112EA91A00D5157A /* libQTCubed.jnilib */; };
 		89C3F2920F5250A300B0048E /* Credits.rtf in Resources */ = {isa = PBXBuildFile; fileRef = 89C3F2900F5250A300B0048E /* Credits.rtf */; };
 		89D0F0240F392F20007831A7 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 89D0F0210F392F20007831A7 /* InfoPlist.strings */; };
 		89D0F0410F39306C007831A7 /* JavaApplicationStub in Copy Executable */ = {isa = PBXBuildFile; fileRef = 89D0F03E0F39304A007831A7 /* JavaApplicationStub */; };
 		89D0F05C0F39404F007831A7 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1058C7A1FEA54F0111CA2CBB /* Cocoa.framework */; };
 		89D0F0850F394066007831A7 /* JavaNativeFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 89D0F0840F394066007831A7 /* JavaNativeFoundation.framework */; };
 		89D0F1870F3A2442007831A7 /* JavaVM.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 89D0F1860F3A2442007831A7 /* JavaVM.framework */; };
-		BF05F5AB1186CDC60027D4A3 /* EncodingServer in CopyFiles */ = {isa = PBXBuildFile; fileRef = BF44E7BD1185880A00F308F1 /* EncodingServer */; };
-		BF05F5AC1186CDCA0027D4A3 /* QTCubed.jar in CopyFiles */ = {isa = PBXBuildFile; fileRef = BFC77B1E11310CC100F2D7A3 /* QTCubed.jar */; };
 		BF152CED112ED7BE008B4ECC /* QTMovieBridge.m in Sources */ = {isa = PBXBuildFile; fileRef = BFA7033E112EABF100D5157A /* QTMovieBridge.m */; };
 		BF3329161181341C00A39409 /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BF3328F01181340A00A39409 /* AudioToolbox.framework */; };
 		BF3329171181341C00A39409 /* AudioUnit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BF3328F11181340A00A39409 /* AudioUnit.framework */; };
@@ -146,18 +143,6 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
-		56E9FCDB113270A300570103 /* CopyFiles */ = {
-			isa = PBXCopyFilesBuildPhase;
-			buildActionMask = 12;
-			dstPath = /Library/Java/Extensions;
-			dstSubfolderSpec = 0;
-			files = (
-				BF05F5AC1186CDCA0027D4A3 /* QTCubed.jar in CopyFiles */,
-				BF05F5AB1186CDC60027D4A3 /* EncodingServer in CopyFiles */,
-				56E9FCDC113270D100570103 /* libQTCubed.jnilib in CopyFiles */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 		89D0F0440F393070007831A7 /* Copy Executable */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
@@ -523,7 +508,6 @@
 				89D0F04C0F393AD9007831A7 /* Headers */,
 				89D0F04D0F393AD9007831A7 /* Sources */,
 				89D0F04E0F393AD9007831A7 /* Frameworks */,
-				56E9FCDB113270A300570103 /* CopyFiles */,
 			);
 			buildRules = (
 			);

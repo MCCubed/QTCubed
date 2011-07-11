@@ -60,7 +60,9 @@ import net.mc_cubed.qtcubed.QTCaptureView;
 import net.mc_cubed.qtcubed.QTFormatDescription;
 import net.mc_cubed.qtcubed.QTMediaType;
 import net.mc_cubed.qtcubed.QTPixelFormat;
-
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.io.FileOutputStream;
 /**
  * Starting point for the application. General initialization should be done inside
  * the ApplicationController's init() method. If certain kinds of non-Swing initialization
@@ -84,8 +86,48 @@ public class QTCubed extends JFrame implements ActionListener {
             AccessController.doPrivileged(new PrivilegedAction() {
 
                 public Object run() {
-                    // privileged code goes here
-                    System.loadLibrary("QTCubed");
+					try {
+						String fullName = "libQTCubed";
+						String libExtension = ".jnilib";
+						String resourceName = "/" + fullName + libExtension;
+						// privileged code goes here
+						InputStream inputStream = QTCubed.class.getResourceAsStream(resourceName);
+						if (inputStream == null)
+						{
+							throw new NullPointerException("No resource found with name '"+resourceName+"'");
+						}
+						File tempFile = File.createTempFile(fullName, libExtension);
+						tempFile.deleteOnExit();
+						OutputStream outputStream = null;
+						try
+						{
+							outputStream = new FileOutputStream(tempFile);
+							byte[] buffer = new byte[8192];
+							while (true)
+							{
+								int read = inputStream.read(buffer);
+								if (read < 0)
+								{
+									break;
+								}
+								outputStream.write(buffer, 0, read);	
+							}
+							outputStream.flush();
+							outputStream.close();
+							outputStream = null;
+							System.load(tempFile.toString());
+						}
+						finally 
+						{
+							if (outputStream != null)
+							{
+								outputStream.close();
+							}
+						}		
+						
+					} catch (Exception ex) {
+						ex.printStackTrace();
+					}
                     return null;
                 }
             });
@@ -95,7 +137,7 @@ public class QTCubed extends JFrame implements ActionListener {
         } catch (Throwable t1) {
             Logger.getAnonymousLogger().log(Level.INFO, "Cannot load QTCubed Library!");
             // Couldn't load the library, try QTJava instead
-            try {
+            /*try {
                 Logger.getAnonymousLogger().log(Level.INFO, "Trying to load QTJava Library.");
                 // Invoke QTSession.open() using reflection to avoid any class dependancies.
                 AccessController.doPrivileged(new PrivilegedAction() {
@@ -138,7 +180,7 @@ public class QTCubed extends JFrame implements ActionListener {
                 Logger.getLogger(QTCubed.class.getName()).log(Level.INFO, "Successfully loaded QTJava Library!");
             } catch (Throwable t2) {
                 Logger.getLogger(QTCubed.class.getName()).log(Level.SEVERE, "Cannot load either QTCubed or QTJava libraries!  Quicktime Services will not be available!",t2);
-            }
+            }*/
 
         }
 
