@@ -124,7 +124,8 @@ public enum QTCompressionFormat {
     iLBC(0x696c6263),
     DVIIntelIMA(0x6D730011),
     MicrosoftGSM(0x6D730031),
-    AES3(0x61657333);
+    AES3(0x61657333),
+	k422YpCbCr8CodecType(0x32767579);
 
 	final int nativeValue;
 
@@ -140,10 +141,17 @@ public enum QTCompressionFormat {
 //        Logger.getAnonymousLogger().info("Looking for: "+ Integer.toHexString(nativeValue));
         for (QTCompressionFormat format : values()) {
             if (nativeValue == format.getNativeValue()) {
-//                Logger.getAnonymousLogger().info("Translated " + Integer.toHexString(nativeValue) + " to " + format);
+                Logger.getAnonymousLogger().finest("Translated " + Integer.toHexString(nativeValue) + " to " + format);
                 return format;
             }
         }
+
+		byte[] fourcc = new byte[4];
+		fourcc[0] = (byte)((nativeValue & 0xff000000) / 0x01000000);
+		fourcc[1] = (byte)((nativeValue & 0xff0000) / 0x010000);
+		fourcc[2] = (byte)((nativeValue & 0xff00) / 0x0100);
+		fourcc[3] = (byte)(nativeValue & 0xff);
+		Logger.getAnonymousLogger().warning("No match for: " + Integer.toHexString(nativeValue) + " (" + new String(fourcc) + ")");
         return null;
     }
 

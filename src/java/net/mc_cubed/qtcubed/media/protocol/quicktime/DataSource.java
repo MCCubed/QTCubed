@@ -216,11 +216,11 @@ public class DataSource extends BasicPushBufferDataSource implements CaptureDevi
             }
         }
 		
+		final QTCaptureSession finalSession = session;
 		// Remove all the outputs from the stream
-		for (QTCaptureOutput output : session.getOutputList()) {
-			session.removeOutput(output);
+		for (QTCaptureOutput output : finalSession.getOutputList()) {
+			finalSession.removeOutput(output);
 		}
-		
 		super.disconnect();
     }
 

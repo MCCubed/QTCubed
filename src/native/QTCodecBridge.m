@@ -33,11 +33,12 @@
 #import <QTKit/QTKit.h>
 #import <JavaNativeFoundation/JavaNativeFoundation.h>
 #import "net_mc_cubed_qtcubed_media_codec_QTCodec.h"
+#include "QTCodec.h"
 
 /*
  * Class:     net_mc_cubed_qtcubed_media_codec_QTCodec
  * Method:    _processIntoFrames
- * Signature: ([B[BII)[B
+ * Signature: (J[B[BII)[B
  */
 JNIEXPORT jbyteArray JNICALL Java_net_mc_1cubed_qtcubed_media_codec_QTCodec__1processIntoFrames
 (JNIEnv *env, jobject objectRef, jlong javaObRef, jbyteArray headerBytes, jbyteArray javaDataBytes, jint dataOffset, jint dataLength) {
@@ -73,3 +74,65 @@ JNIEXPORT jbyteArray JNICALL Java_net_mc_1cubed_qtcubed_media_codec_QTCodec__1pr
 	
 	return retval;
 }
+/*
+ * Class:     net_mc_cubed_qtcubed_media_codec_QTCodec
+ * Method:    _allocInit
+ * Signature: ()J
+ */
+JNIEXPORT jlong JNICALL Java_net_mc_1cubed_qtcubed_media_codec_QTCodec__1allocInit
+(JNIEnv * env, jobject jobj) {
+	QTCodec * retval;
+	
+	/* Set up autorelease and exception handling */
+	JNF_COCOA_ENTER(env);
+
+	retval = [[QTCodec alloc]init];
+
+	/* Autorelease and exception cleanup */
+	JNF_COCOA_EXIT(env);
+	
+	return (jlong)retval;
+}
+
+/*
+ * Class:     net_mc_cubed_qtcubed_media_codec_QTCodec
+ * Method:    _getSupportedFormats
+ * Signature: (J)[Ljavax/media/Format;
+ */
+JNIEXPORT jobjectArray JNICALL Java_net_mc_1cubed_qtcubed_media_codec_QTCodec__1getSupportedFormats
+(JNIEnv *, jobject, jlong);
+
+/*
+ * Class:     net_mc_cubed_qtcubed_media_codec_QTCodec
+ * Method:    _setInputFormat
+ * Signature: (JLjavax/media/Format;)V
+ */
+JNIEXPORT void JNICALL Java_net_mc_1cubed_qtcubed_media_codec_QTCodec__1setInputFormat
+(JNIEnv *, jobject, jlong, jobject);
+
+/*
+ * Class:     net_mc_cubed_qtcubed_media_codec_QTCodec
+ * Method:    _setOutputFormat
+ * Signature: (JLjavax/media/Format;)V
+ */
+JNIEXPORT void JNICALL Java_net_mc_1cubed_qtcubed_media_codec_QTCodec__1setOutputFormat
+(JNIEnv *, jobject, jlong, jobject);
+
+/*
+ * Class:     net_mc_cubed_qtcubed_media_codec_QTCodec
+ * Method:    _finalize
+ * Signature: (J)V
+ */
+JNIEXPORT void JNICALL Java_net_mc_1cubed_qtcubed_media_codec_QTCodec__1finalize
+(JNIEnv * env, jobject jobj, jlong qtCodecPtr) {
+	/* Set up autorelease and exception handling */
+	JNF_COCOA_ENTER(env);
+
+	QTCodec * qtCodec = (QTCodec *) qtCodecPtr;
+	[qtCodec release];
+
+	/* Autorelease and exception cleanup */
+	JNF_COCOA_EXIT(env);
+
+}
+

@@ -129,6 +129,12 @@ public class QTFormatUtils {
                 return (new YUVFormat(size, dataSize, Format.byteArray, frameRate, YUVFormat.YUV_420, (int) size.getWidth(), Format.NOT_SPECIFIED, 0, 4, 6));
 //            case SorensonYUV9:
 //                return (new YUVFormat(YUVFormat.YUV_YVU9));
+			case ComponentVideo:
+                dataSize = (int) size.getWidth() * (int) size.getHeight();
+                return (new YUVFormat(size, dataSize, Format.byteArray, frameRate, YUVFormat.YUV_420, (int) size.getWidth(), Format.NOT_SPECIFIED, 0, 4, 6));				
+			case k422YpCbCr8CodecType:
+                dataSize = (int) size.getWidth() * (int) size.getHeight();
+                return (new YUVFormat(size, dataSize, Format.byteArray, frameRate, YUVFormat.YUV_422, (int) size.getWidth(), Format.NOT_SPECIFIED, 0, 4, 6));				
             case LinearPCM:
                 return (new AudioFormat(AudioFormat.LINEAR));
             case AC3:

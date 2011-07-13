@@ -130,7 +130,7 @@ public class QTFormatDescription {
     }
 
     public String localizedFormatSummary() {
-        throw new java.lang.UnsupportedOperationException("Not implemented yet");
+        return this.toString();
     }
 
     @Override
@@ -162,5 +162,10 @@ public class QTFormatDescription {
         hash = 89 * hash + (this.formatType != null ? this.formatType.hashCode() : 0);
         return hash;
     }
+	
+	@Override
+	public String toString() {
+		return getClass().getName() + "[mediaType=" + mediaType + ":formatType=" + formatType + ":height=" + height + ":width=" + width + "]";
+	}
 
 }

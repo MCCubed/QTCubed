@@ -229,7 +229,7 @@ JNIEXPORT void JNICALL Java_net_mc_1cubed_qtcubed_QTKitCaptureSession__1removeOu
 	/* Set up autorelease and exception handling */
 	JNF_COCOA_ENTER(env);
 	
-	[captureSession removeOutput:captureOutput];
+	[captureSession performSelectorOnMainThread:@selector(removeOutput) withObject:captureOutput waitUntilDone:NO];
 	
 	/* Autorelease and exception cleanup */
 	JNF_COCOA_EXIT(env);
