@@ -137,11 +137,13 @@ public enum QTCompressionFormat {
         return nativeValue;
     }
 
-    static public QTCompressionFormat forNative(int nativeValue) {
+	static private final Logger log = Logger.getLogger(QTCompressionFormat.class.getName());
+
+	static public QTCompressionFormat forNative(int nativeValue) {
 //        Logger.getAnonymousLogger().info("Looking for: "+ Integer.toHexString(nativeValue));
         for (QTCompressionFormat format : values()) {
             if (nativeValue == format.getNativeValue()) {
-                Logger.getAnonymousLogger().finest("Translated " + Integer.toHexString(nativeValue) + " to " + format);
+                log.finest("Translated " + Integer.toHexString(nativeValue) + " to " + format);
                 return format;
             }
         }
@@ -151,7 +153,7 @@ public enum QTCompressionFormat {
 		fourcc[1] = (byte)((nativeValue & 0xff0000) / 0x010000);
 		fourcc[2] = (byte)((nativeValue & 0xff00) / 0x0100);
 		fourcc[3] = (byte)(nativeValue & 0xff);
-		Logger.getAnonymousLogger().warning("No match for: " + Integer.toHexString(nativeValue) + " (" + new String(fourcc) + ")");
+		log.warning("No match for: " + Integer.toHexString(nativeValue) + " (" + new String(fourcc) + ")");
         return null;
     }
 

@@ -40,7 +40,6 @@ import java.util.Properties;
 import java.util.Collection;
 import java.util.LinkedList;
 import java.io.IOException;
-import quicktime.QTException;
 
 public class QTCubedFactory {
 
@@ -48,7 +47,7 @@ public class QTCubedFactory {
         if (QTCubed.usesQTKit()) {
             return new QTKitMovieView();
         } else {
-            return new QTJavaMovieView();
+            throw new InstantiationException("QTKit not present or could not be initialized");
         }
     }
 
@@ -56,7 +55,7 @@ public class QTCubedFactory {
         if (QTCubed.usesQTKit()) {
             return new QTKitMovieImpl();
         } else {
-            return new QTJavaMovie();
+            throw new InstantiationException("QTKit not present or could not be initialized");
         }
     }
 
@@ -64,7 +63,7 @@ public class QTCubedFactory {
         if (QTCubed.usesQTKit()) {
             return new QTKitMovieImpl(url);
         } else {
-            return new QTJavaMovie(url);
+            throw new InstantiationException("QTKit not present or could not be initialized");
         }
     }
 
@@ -72,7 +71,7 @@ public class QTCubedFactory {
         if (QTCubed.usesQTKit()) {
             return new QTKitMovieImpl(file);
         } else {
-            return new QTJavaMovie(file);
+            throw new InstantiationException("QTKit not present or could not be initialized");
         }
     }
 
@@ -80,7 +79,7 @@ public class QTCubedFactory {
         if (QTCubed.usesQTKit()) {
             return new QTKitMovieImpl(bytes);
         } else {
-            return new QTJavaMovie(bytes);
+            throw new InstantiationException("QTKit not present or could not be initialized");
         }
     }
 
@@ -88,12 +87,7 @@ public class QTCubedFactory {
         if (QTCubed.usesQTKit()) {
             return new QTKitMovieImpl(attributes);
         } else {
-            try {
-                return new QTJavaMovie(attributes);
-            } catch (QTException ex) {
-                Logger.getLogger(QTCubedFactory.class.getName()).log(Level.SEVERE, null, ex);
-                throw new InstantiationException("Couldn't init movie");
-            }
+            throw new InstantiationException("Couldn't init movie");
         }
     }
 
@@ -101,12 +95,7 @@ public class QTCubedFactory {
         if (QTCubed.usesQTKit()) {
             return new QTKitMovieImpl(name);
         } else {
-            try {
-                return new QTJavaMovie(name);
-            } catch (QTException ex) {
-                Logger.getLogger(QTCubedFactory.class.getName()).log(Level.SEVERE, null, ex);
                 throw new InstantiationException("Couldn't init movie");
-            }
         }
     }
 

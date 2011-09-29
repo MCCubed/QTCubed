@@ -43,20 +43,12 @@ public class QTCubedTest {
 	
 	@Test
 	public void QTCubedInitTest() throws InstantiationException {
-		if (QTCubed.usesQTKit()) {
-			QTMovieView qtmovieView = QTCubedFactory.initQTMovieView();
+        Assert.assertTrue("QTKit not present or could not be initialized",QTCubed.usesQTKit());
+		QTMovieView qtmovieView = QTCubedFactory.initQTMovieView();
 
-			Assert.assertNotNull("Got a null QTMovieView, expected not null!", qtmovieView);
+		Assert.assertNotNull("Got a null QTMovieView, expected not null!", qtmovieView);
 
-			Assert.assertTrue("QTKitMovieView expected since QTKit is enabled, but not returned!",qtmovieView instanceof QTKitMovieView);
-			
-		} else {
-			QTMovieView qtmovieView = QTCubedFactory.initQTMovieView();
-
-			Assert.assertNotNull("Got a null QTMovieView, expected not null!", qtmovieView);
-			
-			Assert.assertTrue("QTKitMovieView expected since QTKit is enabled, but not returned!",qtmovieView instanceof QTJavaMovieView);
-		}
+		Assert.assertTrue("QTKitMovieView expected since QTKit is enabled, but not returned!",qtmovieView instanceof QTKitMovieView);
 	}
 	
 	@Test
